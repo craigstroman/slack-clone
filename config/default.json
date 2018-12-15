@@ -1,0 +1,16 @@
+{
+  "HOST": "127.0.0.1",
+  "PORT": "3000",
+  "BASE_URL": "http://localhost:3000/",
+  "API_URL": "http://localhost:3000/api/",
+  "MONGO_URL": "",
+  "JWT": {
+    "SECRET": "",
+    "EXPIRES": ""
+  },
+  "LOGGER": {
+    "FILE_NAME": "MERNjs.log",
+    "MAX_SIZE": "5242880",
+    "MAX_FILES": "5"
+  }
+}

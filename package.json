@@ -1,0 +1,35 @@
+{
+  "name": "chat-room",
+  "version": "1.0.0",
+  "description": "A chat room built using Express, Sockets.io, and React.",
+  "main": "index.js",
+  "scripts": {
+    "start:lintServer": "nodemon eslint -c ./server/.eslintrc ./server",
+    "start:devServer": "nodemon --exec babel-node ./server/index.js"
+  },
+  "author": "Craig Stroman",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^2.3.1",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "graphql": "^14.0.2",
+    "graphql-tools": "^4.0.3",
+    "sequelize": "^4.42.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "concurrently": "^4.1.0",
+    "eslint": "^5.10.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-react": "^7.11.1",
+    "eslint-watch": "^4.0.2",
+    "nodemon": "^1.18.9"
+  }
+}
