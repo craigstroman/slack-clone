@@ -5,8 +5,8 @@ module.exports = {
     ],
 	'env': {
 		'node': true,
-		'es6': true  
-	},   
+		'es6': true
+	},
     'rules': {
         'no-alert': 2,
         'no-array-constructor': 2,
@@ -63,5 +63,5 @@ module.exports = {
         'space-unary-ops': [2, { 'words': true, 'nonwords': false }],
         'strict': [2, 'function'],
         'yoda': [2, 'never']
-    }		
+    }
 };

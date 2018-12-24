@@ -1,0 +1,41 @@
+module.exports = {
+  'env': {
+      'browser': true,
+      'es6': true,
+  },
+  'plugins': [
+    'react'
+  ],
+  'ecmaFeatures': {'jsx': true},
+  'extends': 'airbnb',
+  'rules': {
+    'no-underscore-dangle': 0,
+    'max-len': [1, 130, 2, {ignoreComments: true}],
+    'no-console': 0,
+    'no-unused-vars': [1, {'vars': 'local', 'args': 'none'}],
+    'arrow-body-style': [2, 'as-needed'],
+    'react/jsx-filename-extension': [1, { 'extensions': ['.js', '.jsx'] }],
+    'react/jsx-uses-react': 'error',
+    'react/jsx-uses-vars': 'error',
+    'react/forbid-prop-types': 0,
+    'react/jsx-no-bind': ['error', {
+      'allowArrowFunctions': true,
+      'allowBind': false,
+      'ignoreRefs': true
+    }],
+    'react/no-did-update-set-state': 'error',
+    'react/no-unknown-property': 'error',
+    'react/no-unused-prop-types': 'error',
+    'react/prop-types': 'error',
+    'react/react-in-jsx-scope': 'error'
+  },
+  'globals': {
+    'React': true,
+    'google': true
+  },
+  'parserOptions': {
+    'ecmaFeatures': {
+      'jsx': true
+    }
+  }
+};

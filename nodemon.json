@@ -1,0 +1,9 @@
+{
+  "ignore": [
+    "client/",
+    "node_modules/",
+    "public/",
+    "webpack.config.dev.js",
+    "webpack.config.prod.js"
+  ]
+}
