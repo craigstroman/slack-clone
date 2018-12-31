@@ -2,9 +2,6 @@
   'env': {
     'server': {
        'presets': ['env', 'stage-3']
-     },
-    'client': {
-      'presets': ['es2015', 'react']
-    }
+     }
   }
 }

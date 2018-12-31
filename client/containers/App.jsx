@@ -3,6 +3,7 @@ import React from 'react';
 import { ApolloClient, createNetworkInterface, ApolloProvider } from 'react-apollo';
 import Main from './main/Main';
 import './App.scss';
+// import '@babel/polyfill';
 
 import registerServiceWorker from './registerServiceWorker';
 

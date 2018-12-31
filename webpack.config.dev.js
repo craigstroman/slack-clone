@@ -39,7 +39,16 @@ module.exports = env => {
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
-            options: { presets: ['@babel/preset-env', '@babel/preset-react'] }
+            options: {
+              presets: [
+                '@babel/preset-env',
+                '@babel/preset-react'
+              ],
+              plugins: [
+                '@babel/plugin-transform-async-to-generator',
+                '@babel/plugin-transform-runtime'
+              ]
+            },
           }
         },
         {
