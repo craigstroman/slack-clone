@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
-import {
-  Col, Button, Form, FormGroup, Label, Input,
-} from 'reactstrap';
+import key from 'react-key-string';
+import { Button } from 'reactstrap';
+import { AvForm, AvField } from 'availity-reactstrap-validation';
 import './Register.scss';
 
 class Register extends React.Component {
@@ -31,26 +31,32 @@ class Register extends React.Component {
   async handleSubmit(e) {
     const { username, email, password } = this.state;
 
-    const { mutate } = this.props;
+    console.log('this.state: ', this.state);
 
-    const response = await mutate({ variables: { username, email, password } });
+    console.log('form filled: ', username.length && email.length && password.length);
 
-    console.log('response: ', response);
+    if (username.length && email.length && password.length) {
+      const { mutate } = this.props;
 
-    const { ok, errors } = response.data.register;
+      const response = await mutate({ variables: { username, email, password } });
 
-    if (ok) {
-      const { history } = this.props;
+      const { ok, errors } = response.data.register;
 
-      history.push('/');
-    } else {
-      const err = {};
-      errors.forEach(({ path, message }) => {
-        // err['passwordError'] = 'too long..';
-        err[`${path}Error`] = message;
-      });
+      if (ok) {
+        const { history } = this.props;
 
-      this.setState(err);
+        history.push('/');
+      } else if (errors) {
+        const err = {};
+        errors.forEach(({ path, message }) => {
+          // err['passwordError'] = 'too long..';
+          err[`${path}Error`] = message;
+        });
+
+        console.log('errors: ', errors);
+
+        this.setState(err);
+      }
     }
   }
 
@@ -91,65 +97,63 @@ class Register extends React.Component {
               <div className="col-md-12 text-center">
                 <div>
                   There was some errors with your submision:
+                  <ul className="erros">
+                    {errorList.map((el, id) => (
+                      <li key={key.generate()}>{ el }</li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </div>
           ) : null }
-          <FormGroup row>
-            <Label for="username" md={12}>
-              Username:
-            </Label>
-            <Col md={12}>
-              <Input
-                type="text"
-                className="form-control"
-                name="username"
-                id="username"
-                placeholder="Username..."
-                value={username}
-                onChange={this.handleChange}
-              />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="email" md={12}>
-              Email address:
-            </Label>
-            <Col md={12}>
-              <Input
-                type="text"
-                className="form-control"
-                name="email"
-                id="email"
-                placeholder="you@host.com"
-                value={email}
-                onChange={this.handleChange}
-              />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="password" md={12}>
-              Password:
-            </Label>
-            <Col md={12}>
-              <Input
-                type="password"
-                className="form-control"
-                name="password"
-                id="password"
-                placeholder="Password.."
-                value={password}
-                onChange={this.handleChange}
-              />
-            </Col>
-          </FormGroup>
-          <Button
-            type="submit"
-            color="primary"
-            onClick={this.handleSubmit}
-          >
-            Register
-          </Button>
+          <AvForm>
+            <AvField
+              name="username"
+              label="Username:"
+              type="text"
+              value={username}
+              onChange={this.handleChange}
+              validate={{
+                required: { value: true, errorMessage: 'Please enter a username.' },
+                pattern: { value: '^[A-Za-z0-9]+$', errorMessage: 'Your username must be composed only with letter and numbers.' },
+                minLength: { value: 3, errorMessage: 'Your username must be between 3 and 25 characters.' },
+                maxLength: { value: 25, errorMessage: 'Your username must be between 3 and 25 characters.' },
+              }}
+            />
+            <AvField
+              name="email"
+              label="Email:"
+              type="email"
+              placeholder="you@host.com"
+              value={email}
+              onChange={this.handleChange}
+              validate={{
+                required: {
+                  value: true,
+                  errorMessage: 'Please enter a email.',
+                },
+              }}
+            />
+            <AvField
+              name="password"
+              label="Password:"
+              type="text"
+              value={password}
+              onChange={this.handleChange}
+              validate={{
+                required: { value: true, errorMessage: 'Please enter a password.' },
+                minLength: { value: 5, errorMessage: 'Your password must be between 5 and 100 characters.' },
+                maxLength: { value: 100, errorMessage: 'Your password must be between 5 and 100 characters.' },
+              }}
+            />
+            <Button
+              type="submit"
+              color="primary"
+              onClick={this.handleSubmit}
+            >
+              Register
+            </Button>
+          </AvForm>
         </main>
       </div>
     );
