@@ -6,6 +6,7 @@ module.exports = {
   'plugins': [
     'react'
   ],
+  'parser': 'babel-eslint',
   'ecmaFeatures': {'jsx': true},
   'extends': 'airbnb',
   'rules': {

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gql, graphql } from 'react-apollo';
 import key from 'react-key-string';
+import { gql, graphql } from 'react-apollo';
 import { Button } from 'reactstrap';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import './Register.scss';
@@ -88,7 +88,9 @@ class Register extends React.Component {
       <div className="container">
         <header>
           <div className="header">
-            <h1 className="text-center">Register</h1>
+            <h1 className="text-center">
+              Register
+            </h1>
           </div>
         </header>
         <main>
@@ -153,6 +155,7 @@ class Register extends React.Component {
             >
               Register
             </Button>
+
           </AvForm>
         </main>
       </div>
@@ -168,12 +171,10 @@ const registerMutation = gql`
 
 Register.defaultProps = {
   history: {},
-  // historypush: () => {},
 };
 
 Register.propTypes = {
   history: PropTypes.object,
-  // history.push: PropTypes.func,
 };
 
 export default graphql(registerMutation)(Register);

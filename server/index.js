@@ -1,15 +1,21 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
+import env from 'node-env-file';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
+import models from './models';
 
+if ( process.env.NODE_ENV === 'development' ) {
+  env(__dirname + '/../.env');
+}
+
+const SECRET = process.env.SECRET;
+const SECRET2 = process.env.SECRET2;
 
 const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './schema')));
 const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers')));
-
-import models from './models';
 
 const nodeEnv = process.env.NODE_ENV;
 const reactApp = (nodeEnv === 'development') ?  '/static/js/bundle.js' : '/static/js/main.min.js';
@@ -42,7 +48,9 @@ app.use(
 			models,
 			user: {
 				id: 1,
-			}
+			},
+      SECRET,
+      SECRET2
 		}
 	})
 );
@@ -63,7 +71,7 @@ app.use('/', (req, res) => {
  * Creates database if not already created.
  * To recreate database add {force: true} to sync().
  */
-models.sequelize.sync({force: true}).then(() => {
+models.sequelize.sync({}).then(() => {
 	app.listen(PORT, () => {
 	  console.log(`\nThe server has started on port: ${PORT}`);
     console.log(`http://localhost:${PORT}`);
