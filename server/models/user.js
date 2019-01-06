@@ -21,7 +21,7 @@ export default (sequelize, DataTypes) => {
       validate: {
         isEmail: {
           args: true,
-          msg: 'Invalid email.',
+          msg: 'Invalid email or password.',
         },
       },
     },

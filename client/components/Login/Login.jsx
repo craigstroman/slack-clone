@@ -65,7 +65,9 @@ class Login extends React.Component {
             <div
               className={errors ? 'error visible' : 'error'}
             >
-              Invalid email or password.
+              <div className="alert alert-danger">
+                Invalid email or password.
+              </div>
             </div>
             <AvForm>
               <AvField
