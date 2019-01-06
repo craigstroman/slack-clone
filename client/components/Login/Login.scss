@@ -1,0 +1,13 @@
+.container {
+  main {
+    .content {
+      .error {
+        color: $red;
+        display: none;
+        &.visible {
+          display: block;
+        }
+      }
+    }
+  }
+}

@@ -15,6 +15,7 @@ class Login extends React.Component {
     extendObservable(this, {
       email: '',
       password: '',
+      errors: false,
     });
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,29 +25,31 @@ class Login extends React.Component {
   handleChange(e) {
     const { name, value } = e.target;
     this[name] = value;
-    console.log('onChnage: ');
-    console.log('this: ', this);
   }
 
   async handleSubmit() {
     const { email, password } = this;
 
-    const { mutate } = this.props;
+    if (email.length && password.length) {
+      const { mutate, history } = this.props;
 
-    const response = await mutate({ variables: { email, password } });
+      const response = await mutate({ variables: { email, password } });
 
-    const { ok, token, refreshToken } = response.data.login;
+      const { ok, token, refreshToken } = response.data.login;
 
-    if (ok) {
-      console.log('token: ', token);
-      console.log('refreshToken: ', refreshToken);
-      localStorage.setItem('token', token);
-      localStorage.setItem('refreshToken', refreshToken);
+      if (ok) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('refreshToken', refreshToken);
+
+        history.push('/');
+      } else {
+        this.errors = true;
+      }
     }
   }
 
   render() {
-    const { email, password } = this;
+    const { email, password, errors } = this;
 
     return (
       <div className="container">
@@ -58,35 +61,43 @@ class Login extends React.Component {
           </div>
         </header>
         <main>
-          <AvForm>
-            <AvField
-              label="Email:"
-              type="email"
-              name="email"
-              value={email}
-              onChange={this.handleChange}
-              validate={{
-                required: { value: true, errorMessage: 'Please enter a username.' },
-              }}
-            />
-            <AvField
-              label="Password:"
-              type="password"
-              name="password"
-              value={password}
-              onChange={this.handleChange}
-              validate={{
-                required: { value: true, errorMessage: 'Please enter a password.' },
-              }}
-            />
-            <Button
-              type="submit"
-              color="primary"
-              onClick={this.handleSubmit}
+          <div className="content">
+            <div
+              className={errors ? 'error visible' : 'error'}
             >
-              Login
-            </Button>
-          </AvForm>
+              Invalid email or password.
+            </div>
+            <AvForm>
+              <AvField
+                label="Email:"
+                type="email"
+                name="email"
+                value={email}
+                placeholder="you@host.com"
+                onChange={this.handleChange}
+                validate={{
+                  required: { value: true, errorMessage: 'Please enter a username.' },
+                }}
+              />
+              <AvField
+                label="Password:"
+                type="password"
+                name="password"
+                value={password}
+                onChange={this.handleChange}
+                validate={{
+                  required: { value: true, errorMessage: 'Please enter a password.' },
+                }}
+              />
+              <Button
+                type="submit"
+                color="primary"
+                onClick={this.handleSubmit}
+              >
+                Login
+              </Button>
+            </AvForm>
+          </div>
         </main>
       </div>
     );
@@ -107,12 +118,12 @@ const loginMutation = gql`
   }
 `;
 
-// Login.defaultProps = {
-//   history: {},
-// };
+Login.defaultProps = {
+  history: {},
+};
 
-// Login.propTypes = {
-//   history: PropTypes.object,
-// };
+Login.propTypes = {
+  history: PropTypes.object,
+};
 
-export default graphql(loginMutation)(Login);
+export default graphql(loginMutation)(observer(Login));
