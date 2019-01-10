@@ -1,10 +1,20 @@
 import Sequelize from 'sequelize';
+import env from 'node-env-file';
 
-const sequelize = new Sequelize('slack', 'postgres', 'postgres', {
+if ( process.env.NODE_ENV === 'development' ) {
+  env(__dirname + '/../../.env');
+}
+
+const db = process.env.DB;
+const dbUser = process.env.DB_USER;
+const dbPassword = process.env.DB_PASSWORD;
+
+
+const sequelize = new Sequelize(db, dbUser, dbPassword, {
   dialect: 'postgres',
   define: {
   	underscored: true,
-  }, 
+  },
 });
 
 const models = {

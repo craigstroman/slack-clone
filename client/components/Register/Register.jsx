@@ -139,7 +139,7 @@ class Register extends React.Component {
             <AvField
               name="password"
               label="Password:"
-              type="text"
+              type="password"
               value={password}
               onChange={this.handleChange}
               validate={{

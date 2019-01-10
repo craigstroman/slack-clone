@@ -1,19 +1,6 @@
 import bcrypt from 'bcrypt';
-import _ from 'lodash';
+import formatErrors from '../formatErrors';
 import { tryLogin } from '../auth';
-
-const formatErrors = (e, models) => {
-  console.log('formatErrors: ');
-  if (e instanceof models.sequelize.ValidationError) {
-    //  _.pick({a: 1, b: 2}, 'a') => {a: 1}
-    return e.errors.map(x => {
-      //const {path, message} = x;
-      return e.errors.map(x => _.pick(x, ['path', 'message']));
-    });
-    console.log('e.errors: ', e.errors);
-  }
-  return [{ path: 'name', message: 'something went wrong' }];
-};
 
 export default {
   Query: {
@@ -22,7 +9,7 @@ export default {
   },
   Mutation: {
     login: (parent, { email, password }, { models, SECRET, SECRET2 }) =>
-      tryLogin(email, password, models, SECRET),
+      tryLogin(email, password, models, SECRET, SECRET2),
     register: async (parent, { password, ...otherArgs }, {models}) => {
       try {
         if (password.length < 5 || password.length > 100) {
