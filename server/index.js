@@ -42,7 +42,6 @@ const PORT = 8081 || process.env;
 
 const addUser = async(req, res, next) => {
   const token = req.headers['x-token'];
-  console.log('token: ', token);
 
   if (token) {
     try {

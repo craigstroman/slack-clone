@@ -1,10 +1,41 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter, Route, Redirect, Switch,
+} from 'react-router-dom';
+import decode from 'jwt-decode';
 
 import Home from '../home/Home';
 import Register from '../../components/Register/Register';
 import Login from '../../components/Login/Login';
 import CreateTeams from '../../components/Teams/CreateTeams';
+
+const isAuthenticated = () => {
+  const token = localStorage.getItem('token');
+  const refreshToken = localStorage.getItem('refreshToken');
+  try {
+    decode(token);
+    decode(refreshToken);
+  } catch (err) {
+    return false;
+  }
+
+  return true;
+};
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props => (isAuthenticated() ? (
+      <Component {...props} />
+    ) : (
+      <Redirect
+        to={{
+          pathname: '/login',
+        }}
+      />
+    ))}
+  />
+);
 
 const Main = () => (
   <BrowserRouter>
@@ -12,7 +43,7 @@ const Main = () => (
       <Route path="/" exact component={Home} />
       <Route path="/register" exact component={Register} />
       <Route path="/login" exact component={Login} />
-      <Route path="/create-team" exact component={CreateTeams} />
+      <PrivateRoute path="/create-team" exact component={CreateTeams} />
     </Switch>
   </BrowserRouter>
 );

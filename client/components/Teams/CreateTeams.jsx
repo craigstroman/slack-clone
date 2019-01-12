@@ -42,7 +42,7 @@ class CreateTeams extends React.Component {
 
       if (ok) {
         history.push('/');
-      } else {
+      } else if (errors) {
         this.errors = true;
       }
     }
@@ -56,7 +56,7 @@ class CreateTeams extends React.Component {
         <header>
           <div className="header">
             <h1 className="text-center">
-              Login
+              Create A Team
             </h1>
           </div>
         </header>
