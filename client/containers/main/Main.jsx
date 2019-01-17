@@ -5,6 +5,7 @@ import {
 import decode from 'jwt-decode';
 
 import Home from '../home/Home';
+import Dashboard from '../dashboard/Dashboard';
 import Register from '../../components/Register/Register';
 import Login from '../../components/Login/Login';
 import CreateTeams from '../../components/Teams/CreateTeams';
@@ -43,6 +44,7 @@ const Main = () => (
       <Route path="/" exact component={Home} />
       <Route path="/register" exact component={Register} />
       <Route path="/login" exact component={Login} />
+      <Route path="/dashboard" exact component={Dashboard} />
       <PrivateRoute path="/create-team" exact component={CreateTeams} />
     </Switch>
   </BrowserRouter>
