@@ -2,7 +2,7 @@ import React from 'react';
 import './SideBar.scss';
 
 const SideBar = () => (
-  <div className="sidebar">
+  <div className="sidebar-content">
     <div className="sidebar__channels">
       <h5 className="text-center">
         Channels

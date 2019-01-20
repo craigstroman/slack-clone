@@ -84,29 +84,14 @@ module.exports = env => {
               }
             }
           ]
+        },
+        {
+             test: /\.(svg|woff|woff2|ttf|eot|otf)([\?]?.*)$/,
+             loader: 'file-loader?name=node_modules/@fortawesome/fontawesome-free/webfonts[name].[ext]',
         }
       ]
     },
-    plugins: plugins,
-    devServer: {
-        contentBase: PATHS.dist,
-        compress: true,
-        headers: {
-            'X-Content-Type-Options': 'nosniff',
-            'X-Frame-Options': 'DENY'
-        },
-        open: true,
-        overlay: {
-            warnings: true,
-            errors: true
-        },
-        port: 8080,
-        publicPath: 'http://localhost:8080/',
-        hot: true
-    },
-    stats: {
-        children: false
-    }
+    plugins: plugins
   }
 };
 

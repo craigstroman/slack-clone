@@ -6,7 +6,29 @@
   padding-left: 0;
   padding-right: 0;
   width: 100%;
+  .sidebar {
+    background-color: $matterhorn;
+    width: 250px;
+  }
   .main-content {
     flex: 1;
+    height: 100%;
+    header {
+      .header-container {
+        height: 40px;
+      }
+    }
+    main {
+      height: 90%;
+      .messages-container {
+        border-bottom: 1px solid $black;
+        border-top: 1px solid $black;
+        height: 98%;
+        overflow-y: scroll;
+      }
+      .input-container {
+        height: 1%;
+      }
+    }
   }
 }

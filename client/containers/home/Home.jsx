@@ -1,15 +1,25 @@
 import React from 'react';
-import { gql, graphql } from 'react-apollo';
 
-const Home = ({ data: { allUsers = [] } }) => allUsers.map(u => <h1 key={u.id}>{u.email}</h1>);
+const Home = () => (
+  <div className="container">
+    <div className="row">
+      <div className="col-md-12">
+        <h1 className="text-center">Slack Clone</h1>
+        <hr />
+      </div>
+    </div>
+    <div className="row">
+      <div className="col-md-12 text-center">
+        <a href="/login">Login</a>
+      </div>
+    </div>
+    <div className="row">
+      <div className="col-md-12 text-center">
+        Not a registered user?&nbsp;
+        <a href="/register">Sign Up</a>
+      </div>
+    </div>
+  </div>
+);
 
-const allUsersQuery = gql`
-  {
-    allUsers {
-      id
-      email
-    }
-  }
-`;
-
-export default graphql(allUsersQuery)(Home);
+export default Home;

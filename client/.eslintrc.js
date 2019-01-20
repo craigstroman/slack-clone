@@ -11,7 +11,7 @@ module.exports = {
   'extends': 'airbnb',
   'rules': {
     'no-underscore-dangle': 0,
-    'max-len': [1, 140, 2, {ignoreComments: true}],
+    'max-len': [1, 180, 2, {ignoreComments: true}],
     'no-console': 0,
     'no-unused-vars': [1, {'vars': 'local', 'args': 'none'}],
     'arrow-body-style': [2, 'as-needed'],
