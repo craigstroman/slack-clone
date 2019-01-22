@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faUserAlt } from '@fortawesome/free-solid-svg-icons';
 import './Header.scss';
 
 class Header extends React.Component {
@@ -15,6 +16,16 @@ class Header extends React.Component {
     };
 
     this.toggle = this.toggle.bind(this);
+    this.logout = this.logout.bind(this);
+  }
+
+  logout() {
+    const { history } = this.props;
+
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('token');
+
+    history.push('/');
   }
 
   toggle() {
@@ -31,12 +42,14 @@ class Header extends React.Component {
     return (
       <div className="header">
         <div className="row">
+          <div className="col-md-12 text-left">
+            <b># general</b>
+          </div>
+        </div>
+        <div className="row">
           <div className="col-md-6 text-left">
-            <div className="channel-name">
-              Channel Name
-            </div>
             <div className="channel-users">
-              Channel Users
+              <FontAwesomeIcon icon={faUserAlt} />
             </div>
           </div>
           <div className="col-md-6 text-right">
@@ -47,11 +60,16 @@ class Header extends React.Component {
                 data-toggle="dropdown"
                 aria-expanded={dropdownOpen}
               >
-                <FontAwesomeIcon icon={faEllipsisV} />
+                <FontAwesomeIcon icon={faCog} className="settings-icon" />
               </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem>Settings</DropdownItem>
-                <DropdownItem>Logout</DropdownItem>
+                <DropdownItem
+                  className="btn btn-link"
+                  onClick={this.logout}
+                >
+                  Logout
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -60,5 +78,13 @@ class Header extends React.Component {
     );
   }
 }
+
+Header.defaultProps = {
+  history: {},
+};
+
+Header.propTypes = {
+  history: PropTypes.object,
+};
 
 export default Header;

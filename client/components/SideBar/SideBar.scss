@@ -1,3 +1,56 @@
 .sidebar-content {
   color: $shadyLady;
+  padding-top: 15px;
+  .sidebar-heading {
+    display: block;
+    width: 100%;
+    h5 {
+      float: left;
+      padding-left: 10px;
+    }
+    .sidebar-heading__action {
+      @extend .btn;
+      @extend .btn-link;
+      color: $shadyLady;
+      float: right;
+      text-decoration: none;
+      &:hover,
+      &:active,
+      &:focus {
+        color: $white;
+        text-decoration: none;
+      }
+    }
+    @include clearfix();
+  }
+  .channels,
+  .users {
+    margin-bottom: 20px;
+    .channels-list,
+    .users-list {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      .channels-list__item,
+      .user-list__item {
+        &:hover {
+          background-color: darken($valentino, 10%);
+        }
+        .channel-item,
+        .users-item {
+          @extend .btn;
+          @extend .btn-link;
+          color: $shadyLady;
+          font-size: 1.5em;
+          text-decoration: none;
+          &:hover,
+          &:active,
+          &:visited {
+            color: $shadyLady;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
 }

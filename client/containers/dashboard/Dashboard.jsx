@@ -5,23 +5,27 @@ import Input from '../../components/Input/Input';
 import Header from '../../components/Header/Header';
 import './Dashboard.scss';
 
-const Dashboard = () => (
+const Dashboard = props => (
   <div className="content">
     <div className="sidebar">
-      <SideBar />
+      <SideBar
+        {...props}
+        channels={[{ id: 1, name: 'general' }, { id: 2, name: 'random' }]}
+        users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
+      />
     </div>
     <div className="main-content">
       <header>
         <div className="header-container">
-          <Header />
+          <Header {...props} />
         </div>
       </header>
       <main>
         <div className="messages-container">
-          <Messages />
+          <Messages {...props} />
         </div>
         <div className="input-container">
-          <Input />
+          <Input {...props} />
         </div>
       </main>
     </div>

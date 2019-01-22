@@ -44,7 +44,7 @@ const Main = () => (
       <Route path="/" exact component={Home} />
       <Route path="/register" exact component={Register} />
       <Route path="/login" exact component={Login} />
-      <Route path="/dashboard" exact component={Dashboard} />
+      <PrivateRoute path="/dashboard" exact component={Dashboard} />
       <PrivateRoute path="/create-team" exact component={CreateTeams} />
     </Switch>
   </BrowserRouter>
