@@ -27,7 +27,7 @@ class Login extends React.Component {
     this[name] = value;
   }
 
-  async handleSubmit() {
+  async handleSubmit(e) {
     const { email, password } = this;
 
     if (email.length && password.length) {

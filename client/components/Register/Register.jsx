@@ -31,10 +31,6 @@ class Register extends React.Component {
   async handleSubmit(e) {
     const { username, email, password } = this.state;
 
-    console.log('this.state: ', this.state);
-
-    console.log('form filled: ', username.length && email.length && password.length);
-
     if (username.length && email.length && password.length) {
       const { mutate } = this.props;
 
@@ -52,8 +48,6 @@ class Register extends React.Component {
           // err['passwordError'] = 'too long..';
           err[`${path}Error`] = message;
         });
-
-        console.log('errors: ', errors);
 
         this.setState(err);
       }

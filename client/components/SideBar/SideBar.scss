@@ -33,8 +33,14 @@
       padding: 0;
       .channels-list__item,
       .user-list__item {
+        &.selected {
+          background-color: $toryBlue;
+          &:hover {
+            background-color: $toryBlue;
+          }
+        }
         &:hover {
-          background-color: darken($valentino, 10%);
+          background-color: darken($valentino, 5%);
         }
         .channel-item,
         .users-item {
@@ -43,12 +49,14 @@
           color: $shadyLady;
           font-size: 1.5em;
           text-decoration: none;
+          &:focus,
           &:hover,
           &:active,
           &:visited {
             color: $shadyLady;
             text-decoration: none;
           }
+
         }
       }
     }

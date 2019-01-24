@@ -1,71 +1,105 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import './SideBar.scss';
 
-const SideBar = (props) => {
-  const { channels, users } = props;
+class SideBar extends React.Component {
+  constructor(props) {
+    super(props);
 
-  return (
-    <div className="sidebar-content">
-      <div className="channels">
-        <div className="sidebar-heading">
-          <h5>Channels</h5>
-          <button
-            type="button"
-            className="sidebar-heading__action"
-          >
-            <FontAwesomeIcon icon={faPlusCircle} />
-          </button>
-        </div>
-        <ul className="channels-list">
-          {channels.map(el => (
-            <li
-              className="channels-list__item"
-              key={el.id}
+    this.state = {
+      activeEl: '',
+    };
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(e) {
+    const { parentNode } = e.target;
+    const elId = parentNode.id;
+
+    setTimeout(() => {
+      this.setState({
+        activeEl: elId,
+      });
+    }, 100);
+  }
+
+  render() {
+    const { channels, users } = this.props;
+    const { activeEl } = this.state;
+
+    return (
+      <div className="sidebar-content">
+        <div className="channels">
+          <div className="sidebar-heading">
+            <h5>Channels</h5>
+            <Button
+              type="button"
+              className="sidebar-heading__action"
+              onClick={this.handleClick}
             >
-              <button
-                type="button"
-                className="channel-item"
+              <FontAwesomeIcon icon={faPlusCircle} />
+            </Button>
+          </div>
+          <ul className="channels-list">
+            {channels.map(el => (
+              <li
+                className={
+                  activeEl === `channel-${el.id}` ? 'channels-list__item selected' : 'channels-list__item'
+                }
+                id={`channel-${el.id}`}
+                key={`channel-${el.id}`}
               >
-                #&nbsp;
-                {el.name}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="users">
-        <div className="sidebar-heading">
-          <h5>Direct Messages</h5>
-          <button
-            type="button"
-            className="sidebar-heading__action"
-          >
-            <FontAwesomeIcon icon={faPlusCircle} />
-          </button>
+                <Button
+                  type="button"
+                  className="channel-item"
+                  onClick={this.handleClick}
+                >
+                  #&nbsp;
+                  {el.name}
+                </Button>
+              </li>
+            ))}
+          </ul>
         </div>
-        <ul className="users-list">
-          {users.map(el => (
-            <li
-              className="user-list__item"
-              key={el.id}
+        <div className="users">
+          <div className="sidebar-heading">
+            <h5>Direct Messages</h5>
+            <Button
+              type="button"
+              className="sidebar-heading__action"
             >
-              <button
-                type="button"
-                className="users-item"
+              <FontAwesomeIcon icon={faPlusCircle} />
+            </Button>
+          </div>
+          <ul className="users-list">
+            {users.map(el => (
+              <li
+                className={
+                  activeEl === `user-${el.id}` ? 'user-list__item selected' : 'user-list__item'
+                }
+                id={`user-${el.id}`}
+                key={el.id}
               >
-                #&nbsp;
-                {el.name}
-              </button>
-            </li>
-          ))}
-        </ul>
+                <Button
+                  type="button"
+                  className="users-item"
+                  onClick={this.handleClick}
+                >
+                  #&nbsp;
+                  {el.name}
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 SideBar.defaultProps = {
   channels: [],

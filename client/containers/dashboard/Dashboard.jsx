@@ -9,7 +9,6 @@ const Dashboard = props => (
   <div className="content">
     <div className="sidebar">
       <SideBar
-        {...props}
         channels={[{ id: 1, name: 'general' }, { id: 2, name: 'random' }]}
         users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
       />
