@@ -1,5 +1,5 @@
 import React from 'react';
-import SideBar from '../../components/SideBar/SideBar';
+import Sidebar from '../../components/Sidebar/Sidebar';
 import Messages from '../../components/Messages/Messages';
 import Input from '../../components/Input/Input';
 import Header from '../../components/Header/Header';
@@ -8,7 +8,7 @@ import './Dashboard.scss';
 const Dashboard = props => (
   <div className="content">
     <div className="sidebar">
-      <SideBar
+      <Sidebar
         channels={[{ id: 1, name: 'general' }, { id: 2, name: 'random' }]}
         users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
       />

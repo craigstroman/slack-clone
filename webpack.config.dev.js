@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-// const liveReloadPlugin = require('webpack-livereload-plugin');
 
 module.exports = env => {
   const nodeEnv = process.env.NODE_ENV;
@@ -10,10 +9,7 @@ module.exports = env => {
   const plugins = [
     new webpack.EnvironmentPlugin({
       NODE_ENV: nodeEnv,
-    }),
-    /* new liveReloadPlugin({
-      port: 8081
-    }) */
+    })
   ];
 
   const PATHS = {
@@ -23,7 +19,7 @@ module.exports = env => {
 
   return {
     entry: {
-       app: path.join(__dirname, 'client/containers/App.jsx')
+       app: path.join(__dirname, 'client/App.jsx')
     },
 
     output: {
@@ -94,4 +90,3 @@ module.exports = env => {
     plugins: plugins
   }
 };
-

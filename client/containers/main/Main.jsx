@@ -4,8 +4,8 @@ import {
 } from 'react-router-dom';
 import decode from 'jwt-decode';
 
-import Home from '../home/Home';
-import Dashboard from '../dashboard/Dashboard';
+import Home from '../Home/Home';
+import Dashboard from '../Dashboard/Dashboard';
 import Register from '../../components/Register/Register';
 import Login from '../../components/Login/Login';
 import CreateTeams from '../../components/Teams/CreateTeams';
