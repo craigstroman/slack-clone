@@ -6,7 +6,9 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import './Channels.scss';
 
 const Channels = (props) => {
-  const { activeEl, channels, handleClick } = props;
+  const {
+    activeEl, channels, handleSelectItem, handleAddChannel,
+  } = props;
 
   return (
     <div className="channels">
@@ -15,7 +17,7 @@ const Channels = (props) => {
         <Button
           type="button"
           className="sidebar-heading__action"
-          onClick={handleClick}
+          onClick={handleAddChannel}
         >
           <FontAwesomeIcon icon={faPlusCircle} />
         </Button>
@@ -32,7 +34,7 @@ const Channels = (props) => {
             <Button
               type="button"
               className="channel-item"
-              onClick={handleClick}
+              onClick={handleSelectItem}
             >
               #&nbsp;
               {el.name}
@@ -46,14 +48,16 @@ const Channels = (props) => {
 
 Channels.defaultProps = {
   activeEl: '',
-  handleClick: () => {},
   channels: [],
+  handleSelectItem: () => {},
+  handleAddChannel: () => {},
 };
 
 Channels.propTypes = {
   activeEl: PropTypes.string,
-  handleClick: PropTypes.func,
   channels: PropTypes.array,
+  handleSelectItem: PropTypes.func,
+  handleAddChannel: PropTypes.func,
 };
 
 export default Channels;

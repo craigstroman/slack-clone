@@ -6,7 +6,9 @@ import { faPlusCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
 import './Users.scss';
 
 const Users = (props) => {
-  const { activeEl, users, handleClick } = props;
+  const {
+    activeEl, users, handleSelectItem, handleMessageUser,
+  } = props;
 
   return (
     <div className="users">
@@ -15,6 +17,7 @@ const Users = (props) => {
         <Button
           type="button"
           className="sidebar-heading__action"
+          onClick={handleMessageUser}
         >
           <FontAwesomeIcon icon={faPlusCircle} />
         </Button>
@@ -31,7 +34,7 @@ const Users = (props) => {
             <Button
               type="button"
               className="users-item"
-              onClick={handleClick}
+              onClick={handleSelectItem}
             >
               <FontAwesomeIcon icon={faCircle} className="user-status" />
               {el.name}
@@ -45,14 +48,16 @@ const Users = (props) => {
 
 Users.defaultProps = {
   activeEl: '',
-  handleClick: () => {},
   users: [],
+  handleSelectItem: () => {},
+  handleMessageUser: () => {},
 };
 
 Users.propTypes = {
   activeEl: PropTypes.string,
-  handleClick: PropTypes.func,
   users: PropTypes.array,
+  handleSelectItem: PropTypes.func,
+  handleMessageUser: PropTypes.func,
 };
 
 

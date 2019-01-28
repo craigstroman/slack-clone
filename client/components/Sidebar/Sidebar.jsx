@@ -12,10 +12,16 @@ class Sidebar extends React.Component {
       activeEl: '',
     };
 
-    this.handleClick = this.handleClick.bind(this);
+    this.handleSelectItem = this.handleSelectItem.bind(this);
+    this.handleAddChannel = this.handleAddChannel.bind(this);
+    this.handleMessageUser = this.handleMessageUser.bind(this);
   }
 
-  handleClick(e) {
+  /**
+   * Sets focus to an item selected in the sidebar.
+   *
+   */
+  handleSelectItem(e) {
     const { parentNode } = e.target;
     const elId = parentNode.id;
 
@@ -24,6 +30,26 @@ class Sidebar extends React.Component {
         activeEl: elId,
       });
     }, 100);
+  }
+
+  /**
+   * Adds a channel to the team.
+   *
+   */
+  handleAddChannel(e) {
+    console.log('handleAddChannel:');
+    console.log('e: ', e);
+    console.log('this: ', this);
+  }
+
+  /**
+   * Allows a user to add a user to send a message to.
+   *
+   */
+  handleMessageUser(e) {
+    console.log('handlMessageUser: ');
+    console.log('e: ', e);
+    console.log('this: ', this);
   }
 
   render() {
@@ -36,8 +62,18 @@ class Sidebar extends React.Component {
           <h2 className="sidebar-title">Team Name</h2>
         </header>
         <section>
-          <Channels activeEl={activeEl} channels={channels} handleClick={this.handleClick} />
-          <Users activeEl={activeEl} users={users} handleClick={this.handleClick} />
+          <Channels
+            activeEl={activeEl}
+            channels={channels}
+            handleSelectItem={this.handleSelectItem}
+            handleAddChannel={this.handleAddChannel}
+          />
+          <Users
+            activeEl={activeEl}
+            users={users}
+            handleSelectItem={this.handleSelectItem}
+            handleMessageUser={this.handleMessageUser}
+          />
         </section>
       </div>
     );
