@@ -8,6 +8,13 @@
           display: block;
         }
       }
+    } // .content
+    .errors {
+      color: $red;
+      padding-top: 10px;
     }
-  }
-}
+    .input-error {
+      border: 1px solid $red;
+    }
+  } // main
+} // .container

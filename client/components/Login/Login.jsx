@@ -1,36 +1,87 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { extendObservable } from 'mobx';
-import { observer } from 'mobx-react';
 import { gql, graphql } from 'react-apollo';
-import { Button } from 'reactstrap';
-import { AvForm, AvField } from 'availity-reactstrap-validation';
+import {
+  Button, Form, FormGroup, Label, Input,
+} from 'reactstrap';
 import './Login.scss';
 
-@observer
 class Login extends React.Component {
   constructor(props) {
     super(props);
 
-    extendObservable(this, {
+    this.state = {
       email: '',
       password: '',
+      fieldErrors: [],
       errors: false,
-    });
+    };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.validateForm = this.validateForm.bind(this);
+    this.validateEmail = this.validateEmail.bind(this);
   }
 
   handleChange(e) {
     const { name, value } = e.target;
-    this[name] = value;
+
+    if (name === 'email') {
+      this.setState({
+        email: value,
+      });
+    }
+
+    if (name === 'password') {
+      this.setState({
+        password: value,
+      });
+    }
+  }
+
+  validateEmail() {
+    const { email } = this.state;
+    const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (emailRex.test(email)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  validateForm() {
+    const { email, password } = this.state;
+    const errors = {};
+
+    if (!email.length) {
+      errors.email = 'Email is required.';
+    } else if (email.length >= 1) {
+      if (!this.validateEmail()) {
+        errors.email = 'Invalid email.';
+      }
+    }
+
+    if (!password.length) {
+      errors.password = 'Password is required.';
+    }
+
+    if (Object.keys(errors).length >= 1) {
+      this.setState({
+        fieldErrors: errors,
+      });
+
+      return false;
+    }
+
+    return true;
   }
 
   async handleSubmit(e) {
-    const { email, password } = this;
+    e.preventDefault();
+    const { email, password } = this.state;
 
-    if (email.length && password.length) {
+    if (this.validateForm()) {
       const { mutate, history } = this.props;
 
       const response = await mutate({ variables: { email, password } });
@@ -49,7 +100,9 @@ class Login extends React.Component {
   }
 
   render() {
-    const { email, password, errors } = this;
+    const {
+      email, password, errors, fieldErrors,
+    } = this.state;
 
     return (
       <div className="container">
@@ -58,6 +111,7 @@ class Login extends React.Component {
             <h1 className="text-center">
               Login
             </h1>
+            <hr />
           </div>
         </header>
         <main>
@@ -69,37 +123,54 @@ class Login extends React.Component {
                 Invalid email or password.
               </div>
             </div>
-            <AvForm>
-              <AvField
-                label="Email:"
-                type="email"
-                name="email"
-                value={email}
-                placeholder="you@host.com"
-                onChange={this.handleChange}
-                validate={{
-                  required: { value: true, errorMessage: 'Please enter a username.' },
-                }}
-              />
-              <AvField
-                label="Password:"
-                type="password"
-                name="password"
-                value={password}
-                onChange={this.handleChange}
-                validate={{
-                  required: { value: true, errorMessage: 'Please enter a password.' },
-                }}
-              />
-              <Button
-                type="submit"
-                color="primary"
-                onClick={this.handleSubmit}
-              >
-                Login
-              </Button>
-            </AvForm>
           </div>
+          <Form>
+            <FormGroup className="row">
+              <Label for="email" className="col-md-2 col-form-label">Email:</Label>
+              <div className="col-md-10">
+                <Input
+                  type="email"
+                  name="email"
+                  id="email"
+                  placeholder="you@host.com"
+                  value={email}
+                  onChange={this.handleChange}
+                  className={fieldErrors.email ? 'input-error' : ''}
+                />
+                <div className="errors">
+                  {fieldErrors.email}
+                </div>
+              </div>
+            </FormGroup>
+            <FormGroup className="row">
+              <Label for="password" className="col-md-2 col-form-label">Password:</Label>
+              <div className="col-md-10">
+                <Input
+                  type="password"
+                  name="password"
+                  id="password"
+                  value={password}
+                  onChange={this.handleChange}
+                  className={fieldErrors.email ? 'input-error' : ''}
+                />
+                <div className="errors">
+                  {fieldErrors.password}
+                </div>
+              </div>
+            </FormGroup>
+            <div className="row">
+              <div className="col text-center">
+                <Button
+                  type="submit"
+                  color="primary"
+                  className="mx-auto"
+                  onClick={this.handleSubmit}
+                >
+                  Login
+                </Button>
+              </div>
+            </div>
+          </Form>
         </main>
       </div>
     );
@@ -128,4 +199,4 @@ Login.propTypes = {
   history: PropTypes.object,
 };
 
-export default graphql(loginMutation)(observer(Login));
+export default graphql(loginMutation)(Login);
