@@ -1,4 +1,7 @@
 .messages {
   background-color: $white;
   color: $black;
+  .messages-list {
+    list-style-type: none;
+  }
 }

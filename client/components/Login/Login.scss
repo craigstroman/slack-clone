@@ -1,4 +1,5 @@
-.container {
+.login-container {
+  @extend .container;
   main {
     .content {
       .error {

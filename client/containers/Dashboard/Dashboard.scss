@@ -1,18 +1,19 @@
-.content {
-  display: flex;
-  height: 100%;
-  margin-left: 0;
-  margin-right: 0;
-  padding-left: 0;
-  padding-right: 0;
-  width: 100%;
-  .sidebar {
+.dashboard-container {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 100px 250px 1fr;
+  grid-template-rows: auto 1fr auto;
+  .team-sidebar {
+    background-color: $thunder;
+    grid-column: 1;
+  }
+  .main-sidebar {
     background-color: $valentino;
-    width: 250px;
+    grid-column: 2;
   }
   .main-content {
-    flex: 1;
-    height: 100%;
+    grid-column: 3;
+    height: 100vh;
     header {
       .header-container {
         height: 55px;
@@ -23,9 +24,11 @@
       .messages-container {
         border-bottom: 1px solid $black;
         border-top: 1px solid $black;
-        height: 98%;
+        height: 95%;
         overflow-y: scroll;
       }
+    }
+    footer {
       .input-container {
         height: 1%;
       }

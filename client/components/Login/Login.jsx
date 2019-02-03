@@ -105,7 +105,7 @@ class Login extends React.Component {
     } = this.state;
 
     return (
-      <div className="container">
+      <div className="login-container">
         <header>
           <div className="header">
             <h1 className="text-center">

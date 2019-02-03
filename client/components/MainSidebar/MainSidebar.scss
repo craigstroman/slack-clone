@@ -1,0 +1,34 @@
+.main-sidebar-container {
+  padding-top: 15px;
+  header {
+    .main-sidebar__title {
+      color: $white;
+      text-align: center;
+    }
+  }
+  section {
+    color: $shadyLady;
+    .sidebar-heading {
+      display: block;
+      width: 100%;
+      h5 {
+        float: left;
+        padding-left: 10px;
+      }
+      .sidebar-heading__action {
+        @extend .btn;
+        @extend .btn-link;
+        color: $shadyLady;
+        float: right;
+        text-decoration: none;
+        &:hover,
+        &:active,
+        &:focus {
+          color: $white;
+          text-decoration: none;
+        }
+      }
+      @include clearfix();
+    }
+  }
+}

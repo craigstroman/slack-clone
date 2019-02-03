@@ -48,8 +48,7 @@ module.exports = env => {
                 ['@babel/plugin-proposal-class-properties', { "loose": true }],
                 ['@babel/plugin-proposal-decorators', { "legacy": true }],
                 ['@babel/plugin-transform-async-to-generator'],
-                ['@babel/plugin-transform-runtime'],
-                ['react-hot-loader/babel']
+                ['@babel/plugin-transform-runtime']
               ]
             },
           }

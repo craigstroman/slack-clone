@@ -1,14 +1,18 @@
 import React from 'react';
-import Sidebar from '../../components/Sidebar/Sidebar';
+import MainSidebar from '../../components/MainSidebar/MainSidebar';
+import TeamSidebar from '../../components/TeamSidebar/TeamSidebar';
 import Messages from '../../components/Messages/Messages';
 import Input from '../../components/Input/Input';
 import Header from '../../components/Header/Header';
 import './Dashboard.scss';
 
 const Dashboard = props => (
-  <div className="content">
-    <div className="sidebar">
-      <Sidebar
+  <div className="dashboard-container">
+    <div className="team-sidebar">
+      <TeamSidebar />
+    </div>
+    <div className="main-sidebar">
+      <MainSidebar
         channels={[{ id: 1, name: 'general' }, { id: 2, name: 'random' }]}
         users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
       />
@@ -23,10 +27,12 @@ const Dashboard = props => (
         <div className="messages-container">
           <Messages {...props} />
         </div>
+      </main>
+      <footer>
         <div className="input-container">
           <Input {...props} />
         </div>
-      </main>
+      </footer>
     </div>
   </div>
 );
