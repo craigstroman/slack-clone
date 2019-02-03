@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { gql, graphql } from 'react-apollo';
 import Channels from '../../containers/Channels/Channels';
 import Users from '../../containers/Users/Users';
 import './Sidebar.scss';
@@ -53,13 +54,18 @@ class Sidebar extends React.Component {
   }
 
   render() {
-    const { channels, users } = this.props;
+    const { channels, users, data } = this.props;
     const { activeEl } = this.state;
+    let teamName = '';
+
+    if (data.allTeams) {
+      teamName = data.allTeams[0].name;
+    }
 
     return (
       <div className="sidebar-content">
         <header>
-          <h2 className="sidebar-title">Team Name</h2>
+          <h2 className="sidebar-title">{teamName}</h2>
         </header>
         <section>
           <Channels
@@ -80,14 +86,29 @@ class Sidebar extends React.Component {
   }
 }
 
+const allTeamsQuery = gql`
+  {
+    allTeams {
+      id
+      name
+      channels {
+        id
+        name
+      }
+    }
+  }
+`;
+
 Sidebar.defaultProps = {
   channels: [],
   users: [],
+  data: {},
 };
 
 Sidebar.propTypes = {
   channels: PropTypes.array,
   users: PropTypes.array,
+  data: PropTypes.object,
 };
 
-export default Sidebar;
+export default graphql(allTeamsQuery)(Sidebar);
