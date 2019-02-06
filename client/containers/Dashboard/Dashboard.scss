@@ -1,8 +1,14 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
 .dashboard-container {
   display: grid;
   height: 100vh;
   grid-template-columns: 100px 250px 1fr;
-  grid-template-rows: auto 1fr auto;
+
   .team-sidebar {
     background-color: $thunder;
     grid-column: 1;
@@ -12,26 +18,20 @@
     grid-column: 2;
   }
   .main-content {
-    grid-column: 3;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
     height: 100vh;
     header {
-      .header-container {
-        height: 55px;
-      }
+      grid-column: 3;
+      grid-row: 1;
     }
     main {
-      height: 90%;
-      .messages-container {
-        border-bottom: 1px solid $black;
-        border-top: 1px solid $black;
-        height: 95%;
-        overflow-y: scroll;
-      }
+      grid-column: 3;
+      grid-row: 2;
     }
     footer {
-      .input-container {
-        height: 1%;
-      }
+      grid-column: 3;
+      grid-row: 3;
     }
   }
 }
