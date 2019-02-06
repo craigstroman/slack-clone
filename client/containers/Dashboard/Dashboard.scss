@@ -28,6 +28,12 @@
     main {
       grid-column: 3;
       grid-row: 2;
+      .messages-container {
+        border-bottom: 1px solid $black;
+        border-top: 1px solid $black;
+        height: 98%;
+        overflow-y: scroll;
+      }
     }
     footer {
       grid-column: 3;
