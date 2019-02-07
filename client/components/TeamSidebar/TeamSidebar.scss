@@ -1,0 +1,35 @@
+.teams-sidebar-container {
+  color: $white;
+  header {
+    h5 {
+      color: $white;
+      text-align: center;
+    }
+  }
+  section {
+    .teams-list {
+      list-style: none;
+      padding-left: 0px;
+      width: 100%;
+      .teams-list__item {
+        align-items: center;
+        background-color: #676066;
+        border-radius: 11px;
+        cursor: pointer;
+        color: #fff;
+        display: flex;
+        font-size: 24px;
+        height: 50px;
+        justify-content: center;
+        margin-bottom: 10px;
+        margin: auto;
+        width: 50px;
+        &:hover {
+          border-style: solid;
+          border-width: thick;
+          border-color: #767676;
+        }
+      }
+    }
+  }
+}
