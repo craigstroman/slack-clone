@@ -60,7 +60,7 @@ class Dashboard extends React.Component {
         <div className="main-content">
           <header>
             <div className="header-container">
-              <Header />
+              <Header {...this.props} />
             </div>
           </header>
           <main>
