@@ -53,9 +53,8 @@ class MainSidebar extends React.Component {
   }
 
   render() {
-    const { channels, users } = this.props;
+    const { channels, users, teamName } = this.props;
     const { activeEl } = this.state;
-    const teamName = '';
 
     return (
       <div className="main-sidebar-container">
@@ -84,11 +83,13 @@ class MainSidebar extends React.Component {
 MainSidebar.defaultProps = {
   channels: [],
   users: [],
+  teamName: '',
 };
 
 MainSidebar.propTypes = {
   channels: PropTypes.array,
   users: PropTypes.array,
+  teamName: PropTypes.string,
 };
 
 export default MainSidebar;

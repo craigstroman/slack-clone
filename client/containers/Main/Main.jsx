@@ -6,7 +6,7 @@ import decode from 'jwt-decode';
 
 
 import Home from '../Home/Home';
-import Dashboard from '../Dashboard/Dashboard';
+import Dashboard from '../../components/Dashboard/Dashboard';
 import Register from '../../components/Register/Register';
 import Login from '../../components/Login/Login';
 import CreateTeams from '../../components/Teams/CreateTeams';
