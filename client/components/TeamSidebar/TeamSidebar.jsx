@@ -9,7 +9,7 @@ class TeamSidebar extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(e) {
+  handleClick = (e) => {
     const { handleTeamChange } = this.props;
 
     const teamName = e.target.getAttribute('team');
@@ -30,13 +30,14 @@ class TeamSidebar extends React.Component {
                   className="teams-list__item"
                   id={`teams-${el.id}`}
                   key={`teams-${el.id}`}
+                  type={el.type}
                 >
                   <button
                     type="button"
                     className="team-item"
                     title={el.name}
                     team={el.name}
-                    onClick={this.handleClick}
+                    onClick={e => this.handleClick(e)}
                   >
                     { el.letter }
                   </button>

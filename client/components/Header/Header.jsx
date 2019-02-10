@@ -38,12 +38,16 @@ class Header extends React.Component {
 
   render() {
     const { dropdownOpen } = this.state;
+    const { channelName } = this.props;
 
     return (
       <div className="header">
         <div className="row">
           <div className="col-md-12 text-left">
-            <b># general</b>
+            <b>
+              #&nbsp;
+              {channelName}
+            </b>
           </div>
         </div>
         <div className="row">
@@ -81,10 +85,12 @@ class Header extends React.Component {
 
 Header.defaultProps = {
   history: {},
+  channelName: '',
 };
 
 Header.propTypes = {
   history: PropTypes.object,
+  channelName: PropTypes.string,
 };
 
 export default Header;

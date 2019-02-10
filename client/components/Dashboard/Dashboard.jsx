@@ -14,18 +14,26 @@ class Dashboard extends React.Component {
 
     this.state = {
       teamName: '',
+      channelName: '',
     };
 
     this.handleTeamChange = this.handleTeamChange.bind(this);
+    this.handleChannelChange = this.handleChannelChange.bind(this);
   }
 
   handleTeamChange(teamName) {
     this.setState({ teamName });
   }
 
+  handleChannelChange(channelName) {
+    console.log('handleChannelChange:');
+    console.log('channelName: ', channelName);
+    this.setState({ channelName });
+  }
+
   render() {
     const { data } = this.props;
-    let { teamName } = this.state;
+    let { teamName, channelName } = this.state;
     let teams = [];
 
     if (Array.isArray(data.allTeams)) {
@@ -40,6 +48,10 @@ class Dashboard extends React.Component {
       if (!teamName.length) {
         teamName = teams[0].name;
       }
+
+      if (!channelName.length) {
+        channelName = 'general';
+      }
     }
 
     return (
@@ -48,29 +60,32 @@ class Dashboard extends React.Component {
           <TeamSidebar
             teams={teams}
             handleTeamChange={this.handleTeamChange}
+            {...this.props}
           />
         </div>
         <div className="main-sidebar">
           <MainSidebar
-            channels={[{ id: 1, name: 'general' }, { id: 2, name: 'random' }]}
-            users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
+            channels={[{ id: 1, name: 'general', type: 'channel' }, { id: 2, name: 'random', type: 'channel' }]}
+            users={[{ id: 1, name: 'slackbot', type: 'user' }, { id: 2, name: 'user1', type: 'user' }]}
             teamName={teamName}
+            handleChannelChange={this.handleChannelChange}
+            {...this.props}
           />
         </div>
         <div className="main-content">
           <header>
             <div className="header-container">
-              <Header {...this.props} />
+              <Header channelName={channelName} {...this.props} />
             </div>
           </header>
           <main>
             <div className="messages-container">
-              <Messages />
+              <Messages {...this.props} />
             </div>
           </main>
           <footer>
             <div className="input-container">
-              <Input />
+              <Input {...this.props} />
             </div>
           </footer>
         </div>
