@@ -26,8 +26,6 @@ class Dashboard extends React.Component {
   }
 
   handleChannelChange(channelName) {
-    console.log('handleChannelChange:');
-    console.log('channelName: ', channelName);
     this.setState({ channelName });
   }
 
