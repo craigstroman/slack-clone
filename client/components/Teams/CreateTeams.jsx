@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { extendObservable } from 'mobx';
 import { observer } from 'mobx-react';
-import { gql, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import { Button } from 'reactstrap';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
+import gql from 'graphql-tag';
 import './CreateTeams.scss';
 
 @observer

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gql, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import {
   Button, Form, FormGroup, Label, Input,
 } from 'reactstrap';
+import gql from 'graphql-tag';
 import './Login.scss';
 
 class Login extends React.Component {

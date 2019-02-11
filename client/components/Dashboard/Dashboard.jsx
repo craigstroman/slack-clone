@@ -1,5 +1,6 @@
 import React from 'react';
-import { gql, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
 import MainSidebar from '../MainSidebar/MainSidebar';
 import TeamSidebar from '../TeamSidebar/TeamSidebar';
@@ -83,7 +84,7 @@ class Dashboard extends React.Component {
           </main>
           <footer>
             <div className="input-container">
-              <Input {...this.props} />
+              <Input {...this.props} channelName={channelName} />
             </div>
           </footer>
         </div>
