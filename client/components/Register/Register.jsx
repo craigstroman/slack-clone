@@ -23,13 +23,13 @@ class Register extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(e) {
+  handleChange = (e) => {
     const { name, value } = e.target;
 
     this.setState({ [name]: value });
   }
 
-  async handleSubmit(e) {
+  handleSubmit = async (e) => {
     const { username, email, password } = this.state;
 
     if (username.length && email.length && password.length) {
@@ -109,7 +109,7 @@ class Register extends React.Component {
               label="Username:"
               type="text"
               value={username}
-              onChange={this.handleChange}
+              onChange={e => this.handleChange(e)}
               validate={{
                 required: { value: true, errorMessage: 'Please enter a username.' },
                 pattern: { value: '^[A-Za-z0-9]+$', errorMessage: 'Your username must be composed only with letter and numbers.' },
@@ -123,7 +123,7 @@ class Register extends React.Component {
               type="email"
               placeholder="you@host.com"
               value={email}
-              onChange={this.handleChange}
+              onChange={e => this.handleChange(e)}
               validate={{
                 required: {
                   value: true,
@@ -136,7 +136,7 @@ class Register extends React.Component {
               label="Password:"
               type="password"
               value={password}
-              onChange={this.handleChange}
+              onChange={e => this.handleChange(e)}
               validate={{
                 required: { value: true, errorMessage: 'Please enter a password.' },
                 minLength: { value: 5, errorMessage: 'Your password must be between 5 and 100 characters.' },

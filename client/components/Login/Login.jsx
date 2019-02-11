@@ -24,7 +24,7 @@ class Login extends React.Component {
     this.validateEmail = this.validateEmail.bind(this);
   }
 
-  handleChange(e) {
+  handleChange = (e) => {
     const { name, value } = e.target;
 
     if (name === 'email') {
@@ -40,7 +40,7 @@ class Login extends React.Component {
     }
   }
 
-  validateEmail() {
+  validateEmail = () => {
     const { email } = this.state;
     const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -51,7 +51,7 @@ class Login extends React.Component {
     return false;
   }
 
-  validateForm() {
+  validateForm = () => {
     const { email, password } = this.state;
     const errors = {};
 
@@ -78,7 +78,7 @@ class Login extends React.Component {
     return true;
   }
 
-  async handleSubmit(e) {
+  handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = this.state;
 
@@ -165,7 +165,7 @@ class Login extends React.Component {
                   type="submit"
                   color="primary"
                   className="mx-auto"
-                  onClick={this.handleSubmit}
+                  onClick={e => this.handleSubmit(e)}
                 >
                   Login
                 </Button>

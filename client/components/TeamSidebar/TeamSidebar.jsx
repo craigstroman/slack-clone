@@ -10,9 +10,12 @@ class TeamSidebar extends React.Component {
   }
 
   handleClick = (e) => {
-    const { handleTeamChange } = this.props;
+    const { handleTeamChange, history } = this.props;
 
     const teamName = e.target.getAttribute('team');
+    const teamId = e.target.getAttribute('teamid');
+
+    history.push(`/dashboard/view/team/${teamId}`);
 
     handleTeamChange(teamName);
   }
@@ -37,6 +40,7 @@ class TeamSidebar extends React.Component {
                     className="team-item"
                     title={el.name}
                     team={el.name}
+                    teamid={el.id}
                     onClick={e => this.handleClick(e)}
                   >
                     { el.letter }
@@ -52,11 +56,13 @@ class TeamSidebar extends React.Component {
 }
 
 TeamSidebar.defaultProps = {
+  history: {},
   teams: [],
   handleTeamChange: () => {},
 };
 
 TeamSidebar.propTypes = {
+  history: PropTypes.object,
   teams: PropTypes.array,
   handleTeamChange: PropTypes.func,
 };

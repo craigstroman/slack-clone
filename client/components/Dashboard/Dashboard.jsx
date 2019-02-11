@@ -22,11 +22,11 @@ class Dashboard extends React.Component {
     this.handleChannelChange = this.handleChannelChange.bind(this);
   }
 
-  handleTeamChange(teamName) {
+  handleTeamChange = (teamName) => {
     this.setState({ teamName });
   }
 
-  handleChannelChange(channelName) {
+  handleChannelChange = (channelName) => {
     this.setState({ channelName });
   }
 

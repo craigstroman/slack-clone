@@ -22,12 +22,12 @@ class CreateTeams extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(e) {
+  handleChange = (e) => {
     const { name, value } = e.target;
     this[name] = value;
   }
 
-  async handleSubmit() {
+  handleSubmit = async () => {
     const { name } = this;
 
     if (name.length) {
@@ -76,7 +76,7 @@ class CreateTeams extends React.Component {
                 type="text"
                 name="name"
                 value={name}
-                onChange={this.handleChange}
+                onChange={e => this.handleChange(e)}
                 validate={{
                   required: { value: true, errorMessage: 'Please enter a team name.' },
                 }}

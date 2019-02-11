@@ -19,7 +19,7 @@ class Header extends React.Component {
     this.logout = this.logout.bind(this);
   }
 
-  logout() {
+  logout = () => {
     const { history } = this.props;
 
     localStorage.removeItem('refreshToken');
@@ -28,7 +28,7 @@ class Header extends React.Component {
     history.push('/');
   }
 
-  toggle() {
+  toggle = () => {
     const { dropdownOpen } = this.state;
 
     this.setState({
