@@ -38,15 +38,21 @@ class Header extends React.Component {
 
   render() {
     const { dropdownOpen } = this.state;
-    const { channelName } = this.props;
+    const { itemName, itemType } = this.props;
+    let title = '';
+
+    if (itemType === 'channel') {
+      title = `#${itemName}`;
+    } else if (itemType === 'user') {
+      title = itemName;
+    }
 
     return (
       <div className="header">
         <div className="row">
           <div className="col-md-12 text-left">
             <b>
-              #&nbsp;
-              {channelName}
+              {title}
             </b>
           </div>
         </div>
@@ -85,12 +91,14 @@ class Header extends React.Component {
 
 Header.defaultProps = {
   history: {},
-  channelName: '',
+  itemName: '',
+  itemType: '',
 };
 
 Header.propTypes = {
   history: PropTypes.object,
-  channelName: PropTypes.string,
+  itemName: PropTypes.string,
+  itemType: PropTypes.string,
 };
 
 export default Header;

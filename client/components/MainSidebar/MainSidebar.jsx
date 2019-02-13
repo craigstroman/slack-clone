@@ -14,8 +14,6 @@ class MainSidebar extends React.Component {
     };
 
     this.handleSelectItem = this.handleSelectItem.bind(this);
-    // this.handleAddChannel = this.handleAddChannel.bind(this);
-    // this.handleMessageUser = this.handleMessageUser.bind(this);
   }
 
   /**
@@ -25,17 +23,16 @@ class MainSidebar extends React.Component {
   handleSelectItem = (e) => {
     const { target } = e;
     const { parentNode } = e.target;
-    const { handleChannelChange } = this.props;
+    const { handleChangeItem } = this.props;
     const elId = parentNode.id;
+    const itemName = target.getAttribute('name');
+    const itemType = target.getAttribute('itemType');
 
     this.setState({
       activeEl: elId,
     });
 
-    if (target.getAttribute('itemType') === 'channel') {
-      const teamName = target.getAttribute('name');
-      handleChannelChange(teamName);
-    }
+    handleChangeItem(itemName, itemType);
   }
 
   render() {
@@ -126,14 +123,14 @@ MainSidebar.defaultProps = {
   channels: [],
   users: [],
   teamName: '',
-  handleChannelChange: () => {},
+  handleChangeItem: () => {},
 };
 
 MainSidebar.propTypes = {
   channels: PropTypes.array,
   users: PropTypes.array,
   teamName: PropTypes.string,
-  handleChannelChange: PropTypes.func,
+  handleChangeItem: PropTypes.func,
 };
 
 export default MainSidebar;

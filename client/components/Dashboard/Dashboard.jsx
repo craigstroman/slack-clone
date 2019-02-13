@@ -15,24 +15,27 @@ class Dashboard extends React.Component {
 
     this.state = {
       teamName: '',
-      channelName: '',
+      itemName: '',
+      itemType: '',
     };
 
-    this.handleTeamChange = this.handleTeamChange.bind(this);
-    this.handleChannelChange = this.handleChannelChange.bind(this);
+    this.handleChangeItem = this.handleChangeItem.bind(this);
   }
 
-  handleTeamChange = (teamName) => {
+  handleChangeTeam = (teamName) => {
     this.setState({ teamName });
   }
 
-  handleChannelChange = (channelName) => {
-    this.setState({ channelName });
+  handleChangeItem = (itemName, itemType) => {
+    this.setState({
+      itemName,
+      itemType,
+    });
   }
 
   render() {
     const { data } = this.props;
-    let { teamName, channelName } = this.state;
+    let { teamName, itemName, itemType } = this.state;
     let teams = [];
 
     if (Array.isArray(data.allTeams)) {
@@ -48,8 +51,9 @@ class Dashboard extends React.Component {
         teamName = teams[0].name;
       }
 
-      if (!channelName.length) {
-        channelName = 'general';
+      if (!itemName.length && !itemType.length) {
+        itemName = 'general';
+        itemType = 'channel';
       }
     }
 
@@ -58,7 +62,7 @@ class Dashboard extends React.Component {
         <div className="team-sidebar">
           <TeamSidebar
             teams={teams}
-            handleTeamChange={this.handleTeamChange}
+            handleChangeTeam={this.handleChangeTeam}
             {...this.props}
           />
         </div>
@@ -67,14 +71,14 @@ class Dashboard extends React.Component {
             channels={[{ id: 1, name: 'general', type: 'channel' }, { id: 2, name: 'random', type: 'channel' }]}
             users={[{ id: 1, name: 'slackbot', type: 'user' }, { id: 2, name: 'user1', type: 'user' }]}
             teamName={teamName}
-            handleChannelChange={this.handleChannelChange}
+            handleChangeItem={this.handleChangeItem}
             {...this.props}
           />
         </div>
         <div className="main-content">
           <header>
             <div className="header-container">
-              <Header channelName={channelName} {...this.props} />
+              <Header itemName={itemName} itemType={itemType} {...this.props} />
             </div>
           </header>
           <main>
@@ -84,7 +88,7 @@ class Dashboard extends React.Component {
           </main>
           <footer>
             <div className="input-container">
-              <Input {...this.props} channelName={channelName} />
+              <Input itemName={itemName} itemType={itemType} {...this.props} />
             </div>
           </footer>
         </div>
@@ -107,12 +111,10 @@ const allTeamsQuery = gql`
 `;
 
 Dashboard.defaultProps = {
-  // teams: [],
   data: {},
 };
 
 Dashboard.propTypes = {
-  // teams: PropTypes.array,
   data: PropTypes.object,
 };
 
