@@ -9,7 +9,7 @@ import Home from '../Home/Home';
 import Dashboard from '../../components/Dashboard/Dashboard';
 import Register from '../../components/Register/Register';
 import Login from '../../components/Login/Login';
-import CreateTeams from '../../components/Teams/CreateTeams';
+import CreateTeam from '../../components/CreateTeam/CreateTeam';
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('token');
@@ -48,7 +48,7 @@ const Main = () => (
       <PrivateRoute path="/dashboard" exact component={Dashboard} />
       <PrivateRoute path="/dashboard/view/team/:teamId?" exact component={Dashboard} />
       <PrivateRoute path="/dashboard/view/channel/:channelId?" exact component={Dashboard} />
-      <PrivateRoute path="/create-team" exact component={CreateTeams} />
+      <PrivateRoute path="/create-team" exact component={CreateTeam} />
     </Switch>
   </BrowserRouter>
 );

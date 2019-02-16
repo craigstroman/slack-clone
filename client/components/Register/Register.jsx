@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import key from 'react-key-string';
 import { graphql } from 'react-apollo';
-import { Button } from 'reactstrap';
-import { AvForm, AvField } from 'availity-reactstrap-validation';
+import {
+  Button, Col, Form, FormGroup, Label, Input,
+} from 'reactstrap';
 import gql from 'graphql-tag';
 import './Register.scss';
 
@@ -13,12 +13,10 @@ class Register extends React.Component {
 
     this.state = {
       username: '',
-      usernameError: '',
       email: '',
-      emailError: '',
       password: '',
-      passwordError: '',
     };
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -46,7 +44,6 @@ class Register extends React.Component {
       } else if (errors) {
         const err = {};
         errors.forEach(({ path, message }) => {
-          // err['passwordError'] = 'too long..';
           err[`${path}Error`] = message;
         });
 
@@ -60,24 +57,7 @@ class Register extends React.Component {
       username,
       email,
       password,
-      usernameError,
-      emailError,
-      passwordError,
     } = this.state;
-
-    const errorList = [];
-
-    if (usernameError) {
-      errorList.push(usernameError);
-    }
-
-    if (emailError) {
-      errorList.push(emailError);
-    }
-
-    if (passwordError) {
-      errorList.push(passwordError);
-    }
 
     return (
       <div className="container">
@@ -89,69 +69,59 @@ class Register extends React.Component {
           </div>
         </header>
         <main>
-          { usernameError || emailError || passwordError ? (
+          <Form>
+            <FormGroup row>
+              <Label for="username" md={2}>
+                Username:
+              </Label>
+              <Col md={10}>
+                <Input
+                  type="text"
+                  name="username"
+                  value={username}
+                  onChange={e => this.handleChange(e)}
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="email" md={2}>
+                Email:
+              </Label>
+              <Col md={10}>
+                <Input
+                  type="email"
+                  name="email"
+                  value={email}
+                  placeholder="you@host.com"
+                  onChange={e => this.handleChange(e)}
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="password" md={2}>
+                Password:
+              </Label>
+              <Col md={10}>
+                <Input
+                  type="password"
+                  name="password"
+                  value={password}
+                  onChange={e => this.handleChange(e)}
+                />
+              </Col>
+            </FormGroup>
             <div className="row">
               <div className="col-md-12 text-center">
-                <div>
-                  There was some errors with your submision:
-                  <ul className="erros">
-                    {errorList.map((el, id) => (
-                      <li key={key.generate()}>{ el }</li>
-                    ))}
-                  </ul>
-                </div>
+                <Button
+                  type="submit"
+                  color="primary"
+                  onClick={this.handleSubmit}
+                >
+                  Register
+                </Button>
               </div>
             </div>
-          ) : null }
-          <AvForm>
-            <AvField
-              name="username"
-              label="Username:"
-              type="text"
-              value={username}
-              onChange={e => this.handleChange(e)}
-              validate={{
-                required: { value: true, errorMessage: 'Please enter a username.' },
-                pattern: { value: '^[A-Za-z0-9]+$', errorMessage: 'Your username must be composed only with letter and numbers.' },
-                minLength: { value: 3, errorMessage: 'Your username must be between 3 and 25 characters.' },
-                maxLength: { value: 25, errorMessage: 'Your username must be between 3 and 25 characters.' },
-              }}
-            />
-            <AvField
-              name="email"
-              label="Email:"
-              type="email"
-              placeholder="you@host.com"
-              value={email}
-              onChange={e => this.handleChange(e)}
-              validate={{
-                required: {
-                  value: true,
-                  errorMessage: 'Please enter a email.',
-                },
-              }}
-            />
-            <AvField
-              name="password"
-              label="Password:"
-              type="password"
-              value={password}
-              onChange={e => this.handleChange(e)}
-              validate={{
-                required: { value: true, errorMessage: 'Please enter a password.' },
-                minLength: { value: 5, errorMessage: 'Your password must be between 5 and 100 characters.' },
-                maxLength: { value: 100, errorMessage: 'Your password must be between 5 and 100 characters.' },
-              }}
-            />
-            <Button
-              type="submit"
-              color="primary"
-              onClick={this.handleSubmit}
-            >
-              Register
-            </Button>
-
-          </AvForm>
+          </Form>
         </main>
       </div>
     );

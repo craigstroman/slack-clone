@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { extendObservable } from 'mobx';
 import { observer } from 'mobx-react';
 import { graphql } from 'react-apollo';
-import { Button } from 'reactstrap';
-import { AvForm, AvField } from 'availity-reactstrap-validation';
+import {
+  Button, Col, Form, FormGroup, Label, Input,
+} from 'reactstrap';
 import gql from 'graphql-tag';
-import './CreateTeams.scss';
+import './CreateTeam.scss';
 
 @observer
-class CreateTeams extends React.Component {
+class CreateTeam extends React.Component {
   constructor(props) {
     super(props);
 
@@ -70,25 +71,32 @@ class CreateTeams extends React.Component {
                 Invalid team name.
               </div>
             </div>
-            <AvForm>
-              <AvField
-                label="Team Name:"
-                type="text"
-                name="name"
-                value={name}
-                onChange={e => this.handleChange(e)}
-                validate={{
-                  required: { value: true, errorMessage: 'Please enter a team name.' },
-                }}
-              />
-              <Button
-                type="submit"
-                color="primary"
-                onClick={this.handleSubmit}
-              >
-                Create Team Name
-              </Button>
-            </AvForm>
+            <Form>
+              <FormGroup row>
+                <Label for="name" md={2}>
+                  Team Name:
+                </Label>
+                <Col md={10}>
+                  <Input
+                    type="text"
+                    name="name"
+                    value={name}
+                    onChange={e => this.handleChange(e)}
+                  />
+                </Col>
+              </FormGroup>
+              <div className="row">
+                <div className="col-md-12 text-center">
+                  <Button
+                    type="submit"
+                    color="primary"
+                    onClick={this.handleSubmit}
+                  >
+                    Create Team
+                  </Button>
+                </div>
+              </div>
+            </Form>
           </div>
         </main>
       </div>
@@ -109,12 +117,12 @@ const createTeamMutation = gql`
 `;
 
 
-CreateTeams.defaultProps = {
+CreateTeam.defaultProps = {
   history: {},
 };
 
-CreateTeams.propTypes = {
+CreateTeam.propTypes = {
   history: PropTypes.object,
 };
 
-export default graphql(createTeamMutation)(observer(CreateTeams));
+export default graphql(createTeamMutation)(observer(CreateTeam));

@@ -1,7 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import PropTypes from 'prop-types';
 import MainSidebar from '../MainSidebar/MainSidebar';
 import TeamSidebar from '../TeamSidebar/TeamSidebar';
 import Messages from '../Messages/Messages';

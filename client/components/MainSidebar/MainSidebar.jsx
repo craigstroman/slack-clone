@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
+import AddChannel from '../AddChannel/AddChannel';
 import './MainSidebar.scss';
 
 class MainSidebar extends React.Component {
@@ -14,6 +15,8 @@ class MainSidebar extends React.Component {
     };
 
     this.handleSelectItem = this.handleSelectItem.bind(this);
+    this.handleOpenAddChannel = this.handleOpenAddChannel.bind(this);
+    this.handleCloseAddChannel = this.handleCloseAddChannel.bind(this);
   }
 
   /**
@@ -30,14 +33,23 @@ class MainSidebar extends React.Component {
 
     this.setState({
       activeEl: elId,
+      openModal: false,
     });
 
     handleChangeItem(itemName, itemType);
   }
 
+  handleOpenAddChannel = () => {
+    this.setState({ openModal: true });
+  }
+
+  handleCloseAddChannel = () => {
+    this.setState({ openModal: false });
+  }
+
   render() {
     const { channels, users, teamName } = this.props;
-    const { activeEl } = this.state;
+    const { activeEl, openModal } = this.state;
 
     return (
       <div className="main-sidebar-container">
@@ -51,7 +63,7 @@ class MainSidebar extends React.Component {
               <Button
                 type="button"
                 className="sidebar-heading__action"
-                onClick={this.handleAddChannel}
+                onClick={this.handleOpenAddChannel}
               >
                 <FontAwesomeIcon icon={faPlusCircle} />
               </Button>
@@ -114,6 +126,10 @@ class MainSidebar extends React.Component {
             </ul>
           </div>
         </section>
+        <AddChannel
+          isOpen={openModal}
+          closeAddChannel={() => this.handleCloseAddChannel()}
+        />
       </div>
     );
   }
