@@ -87,11 +87,6 @@ export const refreshTokens = async (token, refreshToken, models, SECRET) => {
  * @return     {Object}  { description_of_the_return_value }
  */
 export const tryLogin = async (email, password, models, SECRET, SECRET2) => {
-  console.log('tryLogin: ');
-  console.log('email: ', email);
-  console.log('password: ', password);
-  console.log('SECRET: ', SECRET);
-  console.log('SECRET2: ', SECRET2);
   const user = await models.User.findOne({ where: { email }, raw: true });
   if (!user) {
     // user with provided email not found

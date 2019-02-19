@@ -26,16 +26,12 @@ export default {
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        console.log('Ok, user created.');
-        console.log({ ...otherArgs, password: hashedPassword });
-
         const user = await models.User.create({ ...otherArgs, password: hashedPassword });
         return {
           ok: true,
           user,
         };
       } catch(e) {
-        console.log(formatErrors(e, models));
         return {
           ok: false,
           errors: formatErrors(e, models),
