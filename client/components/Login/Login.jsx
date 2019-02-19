@@ -95,7 +95,7 @@ class Login extends React.Component {
 
         history.push('/dashboard');
       } else {
-        this.errors = true;
+        this.setState({ errors: true });
       }
     }
   }
