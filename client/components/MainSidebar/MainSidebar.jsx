@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { graphql } from 'react-apollo';
 import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
@@ -48,7 +49,9 @@ class MainSidebar extends React.Component {
   }
 
   render() {
-    const { channels, users, teamName } = this.props;
+    const {
+      channels, users, teamName, teamId,
+    } = this.props;
     const { activeEl, openModal } = this.state;
 
     return (
@@ -80,7 +83,7 @@ class MainSidebar extends React.Component {
                   <Button
                     type="button"
                     className="channel-item"
-                    itemType={el.type}
+                    itemType="channel"
                     name={el.name}
                     onClick={e => this.handleSelectItem(e)}
                   >
@@ -114,7 +117,7 @@ class MainSidebar extends React.Component {
                   <Button
                     type="button"
                     className="users-item"
-                    itemType={el.type}
+                    itemType="user"
                     name={el.name}
                     onClick={e => this.handleSelectItem(e)}
                   >
@@ -128,7 +131,8 @@ class MainSidebar extends React.Component {
         </section>
         <AddChannel
           isOpen={openModal}
-          closeAddChannel={() => this.handleCloseAddChannel()}
+          teamId={teamId}
+          handleCloseAddChannel={() => this.handleCloseAddChannel()}
         />
       </div>
     );
@@ -139,6 +143,7 @@ MainSidebar.defaultProps = {
   channels: [],
   users: [],
   teamName: '',
+  teamId: null,
   handleChangeItem: () => {},
 };
 
@@ -146,6 +151,7 @@ MainSidebar.propTypes = {
   channels: PropTypes.array,
   users: PropTypes.array,
   teamName: PropTypes.string,
+  teamId: PropTypes.number,
   handleChangeItem: PropTypes.func,
 };
 

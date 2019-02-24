@@ -31,8 +31,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'error'
   },
   'globals': {
-    'React': true,
-    'google': true
+    'React': true
   },
   'parserOptions': {
     'ecmaFeatures': {

@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { extendObservable } from 'mobx';
-import { observer } from 'mobx-react';
 import { graphql } from 'react-apollo';
 import {
   Button, Col, Form, FormGroup, Label, Input,
@@ -9,15 +7,14 @@ import {
 import gql from 'graphql-tag';
 import './CreateTeam.scss';
 
-@observer
 class CreateTeam extends React.Component {
   constructor(props) {
     super(props);
 
-    extendObservable(this, {
+    this.state = {
       name: '',
       errors: false,
-    });
+    };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -29,7 +26,7 @@ class CreateTeam extends React.Component {
   }
 
   handleSubmit = async () => {
-    const { name } = this;
+    const { name } = this.state;
 
     if (name.length) {
       const { mutate, history } = this.props;
@@ -51,7 +48,7 @@ class CreateTeam extends React.Component {
   }
 
   render() {
-    const { name, errors } = this;
+    const { name, errors } = this.state;
 
     return (
       <div className="container">
@@ -125,4 +122,4 @@ CreateTeam.propTypes = {
   history: PropTypes.object,
 };
 
-export default graphql(createTeamMutation)(observer(CreateTeam));
+export default graphql(createTeamMutation)(CreateTeam);

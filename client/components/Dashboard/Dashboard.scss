@@ -7,37 +7,43 @@
 .dashboard-container {
   display: grid;
   height: 100vh;
-  grid-template-columns: 100px 250px 1fr;
-
-  .team-sidebar {
-    background-color: $thunder;
-    grid-column: 1;
-  }
-  .main-sidebar {
-    background-color: $valentino;
-    grid-column: 2;
-  }
-  .main-content {
+  grid-template-columns: 350px 1fr;
+  aside {
     display: grid;
-    grid-template-rows: auto 1fr auto;
-    height: 100vh;
-    header {
-      grid-column: 3;
-      grid-row: 1;
+    grid-template-columns: 100px 250px;
+    .team-sidebar {
+      background-color: $thunder;
+      grid-column: 1;
     }
-    main {
-      grid-column: 3;
-      grid-row: 2;
-      .messages-container {
-        border-bottom: 1px solid $black;
-        border-top: 1px solid $black;
-        height: 98%;
-        overflow-y: scroll;
+    .main-sidebar {
+      background-color: $valentino;
+      grid-column: 2;
+    }
+  }
+  main {
+    display: grid;
+    .main-content {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      height: 100vh;
+      header {
+        grid-column: 3;
+        grid-row: 1;
       }
-    }
-    footer {
-      grid-column: 3;
-      grid-row: 3;
+      section {
+        grid-column: 3;
+        grid-row: 2;
+        .messages-container {
+          border-bottom: 1px solid $black;
+          border-top: 1px solid $black;
+          height: 98%;
+          overflow-y: scroll;
+        }
+      }
+      footer {
+        grid-column: 3;
+        grid-row: 3;
+      }
     }
   }
 }
