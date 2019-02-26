@@ -21,6 +21,7 @@ class Dashboard extends React.Component {
     };
 
     this.handleChangeItem = this.handleChangeItem.bind(this);
+    this.handleChangeTeam = this.handleChangeTeam.bind(this);
   }
 
   handleChangeTeam = (teamName, teamId) => {
@@ -35,20 +36,42 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { data: { loading, allTeams }, currentTeamId } = this.props;
-    const { teamName, teamId } = this.state;
-    let { itemName, itemType } = this.state;
+    const { data: { loading, allTeams } } = this.props;
+    const { teamId } = this.state;
+    let { teamName, itemName, itemType } = this.state;
 
     if (loading) {
       return null;
     }
 
-    const teamIdx = currentTeamId ? allTeams.findIndex(el => (el.id === currentTeamId)) : 0;
+    if (Array.isArray(allTeams)) {
+      if (!allTeams.length) {
+        return (
+          <div className="containter">
+            <div className="row">
+              <div className="col-md-12 text-center">
+                You need to&nbsp;
+                <a href="/create-team">
+                  create a team
+                </a>
+                .
+              </div>
+            </div>
+          </div>
+        );
+      }
+    }
+
+    const teamIdx = teamId ? allTeams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
     const team = allTeams[teamIdx];
 
     if (!itemName.length && !itemType.length) {
       itemName = 'general';
       itemType = 'channel';
+    }
+
+    if (!teamName.length) {
+      teamName = team.name;
     }
 
     return (
@@ -70,7 +93,7 @@ class Dashboard extends React.Component {
             <MainSidebar
               channels={team.channels}
               users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
-              teamName={team.name}
+              teamName={teamName}
               teamId={team.id}
               handleChangeItem={this.handleChangeItem}
               {...this.props}
@@ -81,7 +104,11 @@ class Dashboard extends React.Component {
           <div className="main-content">
             <header>
               <div className="header-container">
-                <Header itemName={itemName} itemType={itemType} {...this.props} />
+                <Header
+                  itemName={itemName}
+                  itemType={itemType}
+                  {...this.props}
+                />
               </div>
             </header>
             <section>
@@ -91,7 +118,11 @@ class Dashboard extends React.Component {
             </section>
             <footer>
               <div className="input-container">
-                <Input itemName={itemName} itemType={itemType} {...this.props} />
+                <Input
+                  itemName={itemName}
+                  itemType={itemType}
+                  {...this.props}
+                />
               </div>
             </footer>
           </div>

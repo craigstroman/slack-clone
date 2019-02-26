@@ -21,28 +21,35 @@ class CreateTeam extends React.Component {
   }
 
   handleChange = (e) => {
-    const { name, value } = e.target;
-    this[name] = value;
+    const { value } = e.target;
+
+    this.setState({ name: value });
   }
 
   handleSubmit = async () => {
     const { name } = this.state;
+    let response = null;
 
     if (name.length) {
       const { mutate, history } = this.props;
 
-      const response = await mutate({ variables: { name } });
-
-      if (response) {
-        console.log('response: ', response);
+      try {
+        response = await mutate({ variables: { name } });
+      } catch (err) {
+        history.push('/login');
       }
 
-      const { ok, errors } = response.data.createTeam;
+      const { ok, errors, team } = response.data.createTeam;
 
       if (ok) {
-        history.push('/');
-      } else if (errors) {
-        this.errors = true;
+        history.push(`/dashboard/view/team/${team.id}`);
+      } else {
+        const err = {};
+        errors.forEach(({ path, message }) => {
+          err[`${path}Error`] = message;
+        });
+
+        this.errors = err;
       }
     }
   }
@@ -68,7 +75,7 @@ class CreateTeam extends React.Component {
                 Invalid team name.
               </div>
             </div>
-            <Form>
+            <Form onSubmit={(e) => { e.preventDefault(); }}>
               <FormGroup row>
                 <Label for="name" md={2}>
                   Team Name:
@@ -87,7 +94,7 @@ class CreateTeam extends React.Component {
                   <Button
                     type="submit"
                     color="primary"
-                    onClick={this.handleSubmit}
+                    onClick={() => this.handleSubmit()}
                   >
                     Create Team
                   </Button>
@@ -105,6 +112,9 @@ const createTeamMutation = gql`
   mutation($name: String!) {
     createTeam(name: $name) {
       ok
+      team {
+        id
+      }
       errors {
         path
         message
@@ -112,7 +122,6 @@ const createTeamMutation = gql`
     }
   }
 `;
-
 
 CreateTeam.defaultProps = {
   history: {},

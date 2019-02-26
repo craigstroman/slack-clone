@@ -17,7 +17,7 @@ class TeamSidebar extends React.Component {
 
     history.push(`/dashboard/view/team/${teamId}`);
 
-    handleChangeTeam(teamName);
+    handleChangeTeam(teamName, teamId);
   }
 
   render() {

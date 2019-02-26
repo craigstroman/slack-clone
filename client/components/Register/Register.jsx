@@ -69,7 +69,7 @@ class Register extends React.Component {
           </div>
         </header>
         <main>
-          <Form>
+          <Form onSubmit={(e) => { e.preventDefault(); }}>
             <FormGroup row>
               <Label for="username" md={2}>
                 Username:
