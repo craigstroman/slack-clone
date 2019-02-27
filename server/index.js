@@ -96,7 +96,7 @@ app.use('/', (req, res) => {
  * Creates database if not already created.
  * To recreate database add {force: true} to sync().
  */
-models.sequelize.sync({}).then(() => {
+models.sequelize.sync().then(() => {
 	app.listen(PORT, () => {
 	  console.log(`\nThe server has started on port: ${PORT}`);
     console.log(`http://localhost:${PORT}`);
