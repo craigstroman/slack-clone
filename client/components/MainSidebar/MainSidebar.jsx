@@ -4,6 +4,7 @@ import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
 import AddChannel from '../AddChannel/AddChannel';
+import InvitePeople from '../InvitePeople/InvitePeople';
 import './MainSidebar.scss';
 
 class MainSidebar extends React.Component {
@@ -12,11 +13,14 @@ class MainSidebar extends React.Component {
 
     this.state = {
       activeEl: '',
+      addChannelModal: false,
+      invitePeopleModal: false,
     };
 
     this.handleSelectItem = this.handleSelectItem.bind(this);
     this.handleOpenAddChannel = this.handleOpenAddChannel.bind(this);
-    this.handleCloseAddChannel = this.handleCloseAddChannel.bind(this);
+    this.handleInvitePeople = this.handleInvitePeople.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
   }
 
   /**
@@ -33,25 +37,35 @@ class MainSidebar extends React.Component {
 
     this.setState({
       activeEl: elId,
-      openModal: false,
+      addChannelModal: false,
     });
 
     handleChangeItem(itemName, itemType);
   }
 
   handleOpenAddChannel = () => {
-    this.setState({ openModal: true });
+    this.setState({ addChannelModal: true });
   }
 
-  handleCloseAddChannel = () => {
-    this.setState({ openModal: false });
+  handleInvitePeople = () => {
+    this.setState({ invitePeopleModal: true });
+  }
+
+  handleCloseModal = () => {
+    const { addChannelModal, invitePeopleModal } = this.state;
+
+    if (addChannelModal) {
+      this.setState({ addChannelModal: false });
+    } else if (invitePeopleModal) {
+      this.setState({ invitePeopleModal: false });
+    }
   }
 
   render() {
     const {
       channels, users, teamName, teamId,
     } = this.props;
-    const { activeEl, openModal } = this.state;
+    const { activeEl, addChannelModal, invitePeopleModal } = this.state;
 
     return (
       <div className="main-sidebar-container">
@@ -127,11 +141,28 @@ class MainSidebar extends React.Component {
               ))}
             </ul>
           </div>
+          <div className="invite-people">
+            <div className="sidebar-heading">
+              <h5>Invite People To Join</h5>
+              <Button
+                type="button"
+                className="sidebar-heading__action"
+                onClick={this.handleInvitePeople}
+              >
+                <FontAwesomeIcon icon={faPlusCircle} />
+              </Button>
+            </div>
+          </div>
         </section>
         <AddChannel
-          isOpen={openModal}
+          isOpen={addChannelModal}
           teamId={teamId}
-          handleCloseAddChannel={() => this.handleCloseAddChannel()}
+          handleCloseAddChannel={() => this.handleCloseModal()}
+        />
+        <InvitePeople
+          isOpen={invitePeopleModal}
+          teamId={teamId}
+          handleCloseInvitePeople={() => this.handleCloseModal()}
         />
       </div>
     );
