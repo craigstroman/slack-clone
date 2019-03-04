@@ -6,12 +6,6 @@ module.exports = env => {
   const filePath = path.join(__dirname, './public/js/')
   const fileName = 'bundle.js';
 
-  const plugins = [
-    new webpack.EnvironmentPlugin({
-      NODE_ENV: nodeEnv,
-    })
-  ];
-
   const PATHS = {
       src: path.join(__dirname, './client'),
       dist: path.join(__dirname, './public')
@@ -87,6 +81,10 @@ module.exports = env => {
         }
       ]
     },
-    plugins: plugins
+    plugins: [
+      new webpack.EnvironmentPlugin({
+        NODE_ENV: nodeEnv,
+      })
+    ]
   }
 };
