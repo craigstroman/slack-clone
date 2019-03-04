@@ -17,6 +17,7 @@ class AddChannel extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   handleChange = (e) => {
@@ -33,7 +34,7 @@ class AddChannel extends React.Component {
 
   handleSubmit = async () => {
     const { channelName } = this.state;
-    const { mutate, teamId, handleCloseAddChannel } = this.props;
+    const { mutate, teamId } = this.props;
 
     await mutate({
       variables: { teamId, name: channelName },
@@ -64,11 +65,19 @@ class AddChannel extends React.Component {
       },
     });
 
+    this.handleClose();
+  }
+
+  handleClose = () => {
+    const { handleCloseAddChannel } = this.props;
+
+    this.setState({ channelName: '' });
+
     handleCloseAddChannel();
   }
 
   render() {
-    const { isOpen, handleCloseAddChannel } = this.props;
+    const { isOpen } = this.props;
     const { channelName } = this.state;
 
     return (
@@ -95,7 +104,7 @@ class AddChannel extends React.Component {
         <ModalFooter>
           <Button
             color="secondary"
-            onClick={() => handleCloseAddChannel()}
+            onClick={() => this.handleClose()}
           >
             Cancel
           </Button>
