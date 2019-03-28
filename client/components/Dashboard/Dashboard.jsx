@@ -36,16 +36,21 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { data: { loading, allTeams } } = this.props;
+    const { data: { loading, allTeams, inviteTeams } } = this.props;
     const { teamId } = this.state;
+    let teams = [];
     let { teamName, itemName, itemType } = this.state;
 
     if (loading) {
       return null;
     }
 
-    if (Array.isArray(allTeams)) {
-      if (!allTeams.length) {
+    if (!loading) {
+      teams = [...allTeams, ...inviteTeams];
+    }
+
+    if (Array.isArray(teams)) {
+      if (!teams.length) {
         return (
           <div className="containter">
             <div className="row">
@@ -62,8 +67,8 @@ class Dashboard extends React.Component {
       }
     }
 
-    const teamIdx = teamId ? allTeams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
-    const team = allTeams[teamIdx];
+    const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
+    const team = teams[teamIdx];
 
     if (!itemName.length && !itemType.length) {
       itemName = 'general';
@@ -79,7 +84,7 @@ class Dashboard extends React.Component {
         <aside>
           <div className="team-sidebar">
             <TeamSidebar
-              teams={allTeams.map(t => ({
+              teams={teams.map(t => ({
                 id: t.id,
                 letter: t.name.charAt(0).toUpperCase(),
                 name: t.name,
