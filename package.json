@@ -4,7 +4,7 @@
   "description": "A chat room built using Express, GraphQL and React.",
   "main": "./server/index.js",
   "scripts": {
-    "live:server": "NODE_ENV=development nodemon --exec BABEL_ENV=server babel-node ./server/index.js",
+    "live:server": "NODE_ENV=development nodemon --exec babel-node ./server/index.js",
     "live:client": "NODE_ENV=development webpack --config webpack.config.dev.js --mode development --progress --watch"
   },
   "author": "Craig Stroman",
@@ -19,6 +19,7 @@
     "apollo-link-context": "^1.0.0",
     "apollo-link-http": "^1.0.0",
     "apollo-server-express": "^1.1.3",
+    "apollo-utilities": "^1.0.22",
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.2.1",
@@ -45,7 +46,9 @@
     "yup": "^0.26.10"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
     "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/plugin-proposal-decorators": "^7.2.3",
     "@babel/plugin-transform-async-to-generator": "^7.2.0",
@@ -53,15 +56,8 @@
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.4",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-3": "^6.24.1",
-    "concurrently": "^4.1.0",
     "css-loader": "^2.0.2",
     "eslint": "^5.10.0",
     "eslint-config-airbnb": "^17.1.0",
@@ -82,6 +78,7 @@
     "uglify-js-plugin": "0.0.6",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
+    "webpack-dev-middleware": "^3.6.1",
     "webpack-dev-server": "^3.1.14",
     "webpack-hot-middleware": "^2.24.3"
   }

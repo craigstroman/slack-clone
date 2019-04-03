@@ -1,6 +1,7 @@
 /node_modules/
 /public/js/node_modules/
 /public/js/*[.svg, .eot, .ttf, .woff2, .woff]
+/public/js/*.json
 package-lock.json
 .env
 .DS_Store

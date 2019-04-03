@@ -66,23 +66,38 @@ app.use(addUser);
 
 const graphqlEndpoint = '/graphql';
 
+
+if ( process.env.NODE_ENV === 'development' ) {
+  const webpack = require('webpack');
+  const webpackConfig = require('../webpack.config.dev');
+  const webpackCompiler = webpack(webpackConfig);
+
+  app.use(require('webpack-dev-middleware')(webpackCompiler, {
+      noInfo: true, publicPath: webpackConfig.output.publicPath
+  }));
+
+  app.use(require('webpack-hot-middleware')(webpackCompiler));
+
+  app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndpoint }));
+}
+
+
 app.use(
-	graphqlEndpoint,
-	bodyParser.json(),
-	graphqlExpress(req => ({
-		schema,
-		context: {
-			models,
-			user: req.user,
+  graphqlEndpoint,
+  bodyParser.json(),
+  graphqlExpress(req => ({
+    schema,
+    context: {
+      models,
+      user: req.user,
       SECRET,
       SECRET2
-		}
-	}))
+    }
+  }))
 );
 
 app.use('/static', express.static('public'));
 
-app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndpoint }));
 
 app.use('/', (req, res) => {
   res.render('index', {
@@ -97,10 +112,12 @@ app.use('/', (req, res) => {
  * To recreate database add {force: true} to sync().
  */
 models.sequelize.sync().then(() => {
-	app.listen(PORT, () => {
-	  console.log(`\nThe server has started on port: ${PORT}`);
+  app.listen(PORT, () => {
+    console.log(`\nThe server has started on port: ${PORT}`);
     console.log(`http://localhost:${PORT}`);
-	  console.log(`http://localhost:${PORT}${graphqlEndpoint}`);
-    console.log(`http://localhost:${PORT}/graphiql`);
-	});
+    if ( process.env.NODE_ENV === 'development' ) {
+      console.log(`http://localhost:${PORT}${graphqlEndpoint}`);
+      console.log(`http://localhost:${PORT}/graphiql`);
+    }
+  });
 });
