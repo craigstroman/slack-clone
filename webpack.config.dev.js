@@ -14,7 +14,10 @@ module.exports = {
   mode: 'development',
 
   entry: {
-     app: [path.join(__dirname, 'client/App.jsx'), 'webpack-hot-middleware/client']
+     app: [
+      path.join(__dirname, 'client/App.jsx'),
+     'webpack-hot-middleware/client?path=/__webpack_hmr&reload=true'
+     ]
   },
 
   output: {
@@ -83,7 +86,6 @@ module.exports = {
     ]
   },
   plugins: [
-   new webpack.HotModuleReplacementPlugin(),
-   new webpack.NoEmitOnErrorsPlugin()
+   new webpack.HotModuleReplacementPlugin()
   ]
 };

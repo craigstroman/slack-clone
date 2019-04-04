@@ -76,7 +76,9 @@ if ( process.env.NODE_ENV === 'development' ) {
       noInfo: true, publicPath: webpackConfig.output.publicPath
   }));
 
-  app.use(require('webpack-hot-middleware')(webpackCompiler));
+  app.use(require('webpack-hot-middleware')(webpackCompiler, {
+    'path': '/__webpack_hmr'
+  }));
 
   app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndpoint }));
 }
