@@ -25,6 +25,11 @@ module.exports = {
     filename: fileName,
   },
 
+  watch: false,
+  watchOptions: {
+    ignored: '/node_modules/'
+  },
+
   resolve: {
     extensions: [
       '.js','.jsx'
