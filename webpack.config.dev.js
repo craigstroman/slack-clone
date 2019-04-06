@@ -23,6 +23,8 @@ module.exports = {
   output: {
     path: filePath,
     filename: fileName,
+    hotUpdateChunkFilename: 'hot-update.js',
+    hotUpdateMainFilename: 'hot-update.json'
   },
 
   watch: false,
