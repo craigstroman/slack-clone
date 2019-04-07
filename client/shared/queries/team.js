@@ -6,6 +6,7 @@ const allTeamsQuery = gql`
     allTeams {
       id
       name
+      owner
       channels {
         id
         name
@@ -14,6 +15,7 @@ const allTeamsQuery = gql`
     inviteTeams {
       id
       name
+      owner
       channels {
         id
         name

@@ -63,7 +63,7 @@ class MainSidebar extends React.Component {
 
   render() {
     const {
-      channels, users, teamName, teamId,
+      channels, users, teamName, teamId, isOwner,
     } = this.props;
     const { activeEl, addChannelModal, invitePeopleModal } = this.state;
 
@@ -76,13 +76,15 @@ class MainSidebar extends React.Component {
           <div className="channels">
             <div className="sidebar-heading">
               <h5>Channels</h5>
-              <Button
-                type="button"
-                className="sidebar-heading__action"
-                onClick={this.handleOpenAddChannel}
-              >
-                <FontAwesomeIcon icon={faPlusCircle} />
-              </Button>
+              {isOwner && (
+                <Button
+                  type="button"
+                  className="sidebar-heading__action"
+                  onClick={this.handleOpenAddChannel}
+                >
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </Button>
+              )}
             </div>
             <ul className="channels-list">
               {channels.map(el => (
@@ -141,18 +143,20 @@ class MainSidebar extends React.Component {
               ))}
             </ul>
           </div>
-          <div className="invite-people">
-            <div className="sidebar-heading">
-              <h5>Invite People To Join</h5>
-              <Button
-                type="button"
-                className="sidebar-heading__action"
-                onClick={this.handleInvitePeople}
-              >
-                <FontAwesomeIcon icon={faPlusCircle} />
-              </Button>
+          {isOwner && (
+            <div className="invite-people">
+              <div className="sidebar-heading">
+                <h5>Invite People To Join</h5>
+                <Button
+                  type="button"
+                  className="sidebar-heading__action"
+                  onClick={this.handleInvitePeople}
+                >
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
         </section>
         <AddChannel
           isOpen={addChannelModal}
@@ -174,6 +178,7 @@ MainSidebar.defaultProps = {
   users: [],
   teamName: '',
   teamId: null,
+  isOwner: false,
   handleChangeItem: () => {},
 };
 
@@ -182,6 +187,7 @@ MainSidebar.propTypes = {
   users: PropTypes.array,
   teamName: PropTypes.string,
   teamId: PropTypes.number,
+  isOwner: PropTypes.bool,
   handleChangeItem: PropTypes.func,
 };
 

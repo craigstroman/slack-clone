@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import decode from 'jwt-decode';
 import { graphql } from 'react-apollo';
 import allTeamsQuery from '../../shared/queries/team';
 import MainSidebar from '../MainSidebar/MainSidebar';
@@ -40,6 +41,7 @@ class Dashboard extends React.Component {
     const { teamId } = this.state;
     let teams = [];
     let { teamName, itemName, itemType } = this.state;
+    let isOwner = false;
 
     if (loading) {
       return null;
@@ -79,6 +81,17 @@ class Dashboard extends React.Component {
       teamName = team.name;
     }
 
+    try {
+      const token = localStorage.getItem('token');
+      const { user } = decode(token);
+      const { id } = user;
+
+      isOwner = id === team.owner;
+    } catch (err) {
+      console.log('There was an error.');
+      console.log('error: ', err);
+    }
+
     return (
       <div className="dashboard-container">
         <aside>
@@ -100,6 +113,7 @@ class Dashboard extends React.Component {
               users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
               teamName={teamName}
               teamId={team.id}
+              isOwner={isOwner}
               handleChangeItem={this.handleChangeItem}
               {...this.props}
             />
