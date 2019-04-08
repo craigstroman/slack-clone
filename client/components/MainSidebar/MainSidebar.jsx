@@ -40,6 +40,8 @@ class MainSidebar extends React.Component {
       addChannelModal: false,
     });
 
+    console.log('elId: ', elId);
+
     handleChangeItem(itemName, itemType);
   }
 

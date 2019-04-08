@@ -6,7 +6,7 @@ import allTeamsQuery from '../../shared/queries/team';
 import MainSidebar from '../MainSidebar/MainSidebar';
 import TeamSidebar from '../TeamSidebar/TeamSidebar';
 import Messages from '../Messages/Messages';
-import Input from '../Input/Input';
+import MessageInput from '../MessageInput/MessageInput';
 import Header from '../Header/Header';
 import './Dashboard.scss';
 
@@ -39,9 +39,10 @@ class Dashboard extends React.Component {
   render() {
     const { data: { loading, allTeams, inviteTeams } } = this.props;
     const { teamId } = this.state;
-    let teams = [];
     let { teamName, itemName, itemType } = this.state;
+    let teams = [];
     let isOwner = false;
+    let channel = null;
 
     if (loading) {
       return null;
@@ -72,9 +73,17 @@ class Dashboard extends React.Component {
     const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
     const team = teams[teamIdx];
 
+    console.log('team: ', team);
+
     if (!itemName.length && !itemType.length) {
       itemName = 'general';
       itemType = 'channel';
+    }
+
+    if (itemName.length && itemType.length) {
+      if (itemType === 'channel') {
+        channel = team.channels.find(el => (el.name === itemName));
+      }
     }
 
     if (!teamName.length) {
@@ -137,9 +146,10 @@ class Dashboard extends React.Component {
             </section>
             <footer>
               <div className="input-container">
-                <Input
+                <MessageInput
                   itemName={itemName}
                   itemType={itemType}
+                  channelId={channel.id}
                   {...this.props}
                 />
               </div>
