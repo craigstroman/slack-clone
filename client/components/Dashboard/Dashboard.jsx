@@ -73,8 +73,6 @@ class Dashboard extends React.Component {
     const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
     const team = teams[teamIdx];
 
-    console.log('team: ', team);
-
     if (!itemName.length && !itemType.length) {
       itemName = 'general';
       itemType = 'channel';
@@ -141,7 +139,10 @@ class Dashboard extends React.Component {
             </header>
             <section>
               <div className="messages-container">
-                <Messages {...this.props} />
+                <Messages
+                  channelId={channel.id}
+                  {...this.props}
+                />
               </div>
             </section>
             <footer>
