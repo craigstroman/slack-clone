@@ -2,22 +2,42 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import Moment from 'react-moment';
 import './Messages.scss';
 
 const Messages = (props) => {
   const { data: { loading, messages }, channelId } = props;
 
-  if (!loading) {
-    console.log('messages: ', messages);
-    console.log('channelId: ', channelId);
+  if (loading) {
+    return null;
   }
+
+  console.log('messages: ', messages);
+  console.log('channelId: ', channelId);
 
   return (
     <div className="messages">
       <ul className="messages-list">
-        <li className="message-item">
-          {JSON.stringify(messages)}
-        </li>
+        {messages.map((message, i) => (
+          <li
+            key={message.id}
+            className="messages-list__item"
+          >
+            <div className="message-header">
+              <div className="message-user">
+                {message.user.username}
+              </div>
+              <div className="message-date">
+                <Moment format="MMMM DD YYYY">
+                  {message.created_at}
+                </Moment>
+              </div>
+            </div>
+            <div className="message-text">
+              {message.text}
+            </div>
+          </li>
+        ))}
       </ul>
     </div>
   );
@@ -31,7 +51,7 @@ const messagesQuery = gql`
       user {
         username
       }
-      createdAt
+      created_at
     }
   }
 `;

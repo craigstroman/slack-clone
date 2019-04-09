@@ -3,5 +3,16 @@
   color: $black;
   .messages-list {
     list-style-type: none;
+    .messages-list__item {
+      .message-header {
+        div {
+          display: inline-block;
+        }
+        .message-user {
+          font-weight: bold;
+          margin-right: 15px;
+        }
+      }
+    }
   }
 }
