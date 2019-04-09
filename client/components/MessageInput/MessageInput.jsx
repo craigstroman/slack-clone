@@ -68,6 +68,7 @@ class MessageInput extends React.Component {
                 className="form-control"
                 placeholder={placeholder}
                 value={message}
+                autoComplete="off"
                 onChange={e => this.handleChange(e)}
                 onKeyUp={(e) => { if (e.keyCode === 13 && !isSubmiting) { this.handleSubmit(); } }}
               />

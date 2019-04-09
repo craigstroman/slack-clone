@@ -13,39 +13,10 @@ const Messages = (props) => {
   }
 
   return (
-    <div className="messags">
+    <div className="messages">
       <ul className="messages-list">
         <li className="message-item">
-          Proin a mollis metus, ac viverra odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-          Sed ornare dolor ut felis tincidunt, eget suscipit purus consequat. Sed mattis non diam non pellentesque.
-        </li>
-        <li className="message-item">
-          Proin a mollis metus, ac viverra odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-          Sed ornare dolor ut felis tincidunt, eget suscipit purus consequat. Sed mattis non diam non pellentesque.
-        </li>
-        <li className="message-item">
-          Proin a mollis metus, ac viverra odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-          Sed ornare dolor ut felis tincidunt, eget suscipit purus consequat. Sed mattis non diam non pellentesque.
-        </li>
-        <li className="message-item">
-          Proin a mollis metus, ac viverra odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-          Sed ornare dolor ut felis tincidunt, eget suscipit purus consequat. Sed mattis non diam non pellentesque.
-        </li>
-        <li className="message-item">
-          Proin a mollis metus, ac viverra odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-          Sed ornare dolor ut felis tincidunt, eget suscipit purus consequat. Sed mattis non diam non pellentesque.
-        </li>
-        <li className="message-item">
-          Proin a mollis metus, ac viverra odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-          Sed ornare dolor ut felis tincidunt, eget suscipit purus consequat. Sed mattis non diam non pellentesque.
-        </li>
-        <li className="message-item">
-          Proin a mollis metus, ac viverra odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-          Sed ornare dolor ut felis tincidunt, eget suscipit purus consequat. Sed mattis non diam non pellentesque.
-        </li>
-        <li className="message-item">
-          Proin a mollis metus, ac viverra odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-          Sed ornare dolor ut felis tincidunt, eget suscipit purus consequat. Sed mattis non diam non pellentesque.
+          {JSON.stringify(messages)}
         </li>
       </ul>
     </div>
