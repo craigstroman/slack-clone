@@ -1,7 +1,12 @@
 .messages {
   background-color: $white;
   color: $black;
+  display: flex;
+  flex-direction: column-reverse;
+  height: 100%;
+  overflow-y: scroll;
   .messages-list {
+
     list-style-type: none;
     .messages-list__item {
       .message-header {
