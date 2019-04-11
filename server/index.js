@@ -2,9 +2,13 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
 import env from 'node-env-file';
+import { createServer } from 'http';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
+import { execute, subscribe } from 'graphql';
+import { PubSub } from 'graphql-subscriptions';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
 import jwt from 'jsonwebtoken';
 
 import { refreshTokens } from './auth';
@@ -109,17 +113,30 @@ app.use('/', (req, res) => {
   });
 });
 
+const server = createServer(app);
+
 /**
  * Creates database if not already created.
  * To recreate database add {force: true} to sync().
  */
 models.sequelize.sync().then(() => {
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(`\nThe server has started on port: ${PORT}`);
     console.log(`http://localhost:${PORT}`);
     if ( process.env.NODE_ENV === 'development' ) {
       console.log(`http://localhost:${PORT}${graphqlEndpoint}`);
       console.log(`http://localhost:${PORT}/graphiql`);
     }
+    new SubscriptionServer(
+      {
+        execute,
+        subscribe,
+        schema,
+      },
+      {
+        server,
+        path: '/subscriptions',
+      },
+    );
   });
 });
