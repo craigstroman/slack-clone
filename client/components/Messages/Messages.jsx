@@ -5,43 +5,77 @@ import gql from 'graphql-tag';
 import Moment from 'react-moment';
 import './Messages.scss';
 
-const Messages = (props) => {
-  const { data: { loading, messages }, channelId } = props;
+const newChannelMessageSubscription = gql`
+  subscription($channelId: Int!) {
+    newChannelMessage(channelId: $channelId) {
+      id
+      text
+      user {
+        username
+      }
+      createdAt
+    }
+  }
+`;
 
-  if (loading) {
-    return null;
+class Messages extends React.Component {
+  componentWillMount() {
+    const { data, channelId } = this.props;
+
+    data
+      .subscribeToMore({
+        document: newChannelMessageSubscription,
+        variables: {
+          channelId,
+        },
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData) {
+            return prev;
+          }
+
+          return {
+            ...prev,
+            messages: [...prev.messages, subscriptionData.newChannelMessage],
+          };
+        },
+      });
   }
 
-  console.log('messages: ', messages);
-  console.log('channelId: ', channelId);
+  render() {
+    const { data: { loading, messages } } = this.props;
 
-  return (
-    <div className="messages">
-      <ul className="messages-list">
-        {messages.map((message, i) => (
-          <li
-            key={message.id}
-            className="messages-list__item"
-          >
-            <div className="message-header">
-              <div className="message-user">
-                {message.user.username}
+    if (loading) {
+      return null;
+    }
+
+    return (
+      <div className="messages">
+        <ul className="messages-list">
+          {messages.map((message, i) => (
+            <li
+              key={message.id}
+              className="messages-list__item"
+            >
+              <div className="message-header">
+                <div className="message-user">
+                  {message.user.username}
+                </div>
+                <div className="message-date">
+                  <Moment format="MMMM DD YYYY hh:MM A">
+                    {message.created_at}
+                  </Moment>
+                </div>
               </div>
-              <div className="message-date">
-                <Moment format="MMMM DD YYYY">
-                  {message.created_at}
-                </Moment>
+              <div className="message-text">
+                {message.text}
               </div>
-            </div>
-            <div className="message-text">
-              {message.text}
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+}
 
 const messagesQuery = gql`
   query($channelId: Int!) {
@@ -51,7 +85,7 @@ const messagesQuery = gql`
       user {
         username
       }
-      created_at
+      createdAt
     }
   }
 `;

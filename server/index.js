@@ -7,7 +7,6 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import { execute, subscribe } from 'graphql';
-import { PubSub } from 'graphql-subscriptions';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import jwt from 'jsonwebtoken';
 
@@ -29,7 +28,7 @@ const reactApp = (nodeEnv === 'development') ?  '/static/js/bundle.js' : '/stati
 
 const schema = makeExecutableSchema({
   typeDefs,
-  resolvers,
+  resolvers
 });
 
 const app = express();
@@ -71,7 +70,7 @@ app.use(addUser);
 const graphqlEndpoint = '/graphql';
 
 
-if ( process.env.NODE_ENV === 'development' ) {
+if (process.env.NODE_ENV === 'development') {
   const webpack = require('webpack');
   const webpackConfig = require('../webpack.config.dev');
   const webpackCompiler = webpack(webpackConfig);

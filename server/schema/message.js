@@ -4,7 +4,11 @@ export default `
     text: String!
     user: User!
     channel: Channel!
-    created_at: String!
+    createdAt: String!
+  }
+
+  type Subscription {
+    newChannelMessage(channelId: Int!): Message!
   }
 
   type Query {
