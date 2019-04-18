@@ -51,26 +51,36 @@ class Messages extends React.Component {
     return (
       <div className="messages">
         <ul className="messages-list">
-          {messages.map((message, i) => (
-            <li
-              key={message.id}
-              className="messages-list__item"
-            >
-              <div className="message-header">
-                <div className="message-user">
-                  {message.user.username}
+          {messages.map((message, i) => {
+            const calendarStrings = {
+              lastDay: '[Yesterday at] LT',
+              sameDay: '[Today at] LT',
+              nextDay: '[Tomorrow at] LT',
+              lastWeek: '[last] dddd [at] LT',
+              sameElse: 'L',
+            };
+
+            return (
+              <li
+                key={message.id}
+                className="messages-list__item"
+              >
+                <div className="message-header">
+                  <div className="message-user">
+                    {message.user.username}
+                  </div>
+                  <div className="message-date">
+                    <Moment calendar={calendarStrings}>
+                      {message.createdAt}
+                    </Moment>
+                  </div>
                 </div>
-                <div className="message-date">
-                  <Moment format="MMMM DD YYYY hh:MM A">
-                    {message.created_at}
-                  </Moment>
+                <div className="message-text">
+                  {message.text}
                 </div>
-              </div>
-              <div className="message-text">
-                {message.text}
-              </div>
-            </li>
-          ))}
+              </li>
+            );
+          })}
         </ul>
       </div>
     );
