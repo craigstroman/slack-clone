@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import Moment from 'react-moment';
+import uniqid from 'uniqid';
 import './Messages.scss';
 
 const newChannelMessageSubscription = gql`
@@ -19,8 +20,52 @@ const newChannelMessageSubscription = gql`
 `;
 
 class Messages extends React.Component {
-  componentWillMount() {
-    const { data, channelId } = this.props;
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      channelId: '',
+    };
+
+    this.subscribe = this.subscribe.bind(this);
+  }
+
+  componentDidMount() {
+    const { channelId } = this.props;
+
+    this.setState({ channelId });
+
+    this.unsubscribe = this.subscribe(channelId);
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.channelId !== nextProps.channelId) {
+      return { channelId: nextProps.channelId };
+    }
+
+    return null;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { channelId } = this.props;
+
+    if (prevProps.channelId !== channelId) {
+      if (this.unsubscribe) {
+        this.unsubscribe();
+      }
+
+      this.unsubscribe = this.subscribe(channelId);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
+
+  subscribe = (channelId) => {
+    const { data } = this.props;
 
     data
       .subscribeToMore({
@@ -62,7 +107,7 @@ class Messages extends React.Component {
 
             return (
               <li
-                key={message.id}
+                key={`${uniqid()}`}
                 className="messages-list__item"
               >
                 <div className="message-header">
@@ -114,4 +159,7 @@ export default graphql(messagesQuery, {
   variables: props => ({
     channelId: props.channelId,
   }),
+  options: {
+    fetchPolicy: 'network-only',
+  },
 })(Messages);
