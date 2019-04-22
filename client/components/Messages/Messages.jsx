@@ -64,6 +64,12 @@ class Messages extends React.Component {
     }
   }
 
+  /**
+   * Subscribes a user to a channel.
+   *
+   * @param      {String}  channelId  The channel identifier
+   * @return     {Object}  The messages object.
+   */
   subscribe = (channelId) => {
     const { data } = this.props;
 
