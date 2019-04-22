@@ -15,6 +15,7 @@ const sequelize = new Sequelize(db, dbUser, dbPassword, {
   define: {
   	underscored: true,
   },
+  logging: false,
 });
 
 const models = {

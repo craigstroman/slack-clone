@@ -83,7 +83,10 @@ if (process.env.NODE_ENV === 'development') {
     'path': '/__webpack_hmr'
   }));
 
-  app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndpoint }));
+  app.use('/graphiql', graphiqlExpress({
+    endpointURL: graphqlEndpoint,
+    subscriptionsEndpoint: 'ws://localhost:8081/subscriptions',
+  }));
 }
 
 
@@ -142,14 +145,10 @@ models.sequelize.sync().then(() => {
               const newTokens = await refreshTokens(token, refreshToken, models, SECRET, SECRET2);
               user = newTokens.user;
             }
+
+
             if (!user) {
               throw new Error('Invalid auth tokens');
-            }
-
-            const member = await models.Member.findOne({ where: { teamId: 1, userId: user.id } });
-
-            if (!member) {
-              throw new Error('Missing auth tokens!');
             }
 
             return true;
