@@ -146,15 +146,12 @@ models.sequelize.sync().then(() => {
               user = newTokens.user;
             }
 
-
             if (!user) {
               throw new Error('Invalid auth tokens');
             }
 
             return true;
          }
-
-         throw new Error('Missing auth tokens!');
         },
       },
       {
