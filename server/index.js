@@ -153,6 +153,8 @@ models.sequelize.sync().then(() => {
 
             return true;
          }
+
+         throw new Error('Missing auth tokens!');
         },
       },
       {

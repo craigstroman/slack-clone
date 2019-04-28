@@ -5,6 +5,7 @@
 // Delete
 
 export default `
+
   type User {
     id: Int!
     username: String!
@@ -13,7 +14,7 @@ export default `
   }
 
   type Query {
-    getUser(id: Int!): User!
+    me: User!
     allUsers: [User!]!
   }
 
@@ -34,4 +35,5 @@ export default `
     register(username: String!, email: String!, password: String!): RegisterResponse!
     login(email: String!, password: String!): LoginResponse!
   }
+
 `;
