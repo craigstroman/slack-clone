@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import decode from 'jwt-decode';
 import { graphql } from 'react-apollo';
-import allTeamsQuery from '../../shared/queries/team';
+import meQuery from '../../shared/queries/team';
 import MainSidebar from '../MainSidebar/MainSidebar';
 import TeamSidebar from '../TeamSidebar/TeamSidebar';
 import Messages from '../Messages/Messages';
@@ -37,10 +37,10 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { data: { loading, allTeams, inviteTeams } } = this.props;
+    const { data: { loading, me } } = this.props;
     const { teamId } = this.state;
     let { teamName, itemName, itemType } = this.state;
-    let teams = [];
+    let userTeams = null;
     let isOwner = false;
     let channel = null;
     let userId = null;
@@ -50,7 +50,9 @@ class Dashboard extends React.Component {
     }
 
     if (!loading) {
-      teams = [...allTeams, ...inviteTeams];
+      const { teams } = me;
+
+      userTeams = teams;
     }
 
     try {
@@ -63,8 +65,8 @@ class Dashboard extends React.Component {
       console.log('error: ', err);
     }
 
-    if (Array.isArray(teams)) {
-      if (!teams.length) {
+    if (Array.isArray(userTeams)) {
+      if (!userTeams.length) {
         return (
           <div className="containter">
             <div className="row">
@@ -81,8 +83,8 @@ class Dashboard extends React.Component {
       }
     }
 
-    const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
-    const team = teams[teamIdx];
+    const teamIdx = teamId ? userTeams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
+    const team = userTeams[teamIdx];
 
     if (!itemName.length && !itemType.length) {
       itemName = 'general';
@@ -115,7 +117,7 @@ class Dashboard extends React.Component {
         <aside>
           <div className="team-sidebar">
             <TeamSidebar
-              teams={teams.map(t => ({
+              userTeams={userTeams.map(t => ({
                 id: t.id,
                 letter: t.name.charAt(0).toUpperCase(),
                 name: t.name,
@@ -182,4 +184,4 @@ Dashboard.propTypes = {
   data: PropTypes.object,
 };
 
-export default graphql(allTeamsQuery)(Dashboard);
+export default graphql(meQuery)(Dashboard);

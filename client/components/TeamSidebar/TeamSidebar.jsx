@@ -21,14 +21,14 @@ class TeamSidebar extends React.Component {
   }
 
   render() {
-    const { teams } = this.props;
+    const { userTeams } = this.props;
 
     return (
       <div className="teams-sidebar-container">
         <section>
           <div className="teams-sidebar__content">
             <ul className="teams-list">
-              {teams.map(el => (
+              {userTeams.map(el => (
                 <li
                   className="teams-list__item"
                   id={`teams-${el.id}`}
@@ -57,13 +57,13 @@ class TeamSidebar extends React.Component {
 
 TeamSidebar.defaultProps = {
   history: {},
-  teams: [],
+  userTeams: [],
   handleChangeTeam: () => {},
 };
 
 TeamSidebar.propTypes = {
   history: PropTypes.object,
-  teams: PropTypes.array,
+  userTeams: PropTypes.array,
   handleChangeTeam: PropTypes.func,
 };
 
