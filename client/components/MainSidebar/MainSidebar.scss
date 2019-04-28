@@ -5,6 +5,19 @@
       color: $white;
       text-align: center;
     }
+    .main-sidebar__user {
+      margin: 0 auto;
+      text-align: center;
+      .user-status {
+        color: $jungleGreen;
+        margin-right: 5px;
+      }
+      .main-sidebar__username {
+        color: $white;
+        display: inline-block !important;
+        text-align: center;
+      }
+    }
   }
   section {
     color: $shadyLady;

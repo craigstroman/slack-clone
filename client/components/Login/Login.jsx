@@ -5,6 +5,7 @@ import {
   Button, Form, FormGroup, Label, Input,
 } from 'reactstrap';
 import gql from 'graphql-tag';
+import decode from 'jwt-decode';
 import './Login.scss';
 
 class Login extends React.Component {
@@ -88,6 +89,8 @@ class Login extends React.Component {
       const response = await mutate({ variables: { email, password } });
 
       const { ok, token, refreshToken } = response.data.login;
+
+      console.log('token: ', decode(token));
 
       if (ok) {
         localStorage.setItem('token', token);

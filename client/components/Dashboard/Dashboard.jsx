@@ -43,6 +43,7 @@ class Dashboard extends React.Component {
     let teams = [];
     let isOwner = false;
     let channel = null;
+    let userId = null;
 
     if (loading) {
       return null;
@@ -50,6 +51,16 @@ class Dashboard extends React.Component {
 
     if (!loading) {
       teams = [...allTeams, ...inviteTeams];
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const { user } = decode(token);
+      const { username } = user;
+
+      userId = username;
+    } catch (err) {
+      console.log('error: ', err);
     }
 
     if (Array.isArray(teams)) {
@@ -120,6 +131,7 @@ class Dashboard extends React.Component {
               users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
               teamName={teamName}
               teamId={team.id}
+              username={userId}
               isOwner={isOwner}
               handleChangeItem={this.handleChangeItem}
               {...this.props}
