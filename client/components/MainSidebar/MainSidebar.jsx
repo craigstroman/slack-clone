@@ -67,8 +67,6 @@ class MainSidebar extends React.Component {
     } = this.props;
     const { activeEl, addChannelModal, invitePeopleModal } = this.state;
 
-    console.log('isOwner: ', isOwner);
-
     return (
       <div className="main-sidebar-container">
         <header>

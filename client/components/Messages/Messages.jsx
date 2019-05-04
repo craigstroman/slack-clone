@@ -33,28 +33,25 @@ class Messages extends React.Component {
   componentDidMount() {
     const { channelId } = this.props;
 
-    this.setState({ channelId });
-
     this.unsubscribe = this.subscribe(channelId);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.channelId !== nextProps.channelId) {
+    if (nextProps.channelId !== prevState.channelId) {
       return { channelId: nextProps.channelId };
     }
 
     return null;
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(nextProps, prevProps) {
     const { channelId } = this.props;
 
-    if (prevProps.channelId !== channelId) {
+    if (channelId !== nextProps.channelId) {
       if (this.unsubscribe) {
         this.unsubscribe();
       }
-
-      this.unsubscribe = this.subscribe(channelId);
+      this.unsubscribe = this.subscribe(nextProps.channelId);
     }
   }
 

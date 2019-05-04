@@ -5,7 +5,7 @@ import {
   Button, Col, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
 import gql from 'graphql-tag';
-import allTeamsQuery from '../../shared/queries/team';
+import meQuery from '../../shared/queries/team';
 
 class AddChannel extends React.Component {
   constructor(props) {
@@ -56,12 +56,12 @@ class AddChannel extends React.Component {
           return;
         }
 
-        const data = store.readQuery({ query: allTeamsQuery });
-        const teamIdx = data.allTeams.findIndex(el => (el.id === teamId));
+        const data = store.readQuery({ query: meQuery });
+        const teamIdx = data.me.teams.findIndex(el => (el.id === teamId));
 
-        data.allTeams[teamIdx].channels.push(channel);
+        data.me.teams[teamIdx].channels.push(channel);
 
-        store.writeQuery({ query: allTeamsQuery, data });
+        store.writeQuery({ query: meQuery, data });
       },
     });
 

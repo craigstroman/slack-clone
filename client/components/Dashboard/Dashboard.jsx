@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import decode from 'jwt-decode';
 import { graphql } from 'react-apollo';
 import meQuery from '../../shared/queries/team';
 import MainSidebar from '../MainSidebar/MainSidebar';
@@ -41,28 +40,20 @@ class Dashboard extends React.Component {
     const { teamId } = this.state;
     let { teamName, itemName, itemType } = this.state;
     let userTeams = null;
+    let userId = null;
     let isOwner = false;
     let channel = null;
-    let userId = null;
 
     if (loading) {
       return null;
     }
 
     if (!loading) {
-      const { teams } = me;
-
-      userTeams = teams;
-    }
-
-    try {
-      const token = localStorage.getItem('token');
-      const { user } = decode(token);
-      const { username } = user;
+      const { username, teams } = me;
 
       userId = username;
-    } catch (err) {
-      console.log('error: ', err);
+
+      userTeams = teams;
     }
 
     if (Array.isArray(userTeams)) {
@@ -85,6 +76,7 @@ class Dashboard extends React.Component {
 
     const teamIdx = teamId ? userTeams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
     const team = userTeams[teamIdx];
+    isOwner = team.admin;
 
     if (!itemName.length && !itemType.length) {
       itemName = 'general';
@@ -99,17 +91,6 @@ class Dashboard extends React.Component {
 
     if (!teamName.length) {
       teamName = team.name;
-    }
-
-    try {
-      const token = localStorage.getItem('token');
-      const { user } = decode(token);
-      const { id } = user;
-
-      isOwner = id === team.owner;
-    } catch (err) {
-      console.log('There was an error.');
-      console.log('error: ', err);
     }
 
     return (
