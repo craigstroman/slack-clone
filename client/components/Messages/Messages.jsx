@@ -97,6 +97,8 @@ class Messages extends React.Component {
               sameElse: 'L',
             };
 
+            const createdAt = new Date(message.createdAt);
+
             return (
               <li
                 key={`${uniqid()}`}
@@ -108,7 +110,7 @@ class Messages extends React.Component {
                   </div>
                   <div className="message-date">
                     <Moment calendar={calendarStrings}>
-                      {message.createdAt}
+                      {createdAt}
                     </Moment>
                   </div>
                 </div>
