@@ -3,41 +3,13 @@ import {
   BrowserRouter, Route, Redirect, Switch,
 } from 'react-router-dom';
 import decode from 'jwt-decode';
-
+import PrivateRoute from '../../shared/util/privateRoutes';
 
 import Home from '../Home/Home';
 import Dashboard from '../../components/Dashboard/Dashboard';
 import Register from '../../components/Register/Register';
 import Login from '../../components/Login/Login';
 import CreateTeam from '../../components/CreateTeam/CreateTeam';
-
-const isAuthenticated = () => {
-  const token = localStorage.getItem('token');
-  const refreshToken = localStorage.getItem('refreshToken');
-  try {
-    decode(token);
-    decode(refreshToken);
-  } catch (err) {
-    return false;
-  }
-
-  return true;
-};
-
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props => (isAuthenticated() ? (
-      <Component {...props} />
-    ) : (
-      <Redirect
-        to={{
-          pathname: '/login',
-        }}
-      />
-    ))}
-  />
-);
 
 const Main = () => (
   <BrowserRouter>
