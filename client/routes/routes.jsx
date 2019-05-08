@@ -1,17 +1,16 @@
 import React from 'react';
 import {
-  BrowserRouter, Route, Redirect, Switch,
+  BrowserRouter, Route, Switch,
 } from 'react-router-dom';
-import decode from 'jwt-decode';
-import PrivateRoute from '../../shared/util/privateRoutes';
+import PrivateRoute from '../shared/util/privateRoutes';
 
-import Home from '../Home/Home';
-import Dashboard from '../../components/Dashboard/Dashboard';
-import Register from '../../components/Register/Register';
-import Login from '../../components/Login/Login';
-import CreateTeam from '../../components/CreateTeam/CreateTeam';
+import Home from '../pages/Home/Home';
+import Dashboard from '../pages/Dashboard/Dashboard';
+import Register from '../pages/Register/Register';
+import Login from '../pages/Login/Login';
+import CreateTeam from '../components/CreateTeam/CreateTeam';
 
-const Main = () => (
+const Routes = () => (
   <BrowserRouter>
     <Switch>
       <Route path="/" exact component={Home} />
@@ -25,4 +24,4 @@ const Main = () => (
   </BrowserRouter>
 );
 
-export default Main;
+export default Routes;

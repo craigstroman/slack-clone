@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import meQuery from '../../shared/queries/team';
-import MainSidebar from '../MainSidebar/MainSidebar';
-import TeamSidebar from '../TeamSidebar/TeamSidebar';
-import Messages from '../Messages/Messages';
-import MessageInput from '../MessageInput/MessageInput';
-import Header from '../Header/Header';
+import MainSidebar from '../../components/MainSidebar/MainSidebar';
+import TeamSidebar from '../../components/TeamSidebar/TeamSidebar';
+import Messages from '../../components/Messages/Messages';
+import MessageInput from '../../components/MessageInput/MessageInput';
+import Header from '../../components/Header/Header';
 import './Dashboard.scss';
 
 class Dashboard extends React.Component {
