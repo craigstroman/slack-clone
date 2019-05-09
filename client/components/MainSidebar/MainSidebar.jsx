@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
 import AddChannel from '../AddChannel/AddChannel';
 import InvitePeople from '../InvitePeople/InvitePeople';
+import Channels from '../Channels/Channels';
+import DirectMessages from '../DirectMessages/DirectMessages';
 import './MainSidebar.scss';
 
 class MainSidebar extends React.Component {
@@ -61,6 +63,10 @@ class MainSidebar extends React.Component {
     }
   }
 
+  handleMessageUser = () => {
+    console.log('handleMessageUser: ');
+  }
+
   render() {
     const {
       channels, users, teamName, teamId, username, isOwner,
@@ -79,76 +85,19 @@ class MainSidebar extends React.Component {
           </div>
         </header>
         <section>
-          <div className="channels">
-            <div className="sidebar-heading">
-              <h5>Channels</h5>
-              {isOwner && (
-                <Button
-                  type="button"
-                  className="sidebar-heading__action"
-                  onClick={this.handleOpenAddChannel}
-                >
-                  <FontAwesomeIcon icon={faPlusCircle} />
-                </Button>
-              )}
-            </div>
-            <ul className="channels-list">
-              {channels.map(el => (
-                <li
-                  className={
-                    activeEl === `channel-${el.id}` ? 'channels-list__item selected' : 'channels-list__item'
-                  }
-                  id={`channel-${el.id}`}
-                  key={`channel-${el.id}`}
-                >
-                  <Button
-                    type="button"
-                    className="channel-item"
-                    itemType="channel"
-                    name={el.name}
-                    onClick={e => this.handleSelectItem(e)}
-                  >
-                    #&nbsp;
-                    {el.name}
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="users">
-            <div className="sidebar-heading">
-              <h5>Direct Messages</h5>
-              <Button
-                type="button"
-                className="sidebar-heading__action"
-                onClick={this.handleMessageUser}
-              >
-                <FontAwesomeIcon icon={faPlusCircle} />
-              </Button>
-            </div>
-            <ul className="users-list">
-              {users.map(el => (
-                <li
-                  className={
-                    activeEl === `user-${el.id}` ? 'user-list__item selected' : 'user-list__item'
-                  }
-                  id={`user-${el.id}`}
-                  key={el.id}
-                >
-                  <Button
-                    type="button"
-                    className="users-item"
-                    itemType="user"
-                    name={el.name}
-                    onClick={e => this.handleSelectItem(e)}
-                  >
-                    <FontAwesomeIcon icon={faCircle} className="user-status" />
-                    {el.name}
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <Channels
+            isOwner={isOwner}
+            channels={channels}
+            activeEl={activeEl}
+            addChannel={this.handleOpenAddChannel}
+            selectItem={this.handleSelectItem}
+          />
+          <DirectMessages
+            users={users}
+            activeEl={activeEl}
+            selectItem={this.handleSelectItem}
+            messageUser={this.handleMessageUser}
+          />
           {isOwner && (
             <div className="invite-people">
               <div className="sidebar-heading">

@@ -1,0 +1,35 @@
+.channels {
+  margin-bottom: 20px;
+  .channels-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  .channels-list {
+    .channels-list__item {
+      &.selected {
+        background-color: $toryBlue;
+        &:hover {
+          background-color: $toryBlue;
+        }
+      }
+      &:hover {
+        background-color: darken($valentino, 5%);
+      }
+      .channel-item{
+        @extend .btn;
+        @extend .btn-link;
+        color: $shadyLady;
+        font-size: 1em;
+        text-decoration: none;
+        &:focus,
+        &:hover,
+        &:active,
+        &:visited {
+          color: $shadyLady;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
