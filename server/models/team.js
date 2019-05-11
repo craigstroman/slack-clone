@@ -1,6 +1,7 @@
 
 export default (sequelize, DataTypes) => {
   const Team = sequelize.define('team', {
+    uuid: DataTypes.STRING,
     name: {
       type: DataTypes.STRING,
       unique: true,

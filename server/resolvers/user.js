@@ -1,6 +1,7 @@
 import { tryLogin } from '../auth';
 import formatErrors from '../formatErrors';
 import requiresAuth from '../permissions';
+import shortid from 'shortid';
 
 export default {
   User: {
@@ -24,6 +25,8 @@ export default {
       tryLogin(email, password, models, SECRET, SECRET2),
     register: async (parent, args, { models }) => {
       try {
+        args['uuid'] = shortid.generate();
+
         const user = await models.User.create(args);
 
         return {

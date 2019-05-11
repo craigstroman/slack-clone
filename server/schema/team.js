@@ -1,6 +1,7 @@
 export default `
   type Team {
     id: Int!
+    uiid: String!
     name: String!
     members: [User!]!
     channels: [Channel!]!

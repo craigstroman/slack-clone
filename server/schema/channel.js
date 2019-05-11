@@ -2,6 +2,7 @@
 export default `
   type Channel {
     id: Int!
+    uuid: String!
     name: String!
     public: Boolean!
     messages: [Message!]!

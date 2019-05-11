@@ -1,5 +1,6 @@
 import formatErrors from '../formatErrors';
 import requiresAuth from '../permissions';
+import shortid from 'shortid';
 
 export default {
   Mutation: {
@@ -20,8 +21,10 @@ export default {
             ],
           };
         }
+        args['uuid'] = shortid.generate();
 
         const channel = await models.Channel.create(args);
+
         return {
           ok: true,
           channel,

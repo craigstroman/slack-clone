@@ -8,6 +8,7 @@ export default `
 
   type User {
     id: Int!
+    uuid: String!
     username: String!
     email: String!
     teams: [Team!]!

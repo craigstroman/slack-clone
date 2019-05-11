@@ -1,5 +1,6 @@
 import formatErrors from '../formatErrors';
 import requiresAuth from '../permissions';
+import shortid from 'shortid';
 
 export default {
   Mutation: {
@@ -38,6 +39,8 @@ export default {
     createTeam: requiresAuth.createResolver(async (parent, args, { models, user }) => {
       try {
         const response = await models.sequelize.transaction(async () => {
+          args['uuid'] = shortid.generate();
+
           const team = await models.Team.create({ ...args });
           await models.Channel.create({ name: 'general', public: true, teamId: team.id });
           await models.Member.create({ teamId: team.id, userId: user.id, admin: true });
