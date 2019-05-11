@@ -1,7 +1,7 @@
 export default `
   type Team {
     id: Int!
-    uiid: String!
+    uuid: String!
     name: String!
     members: [User!]!
     channels: [Channel!]!
@@ -11,6 +11,7 @@ export default `
   type CreateTeamResponse {
     ok: Boolean!
     team: Team
+    uuid: String!
     errors: [Error!]
   }
 

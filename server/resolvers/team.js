@@ -42,10 +42,14 @@ export default {
           args['uuid'] = shortid.generate();
 
           const team = await models.Team.create({ ...args });
-          await models.Channel.create({ name: 'general', public: true, teamId: team.id });
+
+          await models.Channel.create({ uuid: shortid.generate(), name: 'general', public: true, teamId: team.id });
+
           await models.Member.create({ teamId: team.id, userId: user.id, admin: true });
+
           return team;
         });
+
         return {
           ok: true,
           team: response,
