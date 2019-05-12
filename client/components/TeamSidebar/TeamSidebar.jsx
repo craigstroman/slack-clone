@@ -14,8 +14,9 @@ class TeamSidebar extends React.Component {
 
     const teamName = e.target.getAttribute('team');
     const teamId = e.target.getAttribute('teamid');
+    const teamUUID = e.target.getAttribute('teamuuid');
 
-    history.push(`/dashboard/view/team/${teamId}`);
+    history.push(`/dashboard/view/team/${teamUUID}`);
 
     handleChangeTeam(teamName, teamId);
   }
@@ -32,7 +33,7 @@ class TeamSidebar extends React.Component {
                 <li
                   className="teams-list__item"
                   id={`teams-${el.id}`}
-                  key={`teams-${el.id}`}
+                  key={`teams-${el.uuid}`}
                   type={el.type}
                 >
                   <button
@@ -41,6 +42,7 @@ class TeamSidebar extends React.Component {
                     title={el.name}
                     team={el.name}
                     teamid={el.id}
+                    teamuuid={el.uuid}
                     onClick={e => this.handleClick(e)}
                   >
                     { el.letter }
