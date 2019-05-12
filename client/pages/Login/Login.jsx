@@ -87,13 +87,15 @@ class Login extends React.Component {
 
       const response = await mutate({ variables: { email, password } });
 
-      const { ok, token, refreshToken } = response.data.login;
+      const {
+        ok, teamUUID, token, refreshToken,
+      } = response.data.login;
 
       if (ok) {
         localStorage.setItem('token', token);
         localStorage.setItem('refreshToken', refreshToken);
 
-        history.push('/dashboard');
+        history.push(`/dashboard/view/team/${teamUUID}`);
       } else {
         this.setState({ errors: true });
       }
@@ -182,6 +184,7 @@ const loginMutation = gql`
   mutation($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       ok
+      teamUUID
       token
       refreshToken
       errors {
