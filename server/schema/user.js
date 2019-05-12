@@ -27,6 +27,7 @@ export default `
 
   type LoginResponse {
     ok: Boolean!
+    teamUUID: String
     token: String
     refreshToken: String
     errors: [Error!]

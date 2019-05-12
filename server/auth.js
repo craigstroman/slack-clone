@@ -111,6 +111,7 @@ export const tryLogin = async (email, password, models, SECRET, SECRET2) => {
   const [token, refreshToken] = await createTokens(user, SECRET, refreshTokenSecret);
 
   return {
+    user,
     ok: true,
     token,
     refreshToken,

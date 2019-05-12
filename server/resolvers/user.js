@@ -21,8 +21,34 @@ export default {
       models.User.findOne({ where: { id: user.id } })),
   },
   Mutation: {
-    login: (parent, { email, password }, { models, SECRET, SECRET2 }) =>
-      tryLogin(email, password, models, SECRET, SECRET2),
+    login: async (parent, { email, password }, { models, SECRET, SECRET2 }) => {
+      const loginResult = await tryLogin(email, password, models, SECRET, SECRET2);
+      let result = null;
+
+      if (loginResult.ok) {
+        const teams = await models.sequelize.query(
+          'select * from teams as team join members as member on team.id = member.team_id where member.user_id = ?',
+          {
+            replacements: [loginResult.user.id],
+            model: models.Team,
+            raw: true,
+          },
+        );
+
+        if (Array.isArray(teams)) {
+          result = {
+            'ok': loginResult.ok,
+            'teamUUID': teams[0].uuid,
+            'token': loginResult.token,
+            'refreshToken': loginResult.refreshToken,
+          }
+        }
+      } else {
+        result = loginResult;
+      }
+
+      return result;
+    },
     register: async (parent, args, { models }) => {
       try {
         args['uuid'] = shortid.generate();
