@@ -5,13 +5,16 @@ const meQuery = gql`
   {
     me {
       id
+      uuid
       username
       teams {
         id
+        uuid
         name
         admin
         channels {
           id
+          uuid
           name
         }
       }
