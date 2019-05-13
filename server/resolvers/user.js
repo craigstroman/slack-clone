@@ -36,15 +36,22 @@ export default {
         );
 
         if (Array.isArray(teams)) {
-          result = {
-            'ok': loginResult.ok,
-            'teamUUID': teams[0].uuid,
-            'token': loginResult.token,
-            'refreshToken': loginResult.refreshToken,
+          if (teams.length >= 1) {
+            result = {
+              'ok': loginResult.ok,
+              'teamUUID': teams[0].uuid,
+              'token': loginResult.token,
+              'refreshToken': loginResult.refreshToken,
+            }
+          } else {
+            result = {
+              'ok': loginResult.ok,
+              'teamUUID': undefined,
+              'token': loginResult.token,
+              'refreshToken': loginResult.refreshToken,
+            }
           }
         }
-      } else {
-        result = loginResult;
       }
 
       return result;

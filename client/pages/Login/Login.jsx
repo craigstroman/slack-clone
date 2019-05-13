@@ -95,7 +95,11 @@ class Login extends React.Component {
         localStorage.setItem('token', token);
         localStorage.setItem('refreshToken', refreshToken);
 
-        history.push(`/dashboard/view/team/${teamUUID}`);
+        if (teamUUID !== null) {
+          history.push(`/dashboard/view/team/${teamUUID}`);
+        } else {
+          history.push('/dashboard/view/team/');
+        }
       } else {
         this.setState({ errors: true });
       }
