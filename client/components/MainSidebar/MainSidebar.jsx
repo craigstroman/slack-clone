@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
-import AddChannel from '../AddChannel/AddChannel';
 import InvitePeople from '../InvitePeople/InvitePeople';
 import Channels from '../Channels/Channels';
 import DirectMessages from '../DirectMessages/DirectMessages';
@@ -15,12 +14,10 @@ class MainSidebar extends React.Component {
 
     this.state = {
       activeEl: '',
-      addChannelModal: false,
       invitePeopleModal: false,
     };
 
     this.handleSelectItem = this.handleSelectItem.bind(this);
-    this.handleOpenAddChannel = this.handleOpenAddChannel.bind(this);
     this.handleInvitePeople = this.handleInvitePeople.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
   }
@@ -39,14 +36,9 @@ class MainSidebar extends React.Component {
 
     this.setState({
       activeEl: elId,
-      addChannelModal: false,
     });
 
     handleChangeItem(itemName, itemType);
-  }
-
-  handleOpenAddChannel = () => {
-    this.setState({ addChannelModal: true });
   }
 
   handleInvitePeople = () => {
@@ -54,13 +46,7 @@ class MainSidebar extends React.Component {
   }
 
   handleCloseModal = () => {
-    const { addChannelModal, invitePeopleModal } = this.state;
-
-    if (addChannelModal) {
-      this.setState({ addChannelModal: false });
-    } else if (invitePeopleModal) {
-      this.setState({ invitePeopleModal: false });
-    }
+    this.setState({ invitePeopleModal: false });
   }
 
   handleMessageUser = () => {
@@ -71,7 +57,7 @@ class MainSidebar extends React.Component {
     const {
       channels, users, teamName, teamId, username, isOwner,
     } = this.props;
-    const { activeEl, addChannelModal, invitePeopleModal } = this.state;
+    const { activeEl, invitePeopleModal } = this.state;
 
     return (
       <div className="main-sidebar-container">
@@ -85,19 +71,23 @@ class MainSidebar extends React.Component {
           </div>
         </header>
         <section>
-          <Channels
-            isOwner={isOwner}
-            channels={channels}
-            activeEl={activeEl}
-            addChannel={this.handleOpenAddChannel}
-            selectItem={this.handleSelectItem}
-          />
-          <DirectMessages
-            users={users}
-            activeEl={activeEl}
-            selectItem={this.handleSelectItem}
-            messageUser={this.handleMessageUser}
-          />
+          <Fragment>
+            <Channels
+              isOwner={isOwner}
+              channels={channels}
+              activeEl={activeEl}
+              teamId={teamId}
+              selectItem={this.handleSelectItem}
+            />
+          </Fragment>
+          <Fragment>
+            <DirectMessages
+              users={users}
+              activeEl={activeEl}
+              selectItem={this.handleSelectItem}
+              messageUser={this.handleMessageUser}
+            />
+          </Fragment>
           {isOwner && (
             <div className="invite-people">
               <div className="sidebar-heading">
@@ -113,11 +103,6 @@ class MainSidebar extends React.Component {
             </div>
           )}
         </section>
-        <AddChannel
-          isOpen={addChannelModal}
-          teamId={teamId}
-          handleCloseAddChannel={() => this.handleCloseModal()}
-        />
         <InvitePeople
           isOpen={invitePeopleModal}
           teamId={teamId}
