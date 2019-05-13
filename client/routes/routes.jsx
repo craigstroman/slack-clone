@@ -19,6 +19,7 @@ const Routes = () => (
       <PrivateRoute path="/dashboard" exact component={Dashboard} />
       <PrivateRoute path="/dashboard/view/team/:teamId?" exact component={Dashboard} />
       <PrivateRoute path="/dashboard/view/channel/:channelId?" exact component={Dashboard} />
+      <PrivateRoute path="/dashboard/view/user/:userId?" exact component={Dashboard} />
       <PrivateRoute path="/create-team" exact component={CreateTeam} />
     </Switch>
   </BrowserRouter>

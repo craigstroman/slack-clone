@@ -100,6 +100,7 @@ class Dashboard extends React.Component {
             <TeamSidebar
               userTeams={userTeams.map(t => ({
                 id: t.id,
+                uuid: t.uuid,
                 letter: t.name.charAt(0).toUpperCase(),
                 name: t.name,
                 type: 'channel',
@@ -159,10 +160,12 @@ class Dashboard extends React.Component {
 
 Dashboard.defaultProps = {
   data: {},
+  history: {},
 };
 
 Dashboard.propTypes = {
   data: PropTypes.object,
+  history: PropTypes.object,
 };
 
 export default graphql(meQuery)(Dashboard);

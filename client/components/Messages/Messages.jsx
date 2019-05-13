@@ -80,7 +80,7 @@ class Messages extends React.Component {
   render() {
     const { data: { loading, messages } } = this.props;
 
-    if (loading && typeof messages === 'undefined') {
+    if (loading || typeof messages === 'undefined') {
       return null;
     }
 

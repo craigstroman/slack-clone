@@ -28,7 +28,7 @@ const DirectMessages = (props) => {
             className={
               activeEl === `user-${el.id}` ? 'user-list__item selected' : 'user-list__item'
             }
-            id={`user-${el.id}`}
+            id="user-0"
             key={el.id}
           >
             <Button

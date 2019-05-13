@@ -45,6 +45,7 @@ class AddChannel extends React.Component {
           channel: {
             __typename: 'Channel',
             id: -1,
+            uuid: -1,
             name: channelName,
           },
         },
@@ -127,6 +128,7 @@ const createChannelMutation = gql`
       ok
       channel {
         id
+        uuid
         name
       }
     }
