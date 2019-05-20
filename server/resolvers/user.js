@@ -22,7 +22,41 @@ export default {
   },
   Mutation: {
     login: async (parent, { email, password }, { models, SECRET, SECRET2 }) => {
-      return tryLogin(email, password, models, SECRET, SECRET2);
+      const loginResult = await tryLogin(email, password, models, SECRET, SECRET2);
+      let result = null;
+
+      if (loginResult.ok) {
+        const teams = await models.sequelize.query(
+          'select * from teams as team join members as member on team.id = member.team_id where member.user_id = ?',
+          {
+            replacements: [loginResult.user.id],
+            model: models.Team,
+            raw: true,
+          },
+        );
+
+        if (Array.isArray(teams)) {
+          if (teams.length >= 1) {
+            result = {
+              'ok': loginResult.ok,
+              'user': loginResult.user,
+              'teamUUID': teams[0].uuid,
+              'token': loginResult.token,
+              'refreshToken': loginResult.refreshToken,
+            }
+          } else {
+            result = {
+              'ok': loginResult.ok,
+              'user': loginResult.user,
+              'teamUUID': undefined,
+              'token': loginResult.token,
+              'refreshToken': loginResult.refreshToken,
+            }
+          }
+        }
+      }
+
+      return result;
     },
     register: async (parent, args, { models }) => {
       try {
