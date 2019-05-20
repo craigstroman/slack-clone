@@ -15,6 +15,17 @@ class Channels extends React.Component {
     };
 
     this.handleOpenAddChannel = this.handleOpenAddChannel.bind(this);
+    this.handleSelectChannel = this.handleSelectChannel.bind(this);
+  }
+
+  handleSelectChannel = (e) => {
+    const { selectItem, history } = this.props;
+    const { target } = e;
+    const uuid = target.getAttribute('uuid');
+
+    history.push(`/dashboard/view/channel/${uuid}`);
+
+    selectItem(e);
   }
 
   handleOpenAddChannel = () => {
@@ -28,7 +39,7 @@ class Channels extends React.Component {
   render() {
     const { addChannelModal } = this.state;
     const {
-      isOwner, channels, activeEl, selectItem, teamId,
+      isOwner, channels, activeEl, teamId,
     } = this.props;
 
     return (
@@ -60,8 +71,9 @@ class Channels extends React.Component {
                     type="button"
                     className="channel-item"
                     itemType="channel"
+                    uuid={el.uuid}
                     name={el.name}
-                    onClick={e => selectItem(e)}
+                    onClick={e => this.handleSelectChannel(e)}
                   >
                     #&nbsp;
                     {el.name}
@@ -90,6 +102,7 @@ Channels.defaultProps = {
   activeEl: '',
   teamId: null,
   selectItem: () => {},
+  history: {},
 };
 
 Channels.propTypes = {
@@ -98,6 +111,7 @@ Channels.propTypes = {
   activeEl: PropTypes.string,
   teamId: PropTypes.number,
   selectItem: PropTypes.func,
+  history: PropTypes.object,
 };
 
 export default Channels;

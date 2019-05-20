@@ -78,6 +78,7 @@ class MainSidebar extends React.Component {
               activeEl={activeEl}
               teamId={teamId}
               selectItem={this.handleSelectItem}
+              {...this.props}
             />
           </Fragment>
           <Fragment>
@@ -86,6 +87,7 @@ class MainSidebar extends React.Component {
               activeEl={activeEl}
               selectItem={this.handleSelectItem}
               messageUser={this.handleMessageUser}
+              {...this.props}
             />
           </Fragment>
           {isOwner && (
