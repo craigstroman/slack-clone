@@ -139,6 +139,10 @@ models.sequelize.sync().then(() => {
           if (token && refreshToken) {
             try {
               const { user } = jwt.verify(token, SECRET);
+
+              console.log('onConnect: ');
+              console.log('user: ');
+              console.log(user);
               return { models, user };
             } catch (err) {
               const newTokens = await refreshTokens(token, refreshToken, models, SECRET, SECRET2);
