@@ -112,7 +112,7 @@ class Dashboard extends React.Component {
           <div className="main-sidebar">
             <MainSidebar
               channels={team.channels}
-              users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
+              users={[]}
               teamName={teamName}
               teamId={team.id}
               username={userId}
