@@ -55,7 +55,7 @@ class MainSidebar extends React.Component {
 
   render() {
     const {
-      channels, users, teamName, teamId, username, isOwner,
+      channels, users, teamName, teamId, teamUUID, username, isOwner,
     } = this.props;
     const { activeEl, invitePeopleModal } = this.state;
 
@@ -77,6 +77,7 @@ class MainSidebar extends React.Component {
               channels={channels}
               activeEl={activeEl}
               teamId={teamId}
+              teamUUID={teamUUID}
               selectItem={this.handleSelectItem}
               {...this.props}
             />
@@ -120,6 +121,7 @@ MainSidebar.defaultProps = {
   users: [],
   teamName: '',
   teamId: null,
+  teamUUID: null,
   username: '',
   isOwner: false,
   handleChangeItem: () => {},
@@ -130,6 +132,7 @@ MainSidebar.propTypes = {
   users: PropTypes.array,
   teamName: PropTypes.string,
   teamId: PropTypes.number,
+  teamUUID: PropTypes.string,
   username: PropTypes.string,
   isOwner: PropTypes.bool,
   handleChangeItem: PropTypes.func,

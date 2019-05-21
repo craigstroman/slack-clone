@@ -115,6 +115,7 @@ class Dashboard extends React.Component {
               users={[]}
               teamName={teamName}
               teamId={team.id}
+              teamUUID={team.uuid}
               username={userId}
               isOwner={isOwner}
               handleChangeItem={this.handleChangeItem}

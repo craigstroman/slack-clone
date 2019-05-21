@@ -9,6 +9,7 @@ import Dashboard from '../pages/Dashboard/Dashboard';
 import Register from '../pages/Register/Register';
 import Login from '../pages/Login/Login';
 import CreateTeam from '../components/CreateTeam/CreateTeam';
+import DirectMessages from '../components/DirectMessages/DirectMessages';
 
 const Routes = () => (
   <BrowserRouter>
@@ -18,8 +19,8 @@ const Routes = () => (
       <Route path="/login" exact component={Login} />
       <PrivateRoute path="/dashboard" exact component={Dashboard} />
       <PrivateRoute path="/dashboard/view/team/:teamId?" exact component={Dashboard} />
-      <PrivateRoute path="/dashboard/view/channel/:channelId?" exact component={Dashboard} />
-      <PrivateRoute path="/dashboard/view/user/:userId?" exact component={Dashboard} />
+      <PrivateRoute path="/dashboard/view/team/:teamId?/channel/:channelId?" exact component={Dashboard} />
+      <PrivateRoute path="/dashboard/view/team/:teamId?/user/:userId?" exact component={DirectMessages} />
       <PrivateRoute path="/create-team" exact component={CreateTeam} />
     </Switch>
   </BrowserRouter>

@@ -88,7 +88,7 @@ class Login extends React.Component {
       const response = await mutate({ variables: { email, password } });
 
       const {
-        ok, teamUUID, token, refreshToken,
+        ok, teamUUID, channelUUID, token, refreshToken,
       } = response.data.login;
 
       if (ok) {
@@ -96,7 +96,7 @@ class Login extends React.Component {
         localStorage.setItem('refreshToken', refreshToken);
 
         if (teamUUID !== null) {
-          history.push(`/dashboard/view/team/${teamUUID}`);
+          history.push(`/dashboard/view/team/${teamUUID}/channel/${channelUUID}`);
         } else {
           history.push('/dashboard/view/team/');
         }
@@ -189,6 +189,7 @@ const loginMutation = gql`
     login(email: $email, password: $password) {
       ok
       teamUUID
+      channelUUID
       token
       refreshToken
       errors {

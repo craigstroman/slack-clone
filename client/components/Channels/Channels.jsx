@@ -19,11 +19,11 @@ class Channels extends React.Component {
   }
 
   handleSelectChannel = (e) => {
-    const { selectItem, history } = this.props;
+    const { selectItem, teamUUID, history } = this.props;
     const { target } = e;
     const uuid = target.getAttribute('uuid');
 
-    history.push(`/dashboard/view/channel/${uuid}`);
+    history.push(`/dashboard/view/team/${teamUUID}/channel/${uuid}`);
 
     selectItem(e);
   }
@@ -101,6 +101,7 @@ Channels.defaultProps = {
   channels: [],
   activeEl: '',
   teamId: null,
+  teamUUID: null,
   selectItem: () => {},
   history: {},
 };
@@ -110,6 +111,7 @@ Channels.propTypes = {
   channels: PropTypes.array,
   activeEl: PropTypes.string,
   teamId: PropTypes.number,
+  teamUUID: PropTypes.string,
   selectItem: PropTypes.func,
   history: PropTypes.object,
 };
