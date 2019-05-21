@@ -35,12 +35,26 @@ export default {
           },
         );
 
+        const team = teams[0];
+
+        const channel = await models.sequelize.query(
+          "select uuid from channels where channels.name = 'general' and channels.team_id = ?",
+          {
+            replacements: [team.id],
+            model: models.Channels,
+            raw: true,
+          }
+        );
+
+        const channelUUID = channel[0][0].uuid;
+
         if (Array.isArray(teams)) {
           if (teams.length >= 1) {
             result = {
               'ok': loginResult.ok,
               'user': loginResult.user,
-              'teamUUID': teams[0].uuid,
+              'teamUUID': team.uuid,
+              'channelUUID': channelUUID,
               'token': loginResult.token,
               'refreshToken': loginResult.refreshToken,
             }

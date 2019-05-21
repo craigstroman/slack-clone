@@ -28,6 +28,7 @@ export default `
   type LoginResponse {
     ok: Boolean!
     teamUUID: String
+    channelUUID: String
     token: String
     refreshToken: String
     errors: [Error!]
