@@ -7,10 +7,10 @@ export default `
   }
 
   type Query {
-    directMesages: [DirectMessage!]!
+    directMessages: [DirectMessage!]!
   }
 
-  type mutation {
+  type Mutation {
     createDirectMessage(receiverId: Int!, text: String!): Boolean!
   }
 `;
