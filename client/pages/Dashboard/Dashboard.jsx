@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import meQuery from '../../shared/queries/team';
 import MainSidebar from '../../components/MainSidebar/MainSidebar';
 import TeamSidebar from '../../components/TeamSidebar/TeamSidebar';
-import Messages from '../../components/Messages/Messages';
-import MessageInput from '../../components/MessageInput/MessageInput';
+import ChannelMessages from '../../components/Messages/ChannelMessages/ChannelMessages';
+import ChannelInput from '../../components/MessageInput/ChannelInput/ChannelInput';
+import UserMessages from '../../components/Messages/UserMessages/UserMessages';
+import UserInput from '../../components/MessageInput/UserInput/UserInput';
 import Header from '../../components/Header/Header';
+import NoTeams from '../../components/NoTeams/NoTeams';
 import './Dashboard.scss';
 
 class Dashboard extends React.Component {
@@ -36,7 +39,7 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { data: { loading, me } } = this.props;
+    const { data: { loading, me }, match } = this.props;
     const { teamId } = this.state;
     let { teamName, itemName, itemType } = this.state;
     let userTeams = null;
@@ -48,31 +51,19 @@ class Dashboard extends React.Component {
       return null;
     }
 
-    if (!loading) {
-      const { username, teams } = me;
-
-      userId = username;
-
-      userTeams = teams;
-    }
-
     if (Array.isArray(userTeams)) {
       if (!userTeams.length) {
         return (
-          <div className="containter">
-            <div className="row">
-              <div className="col-md-12 text-center">
-                You need to&nbsp;
-                <a href="/create-team">
-                  create a team
-                </a>
-                .
-              </div>
-            </div>
-          </div>
+          <NoTeams />
         );
       }
     }
+
+    const { username, teams } = me;
+
+    userId = username;
+
+    userTeams = teams;
 
     const teamIdx = teamId ? userTeams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
     const team = userTeams[teamIdx];
@@ -134,24 +125,58 @@ class Dashboard extends React.Component {
                 />
               </div>
             </header>
-            <section>
-              <div className="messages-container">
-                <Messages
-                  channelId={channel.id}
-                  {...this.props}
-                />
-              </div>
-            </section>
-            <footer>
-              <div className="input-container">
-                <MessageInput
-                  itemName={itemName}
-                  itemType={itemType}
-                  channelId={channel.id}
-                  {...this.props}
-                />
-              </div>
-            </footer>
+            <Fragment>
+              {match.params.channelId && (
+                <Fragment>
+                  <section>
+                    <div className="messages-container">
+                      <ChannelMessages
+                        channelId={channel.id}
+                        {...this.props}
+                      />
+                    </div>
+                  </section>
+                </Fragment>
+              )}
+              {match.params.userId && (
+                <Fragment>
+                  <section>
+                    <div className="messages-container">
+                      <UserMessages
+                        {...this.props}
+                      />
+                    </div>
+                  </section>
+                </Fragment>
+              )}
+            </Fragment>
+            <Fragment>
+              {match.params.channelId && (
+                <Fragment>
+                  <footer>
+                    <div className="input-container">
+                      <ChannelInput
+                        itemName={itemName}
+                        itemType={itemType}
+                        channelId={channel.id}
+                        {...this.props}
+                      />
+                    </div>
+                  </footer>
+                </Fragment>
+              )}
+              {match.params.userId && (
+                <Fragment>
+                  <footer>
+                    <div className="input-container">
+                      <UserInput
+                        {...this.props}
+                      />
+                    </div>
+                  </footer>
+                </Fragment>
+              )}
+            </Fragment>
           </div>
         </main>
       </div>
