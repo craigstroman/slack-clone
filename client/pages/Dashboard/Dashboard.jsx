@@ -143,8 +143,8 @@ class Dashboard extends React.Component {
                   <section>
                     <div className="messages-container">
                       <UserMessages
-                        teamId={0}
-                        userId={0}
+                        teamId={3}
+                        userId={8}
                         {...this.props}
                       />
                     </div>
@@ -171,7 +171,7 @@ class Dashboard extends React.Component {
                   <footer>
                     <div className="input-container">
                       <UserInput
-                        itemName="testUser"
+                        itemName="cstroman"
                         {...this.props}
                       />
                     </div>

@@ -1,13 +1,58 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import Moment from 'react-moment';
+import uniqid from 'uniqid';
 import './UserMessages.scss';
 
-const UserMessages = props => (
-  <div>
-    User Messages
-  </div>
-);
+const UserMessages = (props) => {
+  const { data: { loading, messages } } = props;
+
+  if (loading || typeof messages === 'undefined') {
+    return null;
+  }
+
+  return (
+    <div className="messages">
+      <ul className="messages-list">
+        {messages.map((message, i) => {
+          const calendarStrings = {
+            lastDay: '[Yesterday at] LT',
+            sameDay: '[Today at] LT',
+            nextDay: '[Tomorrow at] LT',
+            lastWeek: 'dddd [at] LT',
+            nextWeek: 'dddd [at] LT',
+            sameElse: 'L',
+          };
+
+          const createdAt = new Date(message.createdAt);
+
+          return (
+            <li
+              key={`${uniqid()}`}
+              className="messages-list__item"
+            >
+              <div className="message-header">
+                <div className="message-user">
+                  {message.user.username}
+                </div>
+                <div className="message-date">
+                  <Moment calendar={calendarStrings}>
+                    {createdAt}
+                  </Moment>
+                </div>
+              </div>
+              <div className="message-text">
+                {message.text}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+};
 
 const directMessagesQuery = gql`
   query($teamId: Int!, $userId: Int!) {
@@ -21,6 +66,14 @@ const directMessagesQuery = gql`
     }
   }
 `;
+
+UserMessages.defaultProps = {
+  data: {},
+};
+
+UserMessages.propTypes = {
+  data: PropTypes.object,
+};
 
 export default graphql(directMessagesQuery, {
   variables: props => ({
