@@ -47,15 +47,8 @@ class ChannelInput extends React.Component {
   }
 
   render() {
-    const { itemName, itemType } = this.props;
+    const { itemName } = this.props;
     const { message, isSubmiting } = this.state;
-    let placeholder = '';
-
-    if (itemType === 'channel') {
-      placeholder = `Message #${itemName}`;
-    } else if (itemType === 'user') {
-      placeholder = `Message ${itemName}`;
-    }
 
     return (
       <div className="input">
@@ -66,7 +59,7 @@ class ChannelInput extends React.Component {
                 type="text"
                 name="message"
                 className="form-control"
-                placeholder={placeholder}
+                placeholder={`Message #${itemName}`}
                 value={message}
                 autoComplete="off"
                 onChange={e => this.handleChange(e)}
@@ -88,13 +81,11 @@ const createMessageMutation = gql`
 
 ChannelInput.defaultProps = {
   itemName: '',
-  itemType: '',
   channelId: 0,
 };
 
 ChannelInput.propTypes = {
   itemName: PropTypes.string,
-  itemType: PropTypes.string,
   channelId: PropTypes.number,
 };
 

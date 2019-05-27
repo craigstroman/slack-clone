@@ -38,12 +38,12 @@ class Header extends React.Component {
 
   render() {
     const { dropdownOpen } = this.state;
-    const { itemName, itemType } = this.props;
+    const { itemName, match } = this.props;
     let title = '';
 
-    if (itemType === 'channel') {
+    if (match.params.channelId) {
       title = `#${itemName}`;
-    } else if (itemType === 'user') {
+    } else if (match.params.userId) {
       title = itemName;
     }
 
@@ -91,14 +91,14 @@ class Header extends React.Component {
 
 Header.defaultProps = {
   history: {},
+  match: {},
   itemName: '',
-  itemType: '',
 };
 
 Header.propTypes = {
   history: PropTypes.object,
+  match: PropTypes.object,
   itemName: PropTypes.string,
-  itemType: PropTypes.string,
 };
 
 export default Header;
