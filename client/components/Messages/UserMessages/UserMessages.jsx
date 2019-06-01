@@ -7,16 +7,16 @@ import uniqid from 'uniqid';
 import './UserMessages.scss';
 
 const UserMessages = (props) => {
-  const { data: { loading, messages } } = props;
+  const { data: { loading, directMessages } } = props;
 
-  if (loading || typeof messages === 'undefined') {
+  if (loading || typeof directMessages === 'undefined') {
     return null;
   }
 
   return (
     <div className="messages">
       <ul className="messages-list">
-        {messages.map((message, i) => {
+        {directMessages.map((message, i) => {
           const calendarStrings = {
             lastDay: '[Yesterday at] LT',
             sameDay: '[Today at] LT',
@@ -26,7 +26,7 @@ const UserMessages = (props) => {
             sameElse: 'L',
           };
 
-          const createdAt = new Date(message.createdAt);
+          const createdAt = new Date(message.created_at);
 
           return (
             <li
@@ -35,7 +35,7 @@ const UserMessages = (props) => {
             >
               <div className="message-header">
                 <div className="message-user">
-                  {message.user.username}
+                  {message.sender.username}
                 </div>
                 <div className="message-date">
                   <Moment calendar={calendarStrings}>
