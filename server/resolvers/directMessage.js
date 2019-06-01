@@ -7,12 +7,12 @@ export default {
         return sender;
       }
 
-      return Models.User.findOne({ where: { id: senderId } }, { raw: true });
+      return models.User.findOne({ where: { id: senderId } }, { raw: true });
     },
   },
   Query: {
     directMessages: requiresAuth.createResolver(async (parent, { teamId, otherUserId }, { models, user }) =>
-      models.DirectMessage.findAll(
+      await models.DirectMessage.findAll(
         {
           order: [['created_at', 'ASC']],
           where: {
