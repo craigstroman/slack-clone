@@ -34,7 +34,7 @@ export const requiresTeamAccess = createResolver(async (parent, { channelId }, {
   // Check if part of the team
   const channel = await models.Channel.findOne({ where: { id: channelId } });
   const member = await models.Member.findOne({
-    where: { teamId: channel.teamId, userId: user.id },
+    where: { teamId: channel.teamId, user_id: user.id },
   })
 
   if (!member) {
