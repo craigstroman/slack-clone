@@ -49,10 +49,6 @@ class MainSidebar extends React.Component {
     this.setState({ invitePeopleModal: false });
   }
 
-  handleMessageUser = () => {
-    console.log('handleMessageUser: ');
-  }
-
   render() {
     const {
       channels, users, teamName, teamId, teamUUID, username, isOwner,
@@ -87,7 +83,7 @@ class MainSidebar extends React.Component {
               users={users}
               activeEl={activeEl}
               selectItem={this.handleSelectItem}
-              messageUser={this.handleMessageUser}
+              teamId={teamId}
               {...this.props}
             />
           </Fragment>
