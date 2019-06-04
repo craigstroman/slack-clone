@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import {
   Button, Col, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
-import Autosuggest from 'react-autosuggest';
+import Downshift from 'downshift';
 import './MessageUser.scss';
 
 class MessageUser extends React.Component {
@@ -13,49 +13,75 @@ class MessageUser extends React.Component {
     super(props);
 
     this.state = {
-      user: '',
+      value: '',
     };
-
-    this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-  handleInputChange = (e) => {
-    const { value } = e.target;
-
-    this.setState({
-      user: value,
-    });
   }
 
   render() {
-    const { isOpen, handleCloseDirectMessageModal, data: { loading, getTeamMembers } } = this.props;
-    const { user } = this.state;
+    const {
+      open, handleCloseDirectMessageModal, handleMessageUser, data: { loading, getTeamMembers },
+    } = this.props;
+    const { value } = this.state;
 
     if (loading) {
       return null;
     }
 
-    console.log('getTeamMembers: ', getTeamMembers);
+    const items = getTeamMembers;
 
     return (
-      <Modal isOpen={isOpen}>
+      <Modal className="direct-messages__container" isOpen={open}>
         <ModalHeader>Direct Messages</ModalHeader>
         <ModalBody>
           <Form onSubmit={(e) => { e.preventDefault(); }}>
-            <FormGroup row>
-              <Label for="name" md={4}>
-                Find a user:
-              </Label>
-              <Col md={8}>
-                <Input
-                  type="text"
-                  name="name"
-                  placeholder="Find a user"
-                  value={user}
-                  onChange={e => this.handleInputChange(e)}
-                />
-              </Col>
-            </FormGroup>
+            <Downshift
+              onChange={(selection) => {
+                this.setState({ value: selection });
+              }}
+              itemToString={item => (item ? item.username : '')}
+            >
+              {({
+                getInputProps,
+                getItemProps,
+                getLabelProps,
+                getMenuProps,
+                isOpen,
+                inputValue,
+                highlightedIndex,
+                selectedItem,
+              }) => (
+                <div>
+                  <FormGroup row>
+                    <Label for="name" md={4} {...getLabelProps()}>Find a user to message:</Label>
+                    <Col md={8}>
+                      <Input {...getInputProps()} autoComplete="off" placeholder="Enter username" />
+                    </Col>
+                    <ul {...getMenuProps()} className="user-dropdown">
+                      {isOpen
+                        ? items
+                          .filter(item => !inputValue || item.username.toLowerCase().includes(inputValue))
+                          .map((item, index) => (
+                            <li
+                              {...getItemProps({
+                                key: item.uuid,
+                                index,
+                                item,
+                                style: {
+                                  backgroundColor:
+                                    highlightedIndex === index ? 'lightgray' : 'white',
+                                  fontWeight: selectedItem === item ? 'bold' : 'normal',
+                                },
+                              })}
+                            >
+                              {item.username}
+                            </li>
+                          ))
+                        : null}
+                    </ul>
+                  </FormGroup>
+                </div>
+              )}
+            </Downshift>
           </Form>
         </ModalBody>
         <ModalFooter>
@@ -68,6 +94,7 @@ class MessageUser extends React.Component {
           <Button
             type="submit"
             color="primary"
+            onClick={() => { handleMessageUser(value); }}
           >
             Go
           </Button>
@@ -88,15 +115,21 @@ const getTeamMembersQuery = gql`
 `;
 
 MessageUser.defaultProps = {
-  isOpen: false,
+  open: false,
   handleCloseDirectMessageModal: () => {},
+  handleMessageUser: () => {},
   data: {},
+  teamUUID: null,
+  history: {},
 };
 
 MessageUser.propTypes = {
-  isOpen: PropTypes.bool,
+  open: PropTypes.bool,
   handleCloseDirectMessageModal: PropTypes.func,
+  handleMessageUser: PropTypes.func,
   data: PropTypes.object,
+  teamUUID: PropTypes.string,
+  history: PropTypes.object,
 };
 
 export default graphql(getTeamMembersQuery)(MessageUser);

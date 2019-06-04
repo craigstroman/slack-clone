@@ -16,19 +16,41 @@ class DirectMessages extends React.Component {
 
     this.handleOpenDirectMessageModal = this.handleOpenDirectMessageModal.bind(this);
     this.handleCloseDirectMessageModal = this.handleCloseDirectMessageModal.bind(this);
+    this.handleMessageUser = this.handleMessageUser.bind(this);
   }
 
+  /**
+   * Opens the direct message modal.
+   *
+   */
   handleOpenDirectMessageModal = () => {
     this.setState({ directMessageModal: true });
   }
 
+  /**
+   * Closes the direct message modal.
+   *
+   */
   handleCloseDirectMessageModal = () => {
     this.setState({ directMessageModal: false });
   }
 
+  /**
+   * Loads the screen for messaging a selected user.
+   *
+   * @param      {Object}  val     The value
+   */
+  handleMessageUser = (val) => {
+    const { history, teamUUID } = this.props;
+
+    history.push(`/dashboard/view/team/${teamUUID}/user/${val.uuid}`);
+
+    this.handleCloseDirectMessageModal();
+  }
+
   render() {
     const {
-      users, activeEl, selectItem, teamId,
+      users, activeEl, selectItem, teamId, teamUUID,
     } = this.props;
 
     const { directMessageModal } = this.state;
@@ -73,9 +95,12 @@ class DirectMessages extends React.Component {
         </Fragment>
         <Fragment>
           <MessageUser
-            isOpen={directMessageModal}
+            open={directMessageModal}
             handleCloseDirectMessageModal={() => this.handleCloseDirectMessageModal()}
+            handleMessageUser={this.handleMessageUser}
             teamId={teamId}
+            teamUUID={teamUUID}
+            {...this.props}
           />
         </Fragment>
       </Fragment>
@@ -89,6 +114,7 @@ DirectMessages.defaultProps = {
   activeEl: '',
   selectItem: () => {},
   teamId: null,
+  teamUUID: null,
 };
 
 DirectMessages.propTypes = {
@@ -96,6 +122,7 @@ DirectMessages.propTypes = {
   activeEl: PropTypes.string,
   selectItem: PropTypes.func,
   teamId: PropTypes.number,
+  teamUUID: PropTypes.string,
 };
 
 export default DirectMessages;
