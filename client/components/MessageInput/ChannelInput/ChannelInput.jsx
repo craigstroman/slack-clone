@@ -20,6 +20,11 @@ class ChannelInput extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  /**
+   * Updates the state on input change.
+   *
+   * @param      {Object}  e       The event object.\
+   */
   handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -30,6 +35,10 @@ class ChannelInput extends React.Component {
     }
   }
 
+  /**
+   * Submits the form.
+   *
+   */
   handleSubmit = async () => {
     const { message } = this.state;
     const { mutate, channelId } = this.props;

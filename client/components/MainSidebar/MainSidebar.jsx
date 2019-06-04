@@ -18,8 +18,8 @@ class MainSidebar extends React.Component {
     };
 
     this.handleSelectItem = this.handleSelectItem.bind(this);
-    this.handleInvitePeople = this.handleInvitePeople.bind(this);
-    this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.handleOpenInvitePeople = this.handleOpenInvitePeople.bind(this);
+    this.handleCloseInvitePeople = this.handleCloseInvitePeople.bind(this);
   }
 
   /**
@@ -41,11 +41,19 @@ class MainSidebar extends React.Component {
     handleChangeItem(itemName, itemType);
   }
 
-  handleInvitePeople = () => {
+  /**
+   * Opens the invite people modal.
+   *
+   */
+  handleOpenInvitePeople = () => {
     this.setState({ invitePeopleModal: true });
   }
 
-  handleCloseModal = () => {
+  /**
+   * Closes the invite people modal.
+   *
+   */
+  handleCloseInvitePeople = () => {
     this.setState({ invitePeopleModal: false });
   }
 
@@ -84,6 +92,7 @@ class MainSidebar extends React.Component {
               activeEl={activeEl}
               selectItem={this.handleSelectItem}
               teamId={teamId}
+              teamUUID={teamUUID}
               {...this.props}
             />
           </Fragment>
@@ -94,7 +103,7 @@ class MainSidebar extends React.Component {
                 <Button
                   type="button"
                   className="sidebar-heading__action"
-                  onClick={this.handleInvitePeople}
+                  onClick={this.handleOpenInvitePeople}
                 >
                   <FontAwesomeIcon icon={faPlusCircle} />
                 </Button>
@@ -105,7 +114,7 @@ class MainSidebar extends React.Component {
         <InvitePeople
           isOpen={invitePeopleModal}
           teamId={teamId}
-          handleCloseInvitePeople={() => this.handleCloseModal()}
+          handleCloseInvitePeople={() => this.handleCloseInvitePeople()}
         />
       </div>
     );

@@ -23,6 +23,11 @@ class InvitePeople extends React.Component {
     this.handleClose = this.handleClose.bind(this);
   }
 
+  /**
+   * Sets the state on input change.
+   *
+   * @param      {Object}  e       The event object.
+   */
   handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -35,6 +40,10 @@ class InvitePeople extends React.Component {
     }
   }
 
+  /**
+   * Submits the form.
+   *
+   */
   handleSubmit = async () => {
     const { email } = this.state;
     const { mutate, teamId, handleCloseInvitePeople } = this.props;
@@ -55,6 +64,10 @@ class InvitePeople extends React.Component {
     }
   }
 
+  /**
+   * Closes the invite people modal.
+   *
+   */
   handleClose = () => {
     const { handleCloseInvitePeople } = this.props;
 

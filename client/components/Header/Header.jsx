@@ -19,6 +19,10 @@ class Header extends React.Component {
     this.logout = this.logout.bind(this);
   }
 
+  /**
+   * Logs a user out.
+   *
+   */
   logout = () => {
     const { history } = this.props;
 
@@ -28,6 +32,10 @@ class Header extends React.Component {
     history.push('/');
   }
 
+  /**
+   * Toggles the dropdown.
+   *
+   */
   toggle = () => {
     const { dropdownOpen } = this.state;
 

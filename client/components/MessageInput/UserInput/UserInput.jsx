@@ -20,6 +20,11 @@ class UserInput extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  /**
+   * Sets the state on input change.
+   *
+   * @param      {Object}  e   The event object.
+   */
   handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -30,11 +35,12 @@ class UserInput extends React.Component {
     }
   }
 
+  /**
+   * Submits the form.
+   *
+   */
   handleSubmit = async () => {
-    console.log('handleSubmit: ');
-
     const { message } = this.state;
-    console.log('message: ', message);
 
     const { mutate } = this.props;
 
@@ -51,8 +57,6 @@ class UserInput extends React.Component {
     if (data.createDirectMessage) {
       this.setState({ message: '' });
     }
-
-    console.log('response: ', response);
   }
 
   render() {

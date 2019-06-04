@@ -27,10 +27,22 @@ class Dashboard extends React.Component {
     this.handleChangeTeam = this.handleChangeTeam.bind(this);
   }
 
+  /**
+   * Changes the team.
+   *
+   * @param      {String}  teamName  The team name
+   * @param      {Integer}  teamId    The team identifier
+   */
   handleChangeTeam = (teamName, teamId) => {
     this.setState({ teamName, teamId });
   }
 
+  /**
+   * Sets the selected item.
+   *
+   * @param      {String}  itemName  The item name
+   * @param      {String}  itemType  The item type
+   */
   handleChangeItem = (itemName, itemType) => {
     this.setState({
       itemName,
