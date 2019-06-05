@@ -17,6 +17,22 @@ class DirectMessages extends React.Component {
     this.handleOpenDirectMessageModal = this.handleOpenDirectMessageModal.bind(this);
     this.handleCloseDirectMessageModal = this.handleCloseDirectMessageModal.bind(this);
     this.handleMessageUser = this.handleMessageUser.bind(this);
+    this.handleSelectUser = this.handleSelectUser.bind(this);
+  }
+
+  /**
+   * Selects a user to message.
+   *
+   * @param      {Object}  e  The event object.
+   */
+  handleSelectUser = (e) => {
+    const { selectItem, teamUUID, history } = this.props;
+    const { target } = e;
+    const uuid = target.getAttribute('uuid');
+
+    history.push(`/dashboard/view/team/${teamUUID}/user/${uuid}`);
+
+    selectItem(e);
   }
 
   /**
@@ -41,11 +57,13 @@ class DirectMessages extends React.Component {
    * @param      {Object}  val     The value
    */
   handleMessageUser = (val) => {
-    const { history, teamUUID } = this.props;
+    const { history, teamUUID, handleGetUser } = this.props;
 
     history.push(`/dashboard/view/team/${teamUUID}/user/${val.uuid}`);
 
     this.handleCloseDirectMessageModal();
+
+    handleGetUser(val);
   }
 
   render() {
@@ -73,20 +91,21 @@ class DirectMessages extends React.Component {
               {users.map(el => (
                 <li
                   className={
-                    activeEl === `user-${el.id}` ? 'user-list__item selected' : 'user-list__item'
+                    activeEl === el.uuid ? 'user-list__item selected' : 'user-list__item'
                   }
-                  id="user-0"
-                  key={el.id}
+                  id={el.uuid}
+                  key={el.uuid}
                 >
                   <Button
                     type="button"
                     className="users-item"
                     itemType="user"
-                    name={el.name}
-                    onClick={e => selectItem(e)}
+                    name={el.username}
+                    uuid={el.uuid}
+                    onClick={e => this.handleSelectUser(e)}
                   >
                     <FontAwesomeIcon icon={faCircle} className="user-status" />
-                    {el.name}
+                    {el.username}
                   </Button>
                 </li>
               ))}
@@ -113,6 +132,7 @@ DirectMessages.defaultProps = {
   users: [],
   activeEl: '',
   selectItem: () => {},
+  handleGetUser: () => {},
   teamId: null,
   teamUUID: null,
 };
@@ -121,6 +141,7 @@ DirectMessages.propTypes = {
   users: PropTypes.array,
   activeEl: PropTypes.string,
   selectItem: PropTypes.func,
+  handleGetUser: PropTypes.func,
   teamId: PropTypes.number,
   teamUUID: PropTypes.string,
 };

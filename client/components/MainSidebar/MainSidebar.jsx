@@ -14,12 +14,23 @@ class MainSidebar extends React.Component {
 
     this.state = {
       activeEl: '',
+      user: null,
       invitePeopleModal: false,
     };
 
     this.handleSelectItem = this.handleSelectItem.bind(this);
     this.handleOpenInvitePeople = this.handleOpenInvitePeople.bind(this);
     this.handleCloseInvitePeople = this.handleCloseInvitePeople.bind(this);
+    this.handleGetUser = this.handleGetUser.bind(this);
+  }
+
+  /**
+   * Handles getting the selected user.
+   *
+   * @param      {Object}  user    The user.
+   */
+  handleGetUser = (user) => {
+    this.setState({ user, activeEl: user.uuid });
   }
 
   /**
@@ -61,7 +72,11 @@ class MainSidebar extends React.Component {
     const {
       channels, users, teamName, teamId, teamUUID, username, isOwner,
     } = this.props;
-    const { activeEl, invitePeopleModal } = this.state;
+    const { activeEl, invitePeopleModal, user } = this.state;
+
+    if (user !== null) {
+      users.push(user);
+    }
 
     return (
       <div className="main-sidebar-container">
@@ -91,6 +106,7 @@ class MainSidebar extends React.Component {
               users={users}
               activeEl={activeEl}
               selectItem={this.handleSelectItem}
+              handleGetUser={this.handleGetUser}
               teamId={teamId}
               teamUUID={teamUUID}
               {...this.props}

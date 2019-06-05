@@ -62,10 +62,10 @@ class Channels extends React.Component {
               {channels.map(el => (
                 <li
                   className={
-                    activeEl === `channel-${el.id}` ? 'channels-list__item selected' : 'channels-list__item'
+                    activeEl === `${el.uuid}` ? 'channels-list__item selected' : 'channels-list__item'
                   }
-                  id={`channel-${el.id}`}
-                  key={`channel-${el.id}`}
+                  id={el.uuid}
+                  key={el.uuid}
                 >
                   <Button
                     type="button"
