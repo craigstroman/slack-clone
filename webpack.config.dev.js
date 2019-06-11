@@ -93,6 +93,14 @@ module.exports = {
     ]
   },
   plugins: [
-   new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      debug: true,
+      sourceMap: true,
+      devTool: 'source-map'
+    }),
+    new webpack.SourceMapDevToolPlugin({
+      filename: 'sourcemaps/[file].map'
+    })
   ]
 };
