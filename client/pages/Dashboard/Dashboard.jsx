@@ -17,10 +17,10 @@ class Dashboard extends React.Component {
     super(props);
 
     this.state = {
-      teamName: '',
+      teamName: null,
       teamId: null,
-      itemName: '',
-      itemType: '',
+      id: null,
+      itemName: null,
     };
 
     this.handleChangeItem = this.handleChangeItem.bind(this);
@@ -40,60 +40,71 @@ class Dashboard extends React.Component {
   /**
    * Sets the selected item.
    *
-   * @param      {String}  itemName  The item name
-   * @param      {String}  itemType  The item type
+   * @param      {string}    itemType  The item type
+   * @param      {number}    id        The identifier
+   * @param      {number}    uuid      The uuid
+   * @param      {string}    name      The name
+   * @param      {number}    teamId    The team identifier
    */
-  handleChangeItem = (itemName, itemType) => {
-    this.setState({
-      itemName,
-      itemType,
-    });
+  handleChangeItem = (id, uuid, name, teamId) => {
+    const { match } = this.props;
+
+    const itemState = {
+      teamName: '',
+      teamId: '',
+      id: '',
+      itemName: '',
+    };
+
+    if (match.params.channelId) {
+      itemState.itemName = name;
+      itemState.id = id;
+      itemState.teamId = teamId;
+    } else if (match.params.userId) {
+      itemState.id = id;
+      itemState.teamId = id;
+      itemState.itemName = name;
+    }
+
+    this.setState(itemState);
   }
 
   render() {
     const { data: { loading, me }, match } = this.props;
-    const { teamId } = this.state;
-    let { teamName, itemName, itemType } = this.state;
-    let userTeams = null;
-    let userId = null;
-    let isOwner = false;
-    let channel = null;
+    const {
+      teamName, teamId, itemName,
+    } = this.state;
+    let { id } = this.state;
 
     if (loading) {
-      return null;
-    }
-
-    if (Array.isArray(userTeams)) {
-      if (!userTeams.length) {
-        return (
-          <NoTeams />
-        );
-      }
+      return (
+        <div>
+          Loading...
+        </div>
+      );
     }
 
     const { username, teams } = me;
 
-    userId = username;
+    const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
+    const team = teams[teamIdx];
+    const isOwner = team.admin;
 
-    userTeams = teams;
 
-    const teamIdx = teamId ? userTeams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
-    const team = userTeams[teamIdx];
-    isOwner = team.admin;
+    if (id === null) {
+      if (match.params.channelId) {
+        const channel = team.channels.filter(el => (el.uuid === match.params.channelId));
 
-    if (!itemName.length && !itemType.length) {
-      itemName = 'general';
-      itemType = 'channel';
-    }
-
-    if (itemName.length && itemType.length) {
-      if (itemType === 'channel') {
-        channel = team.channels.find(el => (el.name === itemName));
+        id = channel[0].id; // eslint-disable-line prefer-destructuring
       }
     }
 
-    if (!teamName.length) {
-      teamName = team.name;
+    if (Array.isArray(teams)) {
+      if (!teams.length) {
+        return (
+          <NoTeams />
+        );
+      }
     }
 
     return (
@@ -101,7 +112,7 @@ class Dashboard extends React.Component {
         <aside>
           <div className="team-sidebar">
             <TeamSidebar
-              userTeams={userTeams.map(t => ({
+              userTeams={teams.map(t => ({
                 id: t.id,
                 uuid: t.uuid,
                 letter: t.name.charAt(0).toUpperCase(),
@@ -116,10 +127,10 @@ class Dashboard extends React.Component {
             <MainSidebar
               channels={team.channels}
               users={[]}
+              username={username}
               teamName={teamName}
               teamId={team.id}
               teamUUID={team.uuid}
-              username={userId}
               isOwner={isOwner}
               handleChangeItem={this.handleChangeItem}
               {...this.props}
@@ -131,8 +142,7 @@ class Dashboard extends React.Component {
             <header>
               <div className="header-container">
                 <Header
-                  itemName={itemName}
-                  itemType={itemType}
+                  channels={team.channels}
                   {...this.props}
                 />
               </div>
@@ -143,7 +153,8 @@ class Dashboard extends React.Component {
                   <section>
                     <div className="messages-container">
                       <ChannelMessages
-                        channelId={channel.id}
+                        channelId={parseInt(id, 10)}
+                        channels={team.channels}
                         {...this.props}
                       />
                     </div>
@@ -155,8 +166,8 @@ class Dashboard extends React.Component {
                   <section>
                     <div className="messages-container">
                       <UserMessages
-                        teamId={8}
-                        userId={3}
+                        teamId={teamId}
+                        userId={id}
                         {...this.props}
                       />
                     </div>
@@ -170,8 +181,8 @@ class Dashboard extends React.Component {
                   <footer>
                     <div className="input-container">
                       <ChannelInput
-                        itemName={itemName}
-                        channelId={channel.id}
+                        channelId={parseInt(id, 10)}
+                        channels={team.channels}
                         {...this.props}
                       />
                     </div>
@@ -183,7 +194,7 @@ class Dashboard extends React.Component {
                   <footer>
                     <div className="input-container">
                       <UserInput
-                        itemName="cstroman"
+                        itemName={itemName}
                         {...this.props}
                       />
                     </div>

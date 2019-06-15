@@ -7,6 +7,7 @@ import uniqid from 'uniqid';
 import './UserMessages.scss';
 
 const UserMessages = (props) => {
+  console.log('props: ', props);
   const { data: { loading, directMessages } } = props;
 
   if (loading || typeof directMessages === 'undefined') {

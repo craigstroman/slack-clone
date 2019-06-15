@@ -46,13 +46,15 @@ class Header extends React.Component {
 
   render() {
     const { dropdownOpen } = this.state;
-    const { itemName, match } = this.props;
+    const { match, channels } = this.props;
     let title = '';
 
     if (match.params.channelId) {
-      title = `#${itemName}`;
+      const channel = channels.filter(el => (el.uuid === match.params.channelId));
+
+      title = `#${channel[0].name}`;
     } else if (match.params.userId) {
-      title = itemName;
+      // left empty for now.
     }
 
     return (
@@ -100,13 +102,13 @@ class Header extends React.Component {
 Header.defaultProps = {
   history: {},
   match: {},
-  itemName: '',
+  channels: [],
 };
 
 Header.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
-  itemName: PropTypes.string,
+  channels: PropTypes.array,
 };
 
 export default Header;

@@ -5,7 +5,7 @@
   "main": "./server/index.js",
   "scripts": {
     "live:server": "NODE_ENV=development nodemon --exec babel-node ./server/index.js",
-    "live:client": "NODE_ENV=development webpack --config webpack.config.dev.js --mode development --progress --watch"
+    "live:client": "NODE_ENV=development webpack -d --config webpack.config.dev.js --mode development --progress --watch"
   },
   "author": "Craig Stroman",
   "license": "ISC",

@@ -56,19 +56,19 @@ class DirectMessages extends React.Component {
    *
    * @param      {Object}  val     The value
    */
-  handleMessageUser = (val) => {
+  handleMessageUser = (val, teamId) => {
     const { history, teamUUID, handleGetUser } = this.props;
 
     history.push(`/dashboard/view/team/${teamUUID}/user/${val.uuid}`);
 
     this.handleCloseDirectMessageModal();
 
-    handleGetUser(val);
+    handleGetUser(val, teamId);
   }
 
   render() {
     const {
-      users, activeEl, selectItem, teamId, teamUUID,
+      users, activeEl, teamId, teamUUID,
     } = this.props;
 
     const { directMessageModal } = this.state;
@@ -99,9 +99,10 @@ class DirectMessages extends React.Component {
                   <Button
                     type="button"
                     className="users-item"
-                    itemType="user"
                     name={el.username}
                     uuid={el.uuid}
+                    id={el.id}
+                    teamid={teamId}
                     onClick={e => this.handleSelectUser(e)}
                   >
                     <FontAwesomeIcon icon={faCircle} className="user-status" />

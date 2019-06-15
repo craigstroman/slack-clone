@@ -70,9 +70,10 @@ class Channels extends React.Component {
                   <Button
                     type="button"
                     className="channel-item"
-                    itemType="channel"
+                    id={el.id}
                     uuid={el.uuid}
                     name={el.name}
+                    teamid={teamId}
                     onClick={e => this.handleSelectChannel(e)}
                   >
                     #&nbsp;

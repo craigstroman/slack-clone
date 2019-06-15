@@ -56,8 +56,9 @@ class ChannelInput extends React.Component {
   }
 
   render() {
-    const { itemName } = this.props;
+    const { channels, match } = this.props;
     const { message, isSubmiting } = this.state;
+    const channel = channels.filter(el => (el.uuid === match.params.channelId));
 
     return (
       <div className="input">
@@ -68,7 +69,7 @@ class ChannelInput extends React.Component {
                 type="text"
                 name="message"
                 className="form-control"
-                placeholder={`Message #${itemName}`}
+                placeholder={`Message #${channel[0].name}`}
                 value={message}
                 autoComplete="off"
                 onChange={e => this.handleChange(e)}
@@ -89,13 +90,15 @@ const createMessageMutation = gql`
 `;
 
 ChannelInput.defaultProps = {
-  itemName: '',
   channelId: 0,
+  channels: [],
+  match: {},
 };
 
 ChannelInput.propTypes = {
-  itemName: PropTypes.string,
   channelId: PropTypes.number,
+  channels: PropTypes.array,
+  match: PropTypes.object,
 };
 
 export default graphql(createMessageMutation)(ChannelInput);

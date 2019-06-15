@@ -24,6 +24,19 @@ class MainSidebar extends React.Component {
     this.handleGetUser = this.handleGetUser.bind(this);
   }
 
+  componentDidMount = () => {
+    const { match, channels } = this.props;
+
+    /**
+     * Sets which item is selected when component loads.
+     */
+    if (match.params.channelId) {
+      const channel = channels.filter(el => (el.uuid === match.params.channelId));
+
+      this.setState({ activeEl: channel[0].uuid });
+    }
+  }
+
   /**
    * Handles getting the selected user.
    *
@@ -42,14 +55,16 @@ class MainSidebar extends React.Component {
     const { parentNode } = e.target;
     const { handleChangeItem } = this.props;
     const elId = parentNode.id;
-    const itemName = target.getAttribute('name');
-    const itemType = target.getAttribute('itemType');
+    const id = target.getAttribute('id');
+    const uuid = target.getAttribute('uuid');
+    const name = target.getAttribute('name');
+    const teamId = target.getAttribute('teamid');
 
     this.setState({
       activeEl: elId,
     });
 
-    handleChangeItem(itemName, itemType);
+    handleChangeItem(id, uuid, name, teamId);
   }
 
   /**
@@ -145,6 +160,7 @@ MainSidebar.defaultProps = {
   teamUUID: null,
   username: '',
   isOwner: false,
+  match: {},
   handleChangeItem: () => {},
 };
 
@@ -156,6 +172,7 @@ MainSidebar.propTypes = {
   teamUUID: PropTypes.string,
   username: PropTypes.string,
   isOwner: PropTypes.bool,
+  match: PropTypes.object,
   handleChangeItem: PropTypes.func,
 };
 
