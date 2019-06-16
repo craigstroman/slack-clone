@@ -18,6 +18,7 @@ export default `
   type Query {
     allTeams: [Team!]!
     inviteTeams: [Team!]!
+    getTeamMembersByUUID(teamUUID: String!): [User!]!
     getTeamMembers(teamId: Int!): [User!]!
   }
 

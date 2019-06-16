@@ -4,15 +4,37 @@ import shortid from 'shortid';
 
 export default {
   Query: {
-    getTeamMembers: requiresAuth.createResolver(async (parent, { teamId }, { models }) =>
-      models.sequelize.query(
-        'select * from users as u join members as m on m.user_id = u.id where m.team_id = ?',
+    getTeamMembersByUUID: requiresAuth.createResolver(async (parent, { teamUUID }, { models }) => {
+      const result = await models.sequelize.query(
+          'select id from teams where uuid = ?',
+          {
+            replacements: [teamUUID],
+            model: models.Team,
+            raw: true,
+          },
+        );
+
+      const teamId = result[0].id;
+
+      return models.sequelize.query(
+        'select uuid, username, email from users as u join members as m on m.user_id = u.id where m.team_id = ?',
         {
           replacements: [teamId],
           model: models.User,
           raw: true,
         },
-      )),
+      )
+    }),
+    getTeamMembers: requiresAuth.createResolver(async (parent, { teamId }, { models }) => {
+      return models.sequelize.query(
+        'select uuid, username, email from users as u join members as m on m.user_id = u.id where m.team_id = ?',
+        {
+          replacements: [teamId],
+          model: models.User,
+          raw: true,
+        },
+      )
+    }),
   },
   Mutation: {
     addTeamMember: requiresAuth.createResolver(async (parent, { email, teamId }, { models, user }) => {
