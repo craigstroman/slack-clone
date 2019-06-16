@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import meQuery from '../../shared/queries/team';
 import MainSidebar from '../../components/MainSidebar/MainSidebar';
 import TeamSidebar from '../../components/TeamSidebar/TeamSidebar';
@@ -70,7 +71,9 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { data: { loading, me }, match } = this.props;
+    const {
+      data: { loading, me }, teamMembers, match,
+    } = this.props;
     const {
       teamName, teamId, itemName,
     } = this.state;
@@ -85,6 +88,7 @@ class Dashboard extends React.Component {
     }
 
     const { username, teams } = me;
+    const teamUsers = teamMembers.getTeamMembersByUUID;
 
     const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
     const team = teams[teamIdx];
@@ -126,7 +130,7 @@ class Dashboard extends React.Component {
           <div className="main-sidebar">
             <MainSidebar
               channels={team.channels}
-              users={[]}
+              users={teamUsers}
               username={username}
               teamName={teamName}
               teamId={team.id}
@@ -209,6 +213,16 @@ class Dashboard extends React.Component {
   }
 }
 
+const getTeamMembersQuery = gql`
+  query($teamUUID: String!) {
+    getTeamMembersByUUID(teamUUID: $teamUUID) {
+      uuid
+      username
+      email
+    }
+  }
+`;
+
 Dashboard.defaultProps = {
   data: {},
   history: {},
@@ -219,4 +233,10 @@ Dashboard.propTypes = {
   history: PropTypes.object,
 };
 
-export default graphql(meQuery)(Dashboard);
+export default compose(
+  graphql(meQuery, { options: { fetchPolicy: 'network-only' } }),
+  graphql(getTeamMembersQuery, {
+    options: props => ({ variables: { teamUUID: props.match.params.teamId } }),
+    name: 'teamMembers',
+  }),
+)(Dashboard);
