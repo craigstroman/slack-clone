@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { compose, graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
 import meQuery from '../../shared/queries/team';
 import MainSidebar from '../../components/MainSidebar/MainSidebar';
 import TeamSidebar from '../../components/TeamSidebar/TeamSidebar';
@@ -21,7 +20,6 @@ class Dashboard extends React.Component {
       teamName: null,
       teamId: null,
       id: null,
-      itemName: null,
     };
 
     this.handleChangeItem = this.handleChangeItem.bind(this);
@@ -72,10 +70,10 @@ class Dashboard extends React.Component {
 
   render() {
     const {
-      data: { loading, me }, teamMembers, match,
+      data: { loading, me }, match,
     } = this.props;
     const {
-      teamName, teamId, itemName,
+      teamName, teamId,
     } = this.state;
     let { id } = this.state;
 
@@ -88,18 +86,23 @@ class Dashboard extends React.Component {
     }
 
     const { username, teams } = me;
-    const teamUsers = teamMembers.getTeamMembersByUUID;
 
     const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
     const team = teams[teamIdx];
     const isOwner = team.admin;
 
-
+    /**
+     * TODO: Fix this.
+     */
     if (id === null) {
       if (match.params.channelId) {
         const channel = team.channels.filter(el => (el.uuid === match.params.channelId));
 
         id = channel[0].id; // eslint-disable-line prefer-destructuring
+      } else if (match.params.userId) {
+        const user = team.directMessageMembers.filter(el => (el.uuid === match.params.userId));
+
+        id = user[0].id; // eslint-disable-line prefer-destructuring
       }
     }
 
@@ -130,7 +133,7 @@ class Dashboard extends React.Component {
           <div className="main-sidebar">
             <MainSidebar
               channels={team.channels}
-              users={teamUsers}
+              users={team.directMessageMembers}
               username={username}
               teamName={teamName}
               teamId={team.id}
@@ -147,6 +150,7 @@ class Dashboard extends React.Component {
               <div className="header-container">
                 <Header
                   channels={team.channels}
+                  users={team.directMessageMembers}
                   {...this.props}
                 />
               </div>
@@ -170,7 +174,7 @@ class Dashboard extends React.Component {
                   <section>
                     <div className="messages-container">
                       <UserMessages
-                        teamId={teamId}
+                        teamId={team.id}
                         userId={id}
                         {...this.props}
                       />
@@ -198,7 +202,7 @@ class Dashboard extends React.Component {
                   <footer>
                     <div className="input-container">
                       <UserInput
-                        itemName={itemName}
+                        users={team.directMessageMembers}
                         {...this.props}
                       />
                     </div>
@@ -213,16 +217,6 @@ class Dashboard extends React.Component {
   }
 }
 
-const getTeamMembersQuery = gql`
-  query($teamUUID: String!) {
-    getTeamMembersByUUID(teamUUID: $teamUUID) {
-      uuid
-      username
-      email
-    }
-  }
-`;
-
 Dashboard.defaultProps = {
   data: {},
   history: {},
@@ -233,10 +227,4 @@ Dashboard.propTypes = {
   history: PropTypes.object,
 };
 
-export default compose(
-  graphql(meQuery, { options: { fetchPolicy: 'network-only' } }),
-  graphql(getTeamMembersQuery, {
-    options: props => ({ variables: { teamUUID: props.match.params.teamId } }),
-    name: 'teamMembers',
-  }),
-)(Dashboard);
+export default graphql(meQuery, { options: { fetchPolicy: 'network-only' } })(Dashboard);

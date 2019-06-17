@@ -46,7 +46,7 @@ class Header extends React.Component {
 
   render() {
     const { dropdownOpen } = this.state;
-    const { match, channels } = this.props;
+    const { match, channels, users } = this.props;
     let title = '';
 
     if (match.params.channelId) {
@@ -54,7 +54,9 @@ class Header extends React.Component {
 
       title = `#${channel[0].name}`;
     } else if (match.params.userId) {
-      // left empty for now.
+      const user = users.filter(el => (el.uuid === match.params.userId));
+
+      title = `${user[0].username}`;
     }
 
     return (
@@ -67,12 +69,14 @@ class Header extends React.Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-6 text-left">
-            <div className="channel-users">
-              <FontAwesomeIcon icon={faUserAlt} />
+          {match.params.channelId && (
+            <div className="col-md-6 text-left">
+              <div className="channel-users">
+                <FontAwesomeIcon icon={faUserAlt} />
+              </div>
             </div>
-          </div>
-          <div className="col-md-6 text-right">
+          )}
+          <div className={(match.params.channelId ? 'col-md-6 text-right' : 'col-md-12 text-right')}>
             <Dropdown isOpen={dropdownOpen} toggle={this.toggle}>
               <DropdownToggle
                 tag="span"
@@ -103,12 +107,14 @@ Header.defaultProps = {
   history: {},
   match: {},
   channels: [],
+  users: [],
 };
 
 Header.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
   channels: PropTypes.array,
+  users: PropTypes.array,
 };
 
 export default Header;

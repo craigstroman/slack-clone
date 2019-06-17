@@ -12,6 +12,11 @@ const meQuery = gql`
         uuid
         name
         admin
+        directMessageMembers {
+          id
+          uuid
+          username
+        }
         channels {
           id
           uuid

@@ -60,8 +60,10 @@ class UserInput extends React.Component {
   }
 
   render() {
-    const { itemName } = this.props;
+    const { users, match } = this.props;
     const { message, isSubmiting } = this.state;
+
+    const user = users.filter(el => (el.uuid === match.params.userId));
 
     return (
       <div className="input">
@@ -72,7 +74,7 @@ class UserInput extends React.Component {
                 type="text"
                 name="message"
                 className="form-control"
-                placeholder={`Message ${itemName}`}
+                placeholder={`Message ${user[0].username}`}
                 value={message || ''}
                 autoComplete="off"
                 onChange={e => this.handleChange(e)}
@@ -93,11 +95,13 @@ const createDirectMessageMutation = gql`
 `;
 
 UserInput.defaultProps = {
-  itemName: '',
+  users: null,
+  match: {},
 };
 
 UserInput.propTypes = {
-  itemName: PropTypes.string,
+  users: PropTypes.array,
+  match: PropTypes.object,
 };
 
 export default compose(

@@ -25,7 +25,7 @@ class MainSidebar extends React.Component {
   }
 
   componentDidMount = () => {
-    const { match, channels } = this.props;
+    const { match, channels, users } = this.props;
 
     /**
      * Sets which item is selected when component loads.
@@ -34,6 +34,10 @@ class MainSidebar extends React.Component {
       const channel = channels.filter(el => (el.uuid === match.params.channelId));
 
       this.setState({ activeEl: channel[0].uuid });
+    } else if (match.params.userId) {
+      const user = users.filter(el => (el.uuid === match.params.userId));
+
+      this.setState({ activeEl: user[0].uuid });
     }
   }
 
