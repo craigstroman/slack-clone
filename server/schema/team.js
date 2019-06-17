@@ -3,7 +3,7 @@ export default `
     id: Int!
     uuid: String!
     name: String!
-    members: [User!]!
+    directMessageMembers: [User!]!
     channels: [Channel!]!
     admin: Boolean!
   }
@@ -18,7 +18,6 @@ export default `
   type Query {
     allTeams: [Team!]!
     inviteTeams: [Team!]!
-    getTeamMembersByUUID(teamUUID: String!): [User!]!
     getTeamMembers(teamId: Int!): [User!]!
   }
 

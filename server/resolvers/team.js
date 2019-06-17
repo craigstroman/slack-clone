@@ -4,30 +4,12 @@ import shortid from 'shortid';
 
 export default {
   Query: {
-    getTeamMembersByUUID: requiresAuth.createResolver(async (parent, { teamUUID }, { models }) => {
-      const result = await models.sequelize.query(
-          'select id from teams where uuid = ?',
-          {
-            replacements: [teamUUID],
-            model: models.Team,
-            raw: true,
-          },
-        );
-
-      const teamId = result[0].id;
-
-      return models.sequelize.query(
-        'select uuid, username, email from users as u join members as m on m.user_id = u.id where m.team_id = ?',
-        {
-          replacements: [teamId],
-          model: models.User,
-          raw: true,
-        },
-      )
-    }),
+    /**
+     * Get's the team members.
+     */
     getTeamMembers: requiresAuth.createResolver(async (parent, { teamId }, { models }) => {
       return models.sequelize.query(
-        'select uuid, username, email from users as u join members as m on m.user_id = u.id where m.team_id = ?',
+        'select * from users as u join members as m on m.user_id = u.id where m.team_id = ?',
         {
           replacements: [teamId],
           model: models.User,
@@ -37,6 +19,9 @@ export default {
     }),
   },
   Mutation: {
+    /**
+     * Allows a user to invite a user to a team.
+     */
     addTeamMember: requiresAuth.createResolver(async (parent, { email, teamId }, { models, user }) => {
       try {
         const memberPromise = models.Member.findOne(
@@ -69,6 +54,9 @@ export default {
         };
       }
     }),
+    /**
+     * Creates a team.
+     */
     createTeam: requiresAuth.createResolver(async (parent, args, { models, user }) => {
       try {
         const response = await models.sequelize.transaction(async () => {
@@ -98,5 +86,15 @@ export default {
   },
   Team: {
     channels: ({ id }, args, { models }) => models.Channel.findAll({ where: { teamId: id } }),
+    directMessageMembers: ({ id }, args, { models, user }) => {
+      return models.sequelize.query(
+        'select distinct on (u.id) u.id, u.uuid, u.username from users as u join direct_messages as dm on (u.id = dm.sender_id) or (u.id = dm.receiver_id) where (:currentUserId = dm.sender_id or :currentUserId = dm.receiver_id) and dm.team_id = :teamId',
+        {
+          replacements: { currentUserId: user.id, teamId: id },
+          model: models.User,
+          raw: true,
+        }
+      );
+    },
   },
 };

@@ -5,6 +5,15 @@ import shortid from 'shortid';
 
 export default {
   User: {
+    /**
+     * Get's the teams.
+     *
+     * @param      {Object}  parent       The parent.
+     * @param      {Object}  args         The arguments.
+     * @param      {Object}  models       The models.
+     * @param      {Object}  user         The user.
+     * @return     {Object}  { description_of_the_return_value }
+     */
     teams: (parent, args, { models, user }) =>
       models.sequelize.query(
         'select * from teams as team join members as member on team.id = member.team_id where member.user_id = ?',
@@ -16,11 +25,29 @@ export default {
       ),
   },
   Query: {
+    /**
+     * Get's all users.
+     *
+     * @param      {<type>}  parent       The parent.
+     * @param      {<type>}  args         The arguments.
+     * @param      {Object}  models       The models.
+     */
     allUsers: (parent, args, { models }) => models.User.findAll(),
     me: requiresAuth.createResolver((parent, args, { models, user }) =>
       models.User.findOne({ where: { id: user.id } })),
   },
   Mutation: {
+    /**
+     * Logs a user in.
+     *
+     * @param      {Object}  parent         The parent
+     * @param      {String}  email          The email.
+     * @param      {String}  password       The password.
+     * @param      {Object}  models         The models.
+     * @param      {String}  SECRET         The secret.
+     * @param      {String}  SECRET2        The secret 2.
+     * @return     {Object}  { description_of_the_return_value }
+     */
     login: async (parent, { email, password }, { models, SECRET, SECRET2 }) => {
       const loginResult = await tryLogin(email, password, models, SECRET, SECRET2);
       let result = null;
@@ -72,6 +99,13 @@ export default {
 
       return result;
     },
+    /**
+     * Registers a user.
+     *
+     * @param      {Object}  parent       The parent.
+     * @param      {Object}  args         The arguments.
+     * @param      {Object}  models       The models.
+     */
     register: async (parent, args, { models }) => {
       try {
         args['uuid'] = shortid.generate();
