@@ -5,6 +5,7 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog, faUserAlt } from '@fortawesome/free-solid-svg-icons';
+import jwt from 'jsonwebtoken';
 import './Header.scss';
 
 class Header extends React.Component {
@@ -47,6 +48,7 @@ class Header extends React.Component {
   render() {
     const { dropdownOpen } = this.state;
     const { match, channels, users } = this.props;
+    const token = jwt.decode(localStorage.getItem('token'));
     let title = '';
 
     if (match.params.channelId) {
@@ -56,7 +58,11 @@ class Header extends React.Component {
     } else if (match.params.userId) {
       const user = users.filter(el => (el.uuid === match.params.userId));
 
-      title = `${user[0].username}`;
+      if (user[0].id === token.user.id) {
+        title = `${user[0].username} (you)`;
+      } else {
+        title = `${user[0].username}`;
+      }
     }
 
     return (

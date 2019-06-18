@@ -23,7 +23,7 @@ class ChannelInput extends React.Component {
   /**
    * Updates the state on input change.
    *
-   * @param      {Object}  e       The event object.\
+   * @param      {Object}  e       The event object.
    */
   handleChange = (e) => {
     const { name, value } = e.target;

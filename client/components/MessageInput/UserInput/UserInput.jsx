@@ -5,6 +5,7 @@ import {
   Col, Form, FormGroup, Input,
 } from 'reactstrap';
 import gql from 'graphql-tag';
+import jwt from 'jsonwebtoken';
 import meQuery from '../../../shared/queries/team';
 import './UserInput.scss';
 
@@ -62,8 +63,16 @@ class UserInput extends React.Component {
   render() {
     const { users, match } = this.props;
     const { message, isSubmiting } = this.state;
-
+    const token = jwt.decode(localStorage.getItem('token'));
     const user = users.filter(el => (el.uuid === match.params.userId));
+
+    let placeHolderText = null;
+
+    if (token.user.id === user[0].id) {
+      placeHolderText = 'Jot some notes down.';
+    } else {
+      placeHolderText = `Message ${user[0].username}`;
+    }
 
     return (
       <div className="input">
@@ -74,7 +83,7 @@ class UserInput extends React.Component {
                 type="text"
                 name="message"
                 className="form-control"
-                placeholder={`Message ${user[0].username}`}
+                placeholder={placeHolderText}
                 value={message || ''}
                 autoComplete="off"
                 onChange={e => this.handleChange(e)}

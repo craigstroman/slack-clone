@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
+import jwt from 'jsonwebtoken';
 import MessageUser from '../MessageUser/MessageUser';
 import './DirectMessages.scss';
 
@@ -72,6 +73,7 @@ class DirectMessages extends React.Component {
     } = this.props;
 
     const { directMessageModal } = this.state;
+    const token = jwt.decode(localStorage.getItem('token'));
 
     return (
       <Fragment>
@@ -107,6 +109,7 @@ class DirectMessages extends React.Component {
                   >
                     <FontAwesomeIcon icon={faCircle} className="user-status" />
                     {el.username}
+                    {el.id === token.user.id ? ' (you)' : null}
                   </Button>
                 </li>
               ))}
