@@ -61,7 +61,7 @@ class Dashboard extends React.Component {
       itemState.teamId = teamId;
     } else if (match.params.userId) {
       itemState.id = id;
-      itemState.teamId = id;
+      itemState.teamId = teamId;
       itemState.itemName = name;
     }
 
