@@ -69,7 +69,7 @@ class UserInput extends React.Component {
     let placeHolderText = null;
 
     if (token.user.id === user[0].id) {
-      placeHolderText = 'Jot some notes down.';
+      placeHolderText = 'Jot something down';
     } else {
       placeHolderText = `Message ${user[0].username}`;
     }
