@@ -4,6 +4,7 @@ export default `
     uuid: String!
     name: String!
     directMessageMembers: [User!]!
+    teamMembers: [User!]!
     channels: [Channel!]!
     admin: Boolean!
   }

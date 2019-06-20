@@ -96,5 +96,15 @@ export default {
         }
       );
     },
+    teamMembers: ({ id }, args, { models, user }) => {
+      return models.sequelize.query(
+        'select u.id, u.uuid, u.username from users as u join members as m on m.user_id = u.id where m.team_id = ?',
+        {
+          replacements: [id],
+          model: models.User,
+          raw: true,
+        }
+      );
+    }
   },
 };
