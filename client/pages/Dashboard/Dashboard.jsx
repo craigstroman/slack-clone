@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import meQuery from '../../shared/queries/team';
 import MainSidebar from '../../components/MainSidebar/MainSidebar';
 import TeamSidebar from '../../components/TeamSidebar/TeamSidebar';
@@ -19,11 +20,47 @@ class Dashboard extends React.Component {
     this.state = {
       teamName: null,
       teamId: null,
-      id: null,
+      userId: null,
+      channelId: null,
     };
 
     this.handleChangeItem = this.handleChangeItem.bind(this);
     this.handleChangeTeam = this.handleChangeTeam.bind(this);
+  }
+
+  componentDidUpdate = (prevProps) => {
+    const { data: { loading, me }, match } = this.props;
+    const {
+      teamName, teamId, userId, channelId,
+    } = this.state;
+
+    if (!loading) {
+      const { teams } = me;
+      const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
+      const team = teams[teamIdx];
+
+      if (match.params.channelId) {
+        if (channelId === null) {
+          const channel = team.channels.filter(el => (el.uuid === match.params.channelId));
+
+          const { id } = channel[0];
+
+          this.setState({
+            channelId: id,
+          });
+        }
+      } else if (match.params.userId) {
+        if (userId === null) {
+          const user = team.teamMembers.filter(el => (el.uuid === match.params.userId));
+
+          const { id } = user[0];
+
+          this.setState({
+            userId: id,
+          });
+        }
+      }
+    }
   }
 
   /**
@@ -49,18 +86,19 @@ class Dashboard extends React.Component {
     const { match } = this.props;
 
     const itemState = {
-      teamName: '',
-      teamId: '',
-      id: '',
-      itemName: '',
+      teamName: null,
+      teamId: null,
+      channelId: null,
+      userId: null,
+      itemName: null,
     };
 
     if (match.params.channelId) {
       itemState.itemName = name;
-      itemState.id = id;
+      itemState.channelId = id;
       itemState.teamId = teamId;
     } else if (match.params.userId) {
-      itemState.id = id;
+      itemState.userId = id;
       itemState.teamId = teamId;
       itemState.itemName = name;
     }
@@ -73,9 +111,8 @@ class Dashboard extends React.Component {
       data: { loading, me }, match,
     } = this.props;
     const {
-      teamName, teamId,
+      teamName, teamId, userId, channelId,
     } = this.state;
-    let { id } = this.state;
 
     if (loading) {
       return (
@@ -89,22 +126,8 @@ class Dashboard extends React.Component {
 
     const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
     const team = teams[teamIdx];
+    const { teamMembers } = team;
     const isOwner = team.admin;
-
-    /**
-     * TODO: Fix this.
-     */
-    if (id === null) {
-      if (match.params.channelId) {
-        const channel = team.channels.filter(el => (el.uuid === match.params.channelId));
-
-        id = channel[0].id; // eslint-disable-line prefer-destructuring
-      } else if (match.params.userId) {
-        const user = team.directMessageMembers.filter(el => (el.uuid === match.params.userId));
-
-        id = user[0].id; // eslint-disable-line prefer-destructuring
-      }
-    }
 
     if (Array.isArray(teams)) {
       if (!teams.length) {
@@ -133,7 +156,8 @@ class Dashboard extends React.Component {
           <div className="main-sidebar">
             <MainSidebar
               channels={team.channels}
-              users={team.directMessageMembers}
+              directMessageUsers={team.directMessageMembers}
+              teamMembers={teamMembers}
               username={username}
               teamName={teamName}
               teamId={team.id}
@@ -150,7 +174,7 @@ class Dashboard extends React.Component {
               <div className="header-container">
                 <Header
                   channels={team.channels}
-                  users={team.directMessageMembers}
+                  users={teamMembers}
                   {...this.props}
                 />
               </div>
@@ -161,7 +185,7 @@ class Dashboard extends React.Component {
                   <section>
                     <div className="messages-container">
                       <ChannelMessages
-                        channelId={parseInt(id, 10)}
+                        channelId={parseInt(channelId, 10)}
                         channels={team.channels}
                         {...this.props}
                       />
@@ -175,7 +199,7 @@ class Dashboard extends React.Component {
                     <div className="messages-container">
                       <UserMessages
                         teamId={team.id}
-                        userId={id}
+                        userId={userId}
                         {...this.props}
                       />
                     </div>
@@ -189,7 +213,7 @@ class Dashboard extends React.Component {
                   <footer>
                     <div className="input-container">
                       <ChannelInput
-                        channelId={parseInt(id, 10)}
+                        channelId={parseInt(channelId, 10)}
                         channels={team.channels}
                         {...this.props}
                       />
@@ -202,7 +226,7 @@ class Dashboard extends React.Component {
                   <footer>
                     <div className="input-container">
                       <UserInput
-                        users={team.directMessageMembers}
+                        users={teamMembers}
                         {...this.props}
                       />
                     </div>
@@ -216,6 +240,19 @@ class Dashboard extends React.Component {
     );
   }
 }
+
+const teamMembersQuery = gql`
+  query($channelId: Int!) {
+    getTeamMembers(channelId: $channelId) {
+      id
+      text
+      user {
+        username
+      }
+      created_at
+    }
+  }
+`;
 
 Dashboard.defaultProps = {
   data: {},
