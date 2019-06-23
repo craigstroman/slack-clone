@@ -24,6 +24,11 @@ class Login extends React.Component {
     this.validateEmail = this.validateEmail.bind(this);
   }
 
+  /**
+   * Updates the state when inputs change.
+   *
+   * @param      {Object}   e   The event object.
+   */
   handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -40,6 +45,11 @@ class Login extends React.Component {
     }
   }
 
+  /**
+   * Validates a email.
+   *
+   * @return     {boolean}  Indicates if a email is valid.
+   */
   validateEmail = () => {
     const { email } = this.state;
     const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -51,6 +61,11 @@ class Login extends React.Component {
     return false;
   }
 
+  /**
+   * Validates the form.
+   *
+   * @return     {boolean}  Indicates if a form is valid.
+   */
   validateForm = () => {
     const { email, password } = this.state;
     const errors = {};
@@ -78,13 +93,17 @@ class Login extends React.Component {
     return true;
   }
 
+  /**
+   * Handles the form submit
+   *
+   * @param      {Object}  e   The event object.
+   */
   handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = this.state;
 
     if (this.validateForm()) {
       const { mutate, history } = this.props;
-
       const response = await mutate({ variables: { email, password } });
 
       const {
