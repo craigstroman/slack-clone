@@ -22,6 +22,11 @@ const meQuery = gql`
           uuid
           name
         }
+        teamMembers {
+          id
+          uuid
+          username
+        }
       }
     }
   }

@@ -25,7 +25,7 @@ class MainSidebar extends React.Component {
   }
 
   componentDidMount = () => {
-    const { match, channels, users } = this.props;
+    const { match, channels, teamMembers } = this.props;
 
     /**
      * Sets which item is selected when component loads.
@@ -35,7 +35,7 @@ class MainSidebar extends React.Component {
 
       this.setState({ activeEl: channel[0].uuid });
     } else if (match.params.userId) {
-      const user = users.filter(el => (el.uuid === match.params.userId));
+      const user = teamMembers.filter(el => (el.uuid === match.params.userId));
 
       this.setState({ activeEl: user[0].uuid });
     }
@@ -47,7 +47,12 @@ class MainSidebar extends React.Component {
    * @param      {Object}  user    The user.
    */
   handleGetUser = (user) => {
+    console.log('handleGetUser: ');
+    const { handleChangeItem, teamId } = this.props;
+
     this.setState({ user, activeEl: user.uuid });
+
+    handleChangeItem(user.id, user.uuid, user.username, teamId);
   }
 
   /**
@@ -89,13 +94,9 @@ class MainSidebar extends React.Component {
 
   render() {
     const {
-      channels, users, teamName, teamId, teamUUID, username, isOwner,
+      channels, directMessageUsers, teamName, teamId, teamUUID, username, isOwner,
     } = this.props;
     const { activeEl, invitePeopleModal, user } = this.state;
-
-    if (user !== null) {
-      users.push(user);
-    }
 
     return (
       <div className="main-sidebar-container">
@@ -122,7 +123,7 @@ class MainSidebar extends React.Component {
           </Fragment>
           <Fragment>
             <DirectMessages
-              users={users}
+              users={directMessageUsers}
               activeEl={activeEl}
               selectItem={this.handleSelectItem}
               handleGetUser={this.handleGetUser}
@@ -158,7 +159,8 @@ class MainSidebar extends React.Component {
 
 MainSidebar.defaultProps = {
   channels: [],
-  users: [],
+  directMessageUsers: [],
+  teamMembers: [],
   teamName: '',
   teamId: null,
   teamUUID: null,
@@ -170,7 +172,8 @@ MainSidebar.defaultProps = {
 
 MainSidebar.propTypes = {
   channels: PropTypes.array,
-  users: PropTypes.array,
+  directMessageUsers: PropTypes.array,
+  teamMembers: PropTypes.array,
   teamName: PropTypes.string,
   teamId: PropTypes.number,
   teamUUID: PropTypes.string,

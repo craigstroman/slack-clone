@@ -226,6 +226,8 @@ class Dashboard extends React.Component {
                   <footer>
                     <div className="input-container">
                       <UserInput
+                        teamId={team.id}
+                        receiverId={userId}
                         users={teamMembers}
                         {...this.props}
                       />

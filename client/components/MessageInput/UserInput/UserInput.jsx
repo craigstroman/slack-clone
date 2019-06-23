@@ -43,13 +43,13 @@ class UserInput extends React.Component {
   handleSubmit = async () => {
     const { message } = this.state;
 
-    const { mutate } = this.props;
+    const { mutate, receiverId, teamId } = this.props;
 
     const response = await mutate({
       variables: {
         text: message,
-        receiverId: 3,
-        teamId: 8,
+        receiverId,
+        teamId,
       },
     });
 
@@ -104,11 +104,15 @@ const createDirectMessageMutation = gql`
 `;
 
 UserInput.defaultProps = {
+  receiverId: null,
+  teamId: null,
   users: null,
   match: {},
 };
 
 UserInput.propTypes = {
+  receiverId: PropTypes.number,
+  teamId: PropTypes.number,
   users: PropTypes.array,
   match: PropTypes.object,
 };

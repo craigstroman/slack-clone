@@ -27,6 +27,8 @@ class DirectMessages extends React.Component {
    * @param      {Object}  e  The event object.
    */
   handleSelectUser = (e) => {
+    console.log('handleSelectUser: ');
+    console.log('e: ', e);
     const { selectItem, teamUUID, history } = this.props;
     const { target } = e;
     const uuid = target.getAttribute('uuid');
@@ -58,6 +60,8 @@ class DirectMessages extends React.Component {
    * @param      {Object}  val     The value
    */
   handleMessageUser = (val, teamId) => {
+    console.log('handleMessageUser: ');
+    console.log('val: ', val);
     const { history, teamUUID, handleGetUser } = this.props;
 
     history.push(`/dashboard/view/team/${teamUUID}/user/${val.uuid}`);
