@@ -6,6 +6,10 @@ export default {
   Query: {
     /**
      * Get's the team members.
+     *
+     * @param      {Object}  parent       The parent.
+     * @param      {number}  teamId       The teamId.
+     * @param      {Object}  models       The models.
      */
     getTeamMembers: requiresAuth.createResolver(async (parent, { teamId }, { models }) => {
       return models.sequelize.query(
@@ -21,6 +25,12 @@ export default {
   Mutation: {
     /**
      * Allows a user to invite a user to a team.
+     *
+     * @param      {Object}  parent       The parent.
+     * @param      {String}  email        The email.
+     * @param      {number}  teamId       The teamId.
+     * @param      {Object}  models       The models.
+     * @param      {Object}  user         The user.
      */
     addTeamMember: requiresAuth.createResolver(async (parent, { email, teamId }, { models, user }) => {
       try {
@@ -56,6 +66,11 @@ export default {
     }),
     /**
      * Creates a team.
+     *
+     * @param      {Object}  parent       The parent.
+     * @param      {Object}  args         The args.
+     * @param      {Object}  models       The models.
+     * @param      {Object}  user         The user.
      */
     createTeam: requiresAuth.createResolver(async (parent, args, { models, user }) => {
       try {

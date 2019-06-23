@@ -12,7 +12,6 @@ export default {
      * @param      {Object}  args         The arguments.
      * @param      {Object}  models       The models.
      * @param      {Object}  user         The user.
-     * @return     {Object}  { description_of_the_return_value }
      */
     teams: (parent, args, { models, user }) =>
       models.sequelize.query(
@@ -46,7 +45,6 @@ export default {
      * @param      {Object}  models         The models.
      * @param      {String}  SECRET         The secret.
      * @param      {String}  SECRET2        The secret 2.
-     * @return     {Object}  { description_of_the_return_value }
      */
     login: async (parent, { email, password }, { models, SECRET, SECRET2 }) => {
       const loginResult = await tryLogin(email, password, models, SECRET, SECRET2);
