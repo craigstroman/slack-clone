@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { compose, graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
 import meQuery from '../../shared/queries/team';
 import MainSidebar from '../../components/MainSidebar/MainSidebar';
 import TeamSidebar from '../../components/TeamSidebar/TeamSidebar';
@@ -31,7 +30,7 @@ class Dashboard extends React.Component {
   componentDidUpdate = (prevProps) => {
     const { data: { loading, me }, match } = this.props;
     const {
-      teamName, teamId, userId, channelId,
+      teamId, userId, channelId,
     } = this.state;
 
     if (!loading) {
@@ -122,6 +121,8 @@ class Dashboard extends React.Component {
       );
     }
 
+    console.log('channelId: ', channelId);
+
     const { username, teams } = me;
 
     const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
@@ -180,7 +181,7 @@ class Dashboard extends React.Component {
               </div>
             </header>
             <Fragment>
-              {match.params.channelId && (
+              {match.params.channelId && channelId !== null && (
                 <Fragment>
                   <section>
                     <div className="messages-container">
@@ -193,7 +194,7 @@ class Dashboard extends React.Component {
                   </section>
                 </Fragment>
               )}
-              {match.params.userId && (
+              {match.params.userId && userId !== null && (
                 <Fragment>
                   <section>
                     <div className="messages-container">
@@ -242,19 +243,6 @@ class Dashboard extends React.Component {
     );
   }
 }
-
-const teamMembersQuery = gql`
-  query($channelId: Int!) {
-    getTeamMembers(channelId: $channelId) {
-      id
-      text
-      user {
-        username
-      }
-      created_at
-    }
-  }
-`;
 
 Dashboard.defaultProps = {
   data: {},
