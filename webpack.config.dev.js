@@ -24,8 +24,8 @@ module.exports = {
     publicPath: 'http://localhost:8081/static/js/',
     path: filePath,
     filename: fileName,
-    hotUpdateChunkFilename: '.hot/[id].[hash].hot-update.js',
-    hotUpdateMainFilename: '.hot/[hash].hot-update.json'
+    hotUpdateChunkFilename: '.hot/hot-update.js',
+    hotUpdateMainFilename: '.hot/hot-update.json'
   },
 
   watch: false,
