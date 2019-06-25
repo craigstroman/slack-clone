@@ -1,4 +1,5 @@
 import requiresAuth from '../permissions';
+import Sequelize from 'sequelize';
 
 export default {
   DirectMessage: {
@@ -11,24 +12,29 @@ export default {
     },
   },
   Query: {
-    directMessages: requiresAuth.createResolver(async (parent, { teamId, otherUserId }, { models, user }) =>
-      await models.DirectMessage.findAll(
+    directMessages: requiresAuth.createResolver(async (parent, { teamId, otherUserId }, { models, user }) => {
+      const Op = Sequelize.Op;
+
+      const result = await models.DirectMessage.findAll(
         {
           order: [['created_at', 'ASC']],
           where: {
             teamId,
-            [models.sequelize.Op.or]: [
+            [Op.or]: [
               {
-                [models.sequelize.Op.and]: [{ receiverId: otherUserId }, { senderId: user.id }],
+                [Op.and]: [{ receiverId: otherUserId }, { senderId: user.id }],
               },
               {
-                [models.sequelize.Op.and]: [{ receiverId: user.id }, { senderId: otherUserId }],
+                [Op.and]: [{ receiverId: user.id }, { senderId: otherUserId }],
               },
             ],
           },
         },
         { raw: true },
-      )),
+      );
+
+      return result;
+    }),
   },
   Mutation: {
     createDirectMessage: requiresAuth.createResolver(async (parent, args, { models, user }) => {
