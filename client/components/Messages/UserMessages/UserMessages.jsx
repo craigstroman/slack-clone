@@ -26,7 +26,7 @@ const UserMessages = (props) => {
             sameElse: 'L',
           };
 
-          const createdAt = new Date(message.created_at);
+          const createdAt = new Date(message.createdAt);
 
           return (
             <li
@@ -62,7 +62,7 @@ const directMessagesQuery = gql`
         username
       }
       text
-      created_at
+      createdAt
     }
   }
 `;

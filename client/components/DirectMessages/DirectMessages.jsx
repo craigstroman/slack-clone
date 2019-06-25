@@ -27,8 +27,6 @@ class DirectMessages extends React.Component {
    * @param      {Object}  e  The event object.
    */
   handleSelectUser = (e) => {
-    console.log('handleSelectUser: ');
-    console.log('e: ', e);
     const { selectItem, teamUUID, history } = this.props;
     const { target } = e;
     const uuid = target.getAttribute('uuid');
@@ -60,8 +58,6 @@ class DirectMessages extends React.Component {
    * @param      {Object}  val     The value
    */
   handleMessageUser = (val, teamId) => {
-    console.log('handleMessageUser: ');
-    console.log('val: ', val);
     const { history, teamUUID, handleGetUser } = this.props;
 
     history.push(`/dashboard/view/team/${teamUUID}/user/${val.uuid}`);
@@ -73,11 +69,12 @@ class DirectMessages extends React.Component {
 
   render() {
     const {
-      users, activeEl, teamId, teamUUID,
+      users, user, activeEl, teamId, teamUUID,
     } = this.props;
 
     const { directMessageModal } = this.state;
     const token = jwt.decode(localStorage.getItem('token'));
+    const userInUsers = (Array.isArray(users) && user !== null) ? users.some(el => (el.id === user.id)) : null;
 
     return (
       <Fragment>
@@ -117,6 +114,29 @@ class DirectMessages extends React.Component {
                   </Button>
                 </li>
               ))}
+              {userInUsers === false && (
+                <li
+                  className={
+                    activeEl === user.uuid ? 'user-list__item selected' : 'user-list__item'
+                  }
+                  id={user.uuid}
+                  key={user.uuid}
+                >
+                  <Button
+                    type="button"
+                    className="users-item"
+                    name={user.username}
+                    uuid={user.uuid}
+                    id={user.id}
+                    teamid={teamId}
+                    onClick={e => this.handleSelectUser(e)}
+                  >
+                    <FontAwesomeIcon icon={faCircle} className="user-status" />
+                    {user.username}
+                    {user.id === token.user.id ? ' (you)' : null}
+                  </Button>
+                </li>
+              )}
             </ul>
           </div>
         </Fragment>
@@ -131,14 +151,14 @@ class DirectMessages extends React.Component {
           />
         </Fragment>
       </Fragment>
-
     );
   }
 }
 
 DirectMessages.defaultProps = {
   users: [],
-  activeEl: '',
+  user: null,
+  activeEl: null,
   selectItem: () => {},
   handleGetUser: () => {},
   teamId: null,
@@ -147,6 +167,7 @@ DirectMessages.defaultProps = {
 
 DirectMessages.propTypes = {
   users: PropTypes.array,
+  user: PropTypes.object,
   activeEl: PropTypes.string,
   selectItem: PropTypes.func,
   handleGetUser: PropTypes.func,

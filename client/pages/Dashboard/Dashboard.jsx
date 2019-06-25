@@ -121,8 +121,6 @@ class Dashboard extends React.Component {
       );
     }
 
-    console.log('channelId: ', channelId);
-
     const { username, teams } = me;
 
     const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
@@ -228,7 +226,7 @@ class Dashboard extends React.Component {
                     <div className="input-container">
                       <UserInput
                         teamId={team.id}
-                        receiverId={userId}
+                        receiverId={parseInt(userId, 10)}
                         users={teamMembers}
                         {...this.props}
                       />

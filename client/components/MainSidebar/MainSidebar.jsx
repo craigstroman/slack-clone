@@ -47,7 +47,6 @@ class MainSidebar extends React.Component {
    * @param      {Object}  user    The user.
    */
   handleGetUser = (user) => {
-    console.log('handleGetUser: ');
     const { handleChangeItem, teamId } = this.props;
 
     this.setState({ user, activeEl: user.uuid });
@@ -124,6 +123,7 @@ class MainSidebar extends React.Component {
           <Fragment>
             <DirectMessages
               users={directMessageUsers}
+              user={user}
               activeEl={activeEl}
               selectItem={this.handleSelectItem}
               handleGetUser={this.handleGetUser}

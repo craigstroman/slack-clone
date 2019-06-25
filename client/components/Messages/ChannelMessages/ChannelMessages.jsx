@@ -14,7 +14,7 @@ const newChannelMessageSubscription = gql`
       user {
         username
       }
-      created_at
+      createdAt
     }
   }
 `;
@@ -97,7 +97,7 @@ class ChannelMessages extends React.Component {
               sameElse: 'L',
             };
 
-            const createdAt = new Date(message.created_at);
+            const createdAt = new Date(message.createdAt);
 
             return (
               <li
@@ -134,13 +134,13 @@ const messagesQuery = gql`
       user {
         username
       }
-      created_at
+      createdAt
     }
   }
 `;
 
 ChannelMessages.defaultProps = {
-  channelId: 0,
+  channelId: null,
   data: {},
 };
 
