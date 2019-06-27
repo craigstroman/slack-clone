@@ -1,3 +1,5 @@
+import Sequelize from 'sequelize';
+
 const createResolver = (resolver) => {
   const baseResolver = resolver;
   baseResolver.createResolver = (childResolver) => {
@@ -39,5 +41,24 @@ export const requiresTeamAccess = createResolver(async (parent, { channelId }, {
 
   if (!member) {
     throw new Error('You have to be a member of the team to subscribe to it\'s messages.');
+  }
+});
+
+export const directMessageSubscription = createResolver(async (parent, { teamId, userId }, { models, user })  => {
+  if (!user || !user.id) {
+    throw new Error('Not authenticated');
+  }
+
+  const Op = Sequelize.Op;
+
+  const members = await models.Member.findAll({
+    where: {
+      teamId,
+      [Op.or]: [{ userId }, { userId: user.id }],
+    },
+  });
+
+  if (members.length !== 2) {
+    throw new Error('Something went wrong');
   }
 });
