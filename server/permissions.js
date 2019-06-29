@@ -44,9 +44,14 @@ export const requiresTeamAccess = createResolver(async (parent, { channelId }, {
   }
 });
 
+// directMessage subscription
 export const directMessageSubscription = createResolver(async (parent, { teamId, userId }, { models, user })  => {
-  if (!user || !user.id) {
+  if ((!user || !user.id) || (!loggedInUser || !loggedInUser.id)) {
     throw new Error('Not authenticated');
+  }
+
+  if (user === undefined && typeof loggedInUser === 'object') {
+    user = loggedInUser;
   }
 
   const Op = Sequelize.Op;
@@ -56,9 +61,9 @@ export const directMessageSubscription = createResolver(async (parent, { teamId,
       teamId,
       [Op.or]: [{ userId }, { userId: user.id }],
     },
-  });
+  })
 
-  if (members.length !== 2) {
+  if (members.length < 1) {
     throw new Error('Something went wrong');
   }
 });
