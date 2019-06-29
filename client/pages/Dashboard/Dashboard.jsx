@@ -197,8 +197,8 @@ class Dashboard extends React.Component {
                   <section>
                     <div className="messages-container">
                       <UserMessages
-                        teamId={team.id}
-                        userId={userId}
+                        teamId={parseInt(team.id, 10)}
+                        userId={parseInt(userId, 10)}
                         {...this.props}
                       />
                     </div>
