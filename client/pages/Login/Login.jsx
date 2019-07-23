@@ -5,6 +5,7 @@ import {
   Button, Form, FormGroup, Label, Input,
 } from 'reactstrap';
 import gql from 'graphql-tag';
+import { updateSubScription } from '../../apollo';
 import './Login.scss';
 
 class Login extends React.Component {
@@ -113,6 +114,13 @@ class Login extends React.Component {
       if (ok) {
         localStorage.setItem('token', token);
         localStorage.setItem('refreshToken', refreshToken);
+
+        const tokens = {
+          token: localStorage.getItem('token'),
+          refreshToken: localStorage.getItem('refreshToken'),
+        };
+
+        updateSubScription(tokens);
 
         if (teamUUID !== null) {
           history.push(`/dashboard/view/team/${teamUUID}/channel/${channelUUID}`);

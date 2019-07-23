@@ -47,7 +47,10 @@ class MainSidebar extends React.Component {
    * @param      {Object}  user    The user.
    */
   handleGetUser = (user) => {
+    console.log('handleGetUser: ');
     const { handleChangeItem, teamId } = this.props;
+
+    console.log('user: ', user);
 
     this.setState({ user, activeEl: user.uuid });
 

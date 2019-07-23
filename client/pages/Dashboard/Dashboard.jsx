@@ -84,6 +84,8 @@ class Dashboard extends React.Component {
   handleChangeItem = (id, uuid, name, teamId) => {
     const { match } = this.props;
 
+    // console.log('arguments: ', args);
+
     const itemState = {
       teamName: null,
       teamId: null,

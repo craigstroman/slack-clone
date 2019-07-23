@@ -48,6 +48,25 @@ const wsLink = new WebSocketLink({
   },
 });
 
+/**
+ * Updates subscription with new login tokens.
+ *
+ * @param      {Object}  tokens  The tokens.
+ */
+export const updateSubScription = (tokens) => {
+  if (wsLink.subscriptionClient.connectionParams.token === tokens.token) {
+    return null;
+  }
+
+  wsLink.subscriptionClient.connectionParams.token = tokens.token;
+  wsLink.subscriptionClient.connectionParams.refreshToken = tokens.refreshToken;
+
+  wsLink.subscriptionClient.close();
+  wsLink.subscriptionClient.connect();
+
+  return wsLink;
+};
+
 const link = split(
   ({ query }) => {
     const { kind, operation } = getMainDefinition(query);
@@ -56,6 +75,7 @@ const link = split(
   wsLink,
   httpLinkWithMiddleware,
 );
+
 
 export default new ApolloClient({
   link,
