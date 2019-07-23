@@ -22,7 +22,7 @@ export const createTokens = async (user, secret, secret2) => {
 
   const createRefreshToken = jwt.sign(
     {
-      user: _.pick(user, 'id'),
+      user: _.pick(user,  ['id', 'username']),
     },
     secret2,
     {
@@ -108,7 +108,7 @@ export const tryLogin = async (email, password, models, SECRET, SECRET2) => {
   const [token, refreshToken] = await createTokens(user, SECRET, refreshTokenSecret);
 
   return {
-    user,
+    'userInfo': user,
     ok: true,
     token,
     refreshToken,

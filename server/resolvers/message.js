@@ -11,8 +11,8 @@ export default {
     newChannelMessage: {
       subscribe: requiresTeamAccess.createResolver(withFilter(
         () => pubsub.asyncIterator(NEW_CHANNEL_MESSAGE),
-        (payload, args) => payload.channelId === args.channelId
-      ))
+        (payload, args) => payload.channelId === args.channelId,
+      )),
     },
   },
   Message: {

@@ -9,6 +9,7 @@ import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import { execute, subscribe } from 'graphql';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import jwt from 'jsonwebtoken';
+import cors from 'cors';
 
 import { refreshTokens } from './auth';
 import models from './models';
@@ -32,6 +33,8 @@ const schema = makeExecutableSchema({
 });
 
 const app = express();
+
+app.use(cors('*'));
 
 app.set('views', path.join(__dirname, './views'));
 app.set('view engine', 'pug');
@@ -83,26 +86,28 @@ if (process.env.NODE_ENV === 'development') {
   app.use(require('webpack-hot-middleware')(webpackCompiler, {
     'path': '/__webpack_hmr'
   }));
-
-  app.use('/graphiql', graphiqlExpress({
-    endpointURL: graphqlEndpoint,
-    subscriptionsEndpoint: 'ws://localhost:8081/subscriptions',
-  }));
 }
 
+
+app.use('/graphiql', graphiqlExpress({
+  endpointURL: graphqlEndpoint,
+  subscriptionsEndpoint: 'ws://localhost:8081/subscriptions',
+}));
 
 app.use(
   graphqlEndpoint,
   bodyParser.json(),
-  graphqlExpress(req => ({
-    schema,
-    context: {
-      models,
-      user: req.user,
-      SECRET,
-      SECRET2
-    }
-  }))
+  graphqlExpress(req => {
+    return ({
+      schema,
+      context: {
+        user: req.user,
+        models,
+        SECRET,
+        SECRET2
+      }
+    });
+  })
 );
 
 app.use('/static', express.static('public'));
@@ -116,41 +121,43 @@ app.use('/', (req, res) => {
   });
 });
 
-const server = createServer(app);
+const ws = createServer(app);
 
 /**
  * Creates database if not already created.
  * To recreate database add {force: true} to sync().
  */
 models.sequelize.sync().then(() => {
-  server.listen(PORT, () => {
+  ws.listen(PORT, () => {
     console.log(`\nThe server has started on port: ${PORT}`);
     console.log(`http://localhost:${PORT}`);
-    if ( process.env.NODE_ENV === 'development' ) {
-      console.log(`http://localhost:${PORT}${graphqlEndpoint}`);
-      console.log(`http://localhost:${PORT}/graphiql`);
-    }
     new SubscriptionServer(
       {
         execute,
         subscribe,
         schema,
-        onConnect: async ({ token, refreshToken }, WebSocket) => {
-          if (token && refreshToken) {
+        onConnect: async (connectionParams, webSocket) => {
+          const { token, refreshToken } = connectionParams;
+
+           if (token && refreshToken) {
             try {
               const { user } = jwt.verify(token, SECRET);
-              return { models, user };
+
+              return { user, models };
             } catch (err) {
               const newTokens = await refreshTokens(token, refreshToken, models, SECRET, SECRET2);
-              return { models, user: newTokens.user };
+
+              return { user: newTokens.user, models };
             }
           }
 
           return { models };
         },
+        reconnect: true,
       },
       {
-        server,
+        server: ws,
+        reconnect: true,
         path: '/subscriptions',
       },
     );

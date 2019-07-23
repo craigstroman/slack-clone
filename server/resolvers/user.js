@@ -32,7 +32,7 @@ export default {
      * @param      {Object}  models       The models.
      */
     allUsers: (parent, args, { models }) => models.User.findAll(),
-    me: requiresAuth.createResolver((parent, args, { models, user }) =>
+    me: requiresAuth.createResolver((parent, args, { user, models }) =>
       models.User.findOne({ where: { id: user.id } })),
   },
   Mutation: {
@@ -54,7 +54,7 @@ export default {
         const teams = await models.sequelize.query(
           'select * from teams as team join members as member on team.id = member.team_id where member.user_id = ?',
           {
-            replacements: [loginResult.user.id],
+            replacements: [loginResult.userInfo.id],
             model: models.Team,
             raw: true,
           },
