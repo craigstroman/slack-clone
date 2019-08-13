@@ -47,14 +47,7 @@ class MainSidebar extends React.Component {
    * @param      {Object}  user    The user.
    */
   handleGetUser = (user) => {
-    console.log('handleGetUser: ');
-    const { handleChangeItem, teamId } = this.props;
-
-    console.log('user: ', user);
-
     this.setState({ user, activeEl: user.uuid });
-
-    handleChangeItem(user.id, user.uuid, user.username, teamId);
   }
 
   /**
@@ -63,19 +56,12 @@ class MainSidebar extends React.Component {
    */
   handleSelectItem = (e) => {
     const { target } = e;
-    const { parentNode } = e.target;
-    const { handleChangeItem } = this.props;
+    const { parentNode } = target;
     const elId = parentNode.id;
-    const id = target.getAttribute('id');
-    const uuid = target.getAttribute('uuid');
-    const name = target.getAttribute('name');
-    const teamId = target.getAttribute('teamid');
 
     this.setState({
       activeEl: elId,
     });
-
-    handleChangeItem(id, uuid, name, teamId);
   }
 
   /**
@@ -170,7 +156,6 @@ MainSidebar.defaultProps = {
   username: '',
   isOwner: false,
   match: {},
-  handleChangeItem: () => {},
 };
 
 MainSidebar.propTypes = {
@@ -183,7 +168,6 @@ MainSidebar.propTypes = {
   username: PropTypes.string,
   isOwner: PropTypes.bool,
   match: PropTypes.object,
-  handleChangeItem: PropTypes.func,
 };
 
 export default MainSidebar;
