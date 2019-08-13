@@ -26,7 +26,6 @@ class Dashboard extends React.Component {
       itemName: null,
     };
 
-    this.handleChangeItem = this.handleChangeItem.bind(this);
     this.handleChangeTeam = this.handleChangeTeam.bind(this);
   }
 
