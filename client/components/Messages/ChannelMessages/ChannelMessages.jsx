@@ -127,7 +127,7 @@ class ChannelMessages extends React.Component {
 }
 
 const messagesQuery = gql`
-  query($channelId: Int!) {
+  query messagesQuery($channelId: Int!) {
     messages(channelId: $channelId) {
       id
       text

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import Moment from 'react-moment';
 import uniqid from 'uniqid';
+import meQuery from '../../../shared/queries/team';
 import './UserMessages.scss';
 
 const newDirectMessageSubscription = gql`
@@ -28,7 +29,6 @@ class UserMessages extends React.Component {
 
   componentDidMount() {
     const { teamId, userId } = this.props;
-
     this.unsubscribe = this.subscribe(teamId, userId);
   }
 
@@ -39,6 +39,7 @@ class UserMessages extends React.Component {
       if (this.unsubscribe) {
         this.unsubscribe();
       }
+
       this.unsubscribe = this.subscribe(teamId, userId);
     }
   }
@@ -129,7 +130,7 @@ class UserMessages extends React.Component {
 }
 
 const directMessagesQuery = gql`
-  query($teamId: Int!, $userId: Int!) {
+  query directMessagesQuery($teamId: Int!, $userId: Int!) {
     directMessages(teamId: $teamId, otherUserId: $userId) {
       id
       sender {
@@ -153,12 +154,15 @@ UserMessages.propTypes = {
   userId: PropTypes.number,
 };
 
-export default graphql(directMessagesQuery, {
-  variables: props => ({
-    teamId: props.teamId,
-    userId: props.userId,
+export default compose(
+  graphql(meQuery, { options: { fetchPolicy: 'network-only' } }),
+  graphql(directMessagesQuery, {
+    variables: props => ({
+      teamId: props.teamId,
+      userId: props.userId,
+    }),
+    options: {
+      fetchPolicy: 'network-only',
+    },
   }),
-  options: {
-    fetchPolicy: 'network-only',
-  },
-})(UserMessages);
+)(UserMessages);
