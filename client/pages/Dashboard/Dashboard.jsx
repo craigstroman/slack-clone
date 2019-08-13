@@ -20,7 +20,10 @@ class Dashboard extends React.Component {
       teamName: null,
       teamId: null,
       userId: null,
+      userUUID: null,
+      channelUUID: null,
       channelId: null,
+      itemName: null,
     };
 
     this.handleChangeItem = this.handleChangeItem.bind(this);
@@ -28,36 +31,26 @@ class Dashboard extends React.Component {
   }
 
   componentDidUpdate = (prevProps) => {
-    const { data: { loading, me }, match } = this.props;
-    const {
-      teamId, userId, channelId,
-    } = this.state;
+    const { match, data } = this.props;
+    const { channelUUID, userUUID } = this.state;
 
-    if (!loading) {
-      const { teams } = me;
-      const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
-      const team = teams[teamIdx];
+    if (match.params.channelId) {
+      const teamUUID = match.params.teamId;
+      const uuid = match.params.channelId;
 
-      if (match.params.channelId) {
-        if (channelId === null) {
-          const channel = team.channels.filter(el => (el.uuid === match.params.channelId));
+      if (prevProps.match.params.channelId !== match.params.channelId) {
+        this.handleChangeItem(teamUUID, uuid, 'channel', data);
+      } else if (channelUUID === null) {
+        this.handleChangeItem(teamUUID, uuid, 'channel', data);
+      }
+    } else if (match.params.userId) {
+      const teamUUID = match.params.teamId;
+      const uuid = match.params.userId;
 
-          const { id } = channel[0];
-
-          this.setState({
-            channelId: id,
-          });
-        }
-      } else if (match.params.userId) {
-        if (userId === null) {
-          const user = team.teamMembers.filter(el => (el.uuid === match.params.userId));
-
-          const { id } = user[0];
-
-          this.setState({
-            userId: id,
-          });
-        }
+      if (prevProps.match.params.userId !== match.params.userId) {
+        this.handleChangeItem(teamUUID, uuid, 'user', data);
+      } else if (userUUID === null) {
+        this.handleChangeItem(teamUUID, uuid, 'user', data);
       }
     }
   }
@@ -73,38 +66,52 @@ class Dashboard extends React.Component {
   }
 
   /**
-   * Sets the selected item.
+   * Updates which item is selected.
    *
-   * @param      {string}    itemType  The item type
-   * @param      {number}    id        The identifier
-   * @param      {number}    uuid      The uuid
-   * @param      {string}    name      The name
-   * @param      {number}    teamId    The team identifier
+   * @param      {String}  teamUUID  The team uuid
+   * @param      {String}  uuid      The uuid
+   * @param      {String}  type      The type
    */
-  handleChangeItem = (id, uuid, name, teamId) => {
-    const { match } = this.props;
+  handleChangeItem = (teamUUID, uuid, type, data) => {
+    const { teams } = data.me;
+    const teamIdx = teams.findIndex(el => el.uuid === teamUUID);
+    const team = teams[teamIdx];
 
-    // console.log('arguments: ', args);
+    if (type === 'channel') {
+      const { channels } = team;
+      const channel = channels.filter(el => el.uuid === uuid);
 
-    const itemState = {
-      teamName: null,
-      teamId: null,
-      channelId: null,
-      userId: null,
-      itemName: null,
-    };
+      if (Array.isArray(channel)) {
+        if (channel.length) {
+          this.setState({
+            teamName: team.name,
+            teamId: team.id,
+            userId: null,
+            userUUID: null,
+            channelUUID: channel[0].uuid,
+            channelId: channel[0].id,
+            itemName: channel[0].name,
+          });
+        }
+      }
+    } else if (type === 'user') {
+      const { teamMembers } = team;
+      const user = teamMembers.filter(el => el.uuid === uuid);
 
-    if (match.params.channelId) {
-      itemState.itemName = name;
-      itemState.channelId = id;
-      itemState.teamId = teamId;
-    } else if (match.params.userId) {
-      itemState.userId = id;
-      itemState.teamId = teamId;
-      itemState.itemName = name;
+      if (Array.isArray(user)) {
+        if (user.length) {
+          this.setState({
+            teamName: team.name,
+            teamId: team.id,
+            userId: user[0].id,
+            userUUID: user[0].uuid,
+            channelUUID: null,
+            channelId: null,
+            itemName: null,
+          });
+        }
+      }
     }
-
-    this.setState(itemState);
   }
 
   render() {
@@ -112,7 +119,7 @@ class Dashboard extends React.Component {
       data: { loading, me }, match,
     } = this.props;
     const {
-      teamName, teamId, userId, channelId,
+      teamName, teamId, userId, userUUID, channelId, itemName,
     } = this.state;
 
     if (loading) {
@@ -164,7 +171,6 @@ class Dashboard extends React.Component {
               teamId={team.id}
               teamUUID={team.uuid}
               isOwner={isOwner}
-              handleChangeItem={this.handleChangeItem}
               {...this.props}
             />
           </div>
@@ -229,6 +235,8 @@ class Dashboard extends React.Component {
                       <UserInput
                         teamId={team.id}
                         receiverId={parseInt(userId, 10)}
+                        receiverUUID={userUUID}
+                        username={itemName}
                         users={teamMembers}
                         {...this.props}
                       />
