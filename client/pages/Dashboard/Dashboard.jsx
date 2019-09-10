@@ -129,7 +129,14 @@ class Dashboard extends React.Component {
       );
     }
 
-    const { username, teams } = me;
+    const {
+      id, username, teams, uuid,
+    } = me;
+    const user = {
+      id,
+      username,
+      uuid,
+    };
 
     const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
     const team = teams[teamIdx];
@@ -165,7 +172,7 @@ class Dashboard extends React.Component {
               channels={team.channels}
               directMessageUsers={team.directMessageMembers}
               teamMembers={teamMembers}
-              username={username}
+              currentUser={user}
               teamName={teamName}
               teamId={team.id}
               teamUUID={team.uuid}

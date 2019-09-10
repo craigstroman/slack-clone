@@ -82,7 +82,7 @@ class MainSidebar extends React.Component {
 
   render() {
     const {
-      channels, directMessageUsers, teamName, teamId, teamUUID, username, isOwner,
+      channels, directMessageUsers, teamName, teamId, teamUUID, currentUser, isOwner,
     } = this.props;
     const { activeEl, invitePeopleModal, user } = this.state;
 
@@ -93,7 +93,7 @@ class MainSidebar extends React.Component {
           <div className="main-sidebar__user">
             <FontAwesomeIcon icon={faCircle} className="user-status" />
             <h6 className="main-sidebar__username">
-              {username}
+              {currentUser.username}
             </h6>
           </div>
         </header>
@@ -111,8 +111,9 @@ class MainSidebar extends React.Component {
           </Fragment>
           <Fragment>
             <DirectMessages
-              users={directMessageUsers}
-              user={user}
+              directMessageUsers={directMessageUsers}
+              user={currentUser}
+              messageUser={user}
               activeEl={activeEl}
               selectItem={this.handleSelectItem}
               handleGetUser={this.handleGetUser}
@@ -153,7 +154,7 @@ MainSidebar.defaultProps = {
   teamName: '',
   teamId: null,
   teamUUID: null,
-  username: '',
+  currentUser: null,
   isOwner: false,
   match: {},
 };
@@ -165,7 +166,7 @@ MainSidebar.propTypes = {
   teamName: PropTypes.string,
   teamId: PropTypes.number,
   teamUUID: PropTypes.string,
-  username: PropTypes.string,
+  currentUser: PropTypes.object,
   isOwner: PropTypes.bool,
   match: PropTypes.object,
 };

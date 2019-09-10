@@ -137,12 +137,16 @@ const createChannelMutation = gql`
 
 AddChannel.defaultProps = {
   isOpen: false,
+  teamId: null,
   handleCloseAddChannel: () => {},
+  mutate: () => {},
 };
 
 AddChannel.propTypes = {
   isOpen: PropTypes.bool,
+  teamId: PropTypes.number,
   handleCloseAddChannel: PropTypes.func,
+  mutate: PropTypes.func,
 };
 
 export default graphql(createChannelMutation)(AddChannel);

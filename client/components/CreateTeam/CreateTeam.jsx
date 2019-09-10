@@ -126,10 +126,12 @@ const createTeamMutation = gql`
 
 CreateTeam.defaultProps = {
   history: {},
+  mutate: () => {},
 };
 
 CreateTeam.propTypes = {
   history: PropTypes.object,
+  mutate: PropTypes.func,
 };
 
 export default graphql(createTeamMutation)(CreateTeam);
