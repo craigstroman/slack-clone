@@ -23,7 +23,7 @@
     "apollo-utilities": "1.0.22",
     "bcrypt": "3.0.2",
     "body-parser": "1.18.3",
-    "bootstrap": "4.2.1",
+    "bootstrap": "^4.3.1",
     "cors": "2.8.5",
     "downshift": "3.2.10",
     "express": "4.16.4",
