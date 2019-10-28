@@ -93,6 +93,8 @@ export default {
             }
           }
         }
+      } else {
+        result = loginResult;
       }
 
       return result;
