@@ -1,12 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import {
-  Button, Form, FormGroup, Label, Input,
-} from 'reactstrap';
+import styled from 'styled-components';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import gql from 'graphql-tag';
 import { updateSubScription } from '../../apollo';
-import './Login.scss';
+import validateEmail from '../../shared/util/utils';
+
+const Wrapper = styled.div`
+  margin: 0 auto;
+  width: 100%;
+  header {
+    margin: 0 auto;
+    width: 95%;
+    h1 {
+      text-align: center;
+    }
+  }
+`;
+
+const Content = styled.main`
+  margin: 0 auto;
+  width: 100%;
+  form {
+    margin: 0 auto;
+    text-align: center;
+  }
+`;
+
+const StyledTextField = styled(TextField)`
+  .MuiOutlinedInput-root {
+    text-align: left;
+    width: 450px;
+  }
+`;
 
 class Login extends React.Component {
   constructor(props) {
@@ -22,7 +50,6 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.validateForm = this.validateForm.bind(this);
-    this.validateEmail = this.validateEmail.bind(this);
   }
 
   /**
@@ -47,22 +74,6 @@ class Login extends React.Component {
   }
 
   /**
-   * Validates a email.
-   *
-   * @return     {boolean}  Indicates if a email is valid.
-   */
-  validateEmail = () => {
-    const { email } = this.state;
-    const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    if (emailRex.test(email)) {
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
    * Validates the form.
    *
    * @return     {boolean}  Indicates if a form is valid.
@@ -74,7 +85,7 @@ class Login extends React.Component {
     if (!email.length) {
       errors.email = 'Email is required.';
     } else if (email.length >= 1) {
-      if (!this.validateEmail()) {
+      if (!validateEmail(email)) {
         errors.email = 'Invalid email.';
       }
     }
@@ -139,7 +150,7 @@ class Login extends React.Component {
     } = this.state;
 
     return (
-      <div className="login-container">
+      <Wrapper>
         <header>
           <div className="header">
             <h1 className="text-center">
@@ -148,65 +159,49 @@ class Login extends React.Component {
             <hr />
           </div>
         </header>
-        <main>
-          <div className="content">
-            <div
-              className={errors ? 'error visible' : 'error'}
-            >
-              <div className="alert alert-danger">
-                Invalid email or password.
-              </div>
+        <Content>
+          <form>
+            <div>
+              <StyledTextField
+                label="Email *"
+                type="email"
+                name="email"
+                autoComplete="email"
+                margin="normal"
+                variant="outlined"
+                onChange={e => this.handleChange(e)}
+                error={!fieldErrors.email === false}
+                helperText={fieldErrors.email}
+                value={email}
+              />
             </div>
-          </div>
-          <Form>
-            <FormGroup className="row">
-              <Label for="email" className="col-md-2 col-form-label">Email:</Label>
-              <div className="col-md-10">
-                <Input
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="you@host.com"
-                  value={email}
-                  onChange={this.handleChange}
-                  className={fieldErrors.email ? 'input-error' : ''}
-                />
-                <div className="errors">
-                  {fieldErrors.email}
-                </div>
-              </div>
-            </FormGroup>
-            <FormGroup className="row">
-              <Label for="password" className="col-md-2 col-form-label">Password:</Label>
-              <div className="col-md-10">
-                <Input
-                  type="password"
-                  name="password"
-                  id="password"
-                  value={password}
-                  onChange={this.handleChange}
-                  className={fieldErrors.email ? 'input-error' : ''}
-                />
-                <div className="errors">
-                  {fieldErrors.password}
-                </div>
-              </div>
-            </FormGroup>
-            <div className="row">
-              <div className="col text-center">
-                <Button
-                  type="submit"
-                  color="primary"
-                  className="mx-auto"
-                  onClick={e => this.handleSubmit(e)}
-                >
-                  Login
-                </Button>
-              </div>
+            <div>
+              <StyledTextField
+                label="Password *"
+                type="password"
+                name="password"
+                autoComplete="current-password"
+                margin="normal"
+                variant="outlined"
+                onChange={e => this.handleChange(e)}
+                error={!fieldErrors.password === false}
+                helperText={fieldErrors.password}
+                value={password}
+              />
             </div>
-          </Form>
-        </main>
-      </div>
+            <div>
+              <Button
+                type="button"
+                variant="contained"
+                color="primary"
+                onClick={e => this.handleSubmit(e)}
+              >
+                Login
+              </Button>
+            </div>
+          </form>
+        </Content>
+      </Wrapper>
     );
   }
 }
