@@ -4,6 +4,7 @@ import { graphql } from 'react-apollo';
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
 import gql from 'graphql-tag';
 import { updateSubScription } from '../../apollo';
 import validateEmail from '../../shared/util/utils';
@@ -33,6 +34,12 @@ const StyledTextField = styled(TextField)`
   .MuiOutlinedInput-root {
     text-align: left;
     width: 450px;
+  }
+`;
+
+const StyledSnackbar = styled(Snackbar)`
+  .MuiTypography-root {
+   background-color: #D32F2F;
   }
 `;
 
@@ -161,6 +168,12 @@ class Login extends React.Component {
         </header>
         <Content>
           <form>
+            {errors && (
+              <StyledSnackbar
+                open={errors}
+                message="Invalid email or password."
+              />
+            )}
             <div>
               <StyledTextField
                 label="Email *"
@@ -170,6 +183,7 @@ class Login extends React.Component {
                 margin="normal"
                 variant="outlined"
                 onChange={e => this.handleChange(e)}
+                onBlur={this.validateForm}
                 error={!fieldErrors.email === false}
                 helperText={fieldErrors.email}
                 value={email}
@@ -184,6 +198,7 @@ class Login extends React.Component {
                 margin="normal"
                 variant="outlined"
                 onChange={e => this.handleChange(e)}
+                onBlur={this.validateForm}
                 error={!fieldErrors.password === false}
                 helperText={fieldErrors.password}
                 value={password}
