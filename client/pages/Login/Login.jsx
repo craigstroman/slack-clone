@@ -159,12 +159,10 @@ class Login extends React.Component {
       <Wrapper>
         <Content>
           <header>
-            <div className="header">
-              <h1 className="text-center">
-                Login
-              </h1>
-              <hr />
-            </div>
+            <h1>
+              Login
+            </h1>
+            <hr />
           </header>
           <main>
             <form>
