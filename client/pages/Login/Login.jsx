@@ -12,6 +12,8 @@ import validateEmail from '../../shared/util/utils';
 const Wrapper = styled.div`
   margin: 0 auto;
   width: 100%;
+`;
+const Content = styled.div`
   header {
     margin: 0 auto;
     width: 95%;
@@ -19,9 +21,6 @@ const Wrapper = styled.div`
       text-align: center;
     }
   }
-`;
-
-const Content = styled.main`
   margin: 0 auto;
   width: 100%;
   form {
@@ -158,63 +157,65 @@ class Login extends React.Component {
 
     return (
       <Wrapper>
-        <header>
-          <div className="header">
-            <h1 className="text-center">
-              Login
-            </h1>
-            <hr />
-          </div>
-        </header>
         <Content>
-          <form>
-            {errors && (
-              <StyledSnackbar
-                open={errors}
-                message="Invalid email or password."
-              />
-            )}
-            <div>
-              <StyledTextField
-                label="Email *"
-                type="email"
-                name="email"
-                autoComplete="email"
-                margin="normal"
-                variant="outlined"
-                onChange={e => this.handleChange(e)}
-                onBlur={this.validateForm}
-                error={!fieldErrors.email === false}
-                helperText={fieldErrors.email}
-                value={email}
-              />
-            </div>
-            <div>
-              <StyledTextField
-                label="Password *"
-                type="password"
-                name="password"
-                autoComplete="current-password"
-                margin="normal"
-                variant="outlined"
-                onChange={e => this.handleChange(e)}
-                onBlur={this.validateForm}
-                error={!fieldErrors.password === false}
-                helperText={fieldErrors.password}
-                value={password}
-              />
-            </div>
-            <div>
-              <Button
-                type="button"
-                variant="contained"
-                color="primary"
-                onClick={e => this.handleSubmit(e)}
-              >
+          <header>
+            <div className="header">
+              <h1 className="text-center">
                 Login
-              </Button>
+              </h1>
+              <hr />
             </div>
-          </form>
+          </header>
+          <main>
+            <form>
+              {errors && (
+                <StyledSnackbar
+                  open={errors}
+                  message="Invalid email or password."
+                />
+              )}
+              <div>
+                <StyledTextField
+                  label="Email *"
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  margin="normal"
+                  variant="outlined"
+                  onChange={e => this.handleChange(e)}
+                  onBlur={this.validateForm}
+                  error={!fieldErrors.email === false}
+                  helperText={fieldErrors.email}
+                  value={email}
+                />
+              </div>
+              <div>
+                <StyledTextField
+                  label="Password *"
+                  type="password"
+                  name="password"
+                  autoComplete="current-password"
+                  margin="normal"
+                  variant="outlined"
+                  onChange={e => this.handleChange(e)}
+                  onBlur={this.validateForm}
+                  error={!fieldErrors.password === false}
+                  helperText={fieldErrors.password}
+                  value={password}
+                />
+              </div>
+              <div>
+                <Button
+                  type="button"
+                  variant="contained"
+                  color="primary"
+                  onClick={e => this.handleSubmit(e)}
+                >
+                  Login
+                </Button>
+              </div>
+            </form>
+          </main>
         </Content>
       </Wrapper>
     );
