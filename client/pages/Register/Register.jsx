@@ -84,14 +84,10 @@ class Register extends React.Component {
       if (!validateEmail(email)) {
         errors.email = 'Invalid email.';
       }
-    } else {
-      delete errors.email;
     }
 
     if (!username.length) {
       errors.username = 'Username is required.';
-    } else {
-      delete errors.username;
     }
 
     if (!password.length) {
@@ -102,9 +98,6 @@ class Register extends React.Component {
       } else if (password.length && password.length >= 5) {
         if (password !== passwordConfirmation) {
           errors.passwordConfirmation = 'Password and Password Confirmation must match.';
-        } else {
-          delete errors.password;
-          delete errors.passwordConfirmation;
         }
       }
     }
@@ -197,8 +190,6 @@ class Register extends React.Component {
                     value={email}
                   />
                 </Grid>
-              </Grid>
-              <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <StyledTextField
                     label="Username *"
@@ -214,8 +205,6 @@ class Register extends React.Component {
                     value={username}
                   />
                 </Grid>
-              </Grid>
-              <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <StyledTextField
                     label="Password *"
@@ -231,8 +220,6 @@ class Register extends React.Component {
                     value={password}
                   />
                 </Grid>
-              </Grid>
-              <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <StyledTextField
                     label="Password Confirmation *"
@@ -248,8 +235,6 @@ class Register extends React.Component {
                     value={passwordConfirmation}
                   />
                 </Grid>
-              </Grid>
-              <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <Button
                     type="button"
