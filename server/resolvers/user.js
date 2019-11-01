@@ -95,9 +95,25 @@ export default {
               'token': loginResult.token,
               'refreshToken': loginResult.refreshToken,
             }
+          } else {
+            result = {
+              'ok': loginResult.ok,
+              'user': loginResult.user,
+              'teamUUID': undefined,
+              'token': loginResult.token,
+              'refreshToken': loginResult.refreshToken,
+            }
           }
+        } else {
+          result = {
+              'ok': loginResult.ok,
+              'user': loginResult.user,
+              'teamUUID': undefined,
+              'token': loginResult.token,
+              'refreshToken': loginResult.refreshToken,
+            }
         }
-
+      } else {
         result = {
           'ok': loginResult.ok,
           'user': loginResult.user,
@@ -105,14 +121,6 @@ export default {
           'token': loginResult.token,
           'refreshToken': loginResult.refreshToken,
         }
-      }
-
-      result = {
-        'ok': loginResult.ok,
-        'user': loginResult.user,
-        'teamUUID': undefined,
-        'token': loginResult.token,
-        'refreshToken': loginResult.refreshToken,
       }
 
       return result;
