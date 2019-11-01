@@ -1,11 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import {
-  Button, Col, Form, FormGroup, Label, Input,
-} from 'reactstrap';
 import gql from 'graphql-tag';
-import './Register.scss';
+import styled from 'styled-components';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import validateEmail from '../../shared/util/utils';
+
+const Wrapper = styled.div`
+  margin: 0 auto;
+  width: 100%;
+`;
+
+const Content = styled.div`
+  header {
+    margin: 0 auto;
+    width: 95%;
+    h1 {
+      text-align: center;
+    }
+  }
+  margin: 0 auto;
+  width: 100%;
+  form {
+    margin: 0 auto;
+    text-align: center;
+  }
+`;
+
+const StyledTextField = styled(TextField)`
+  .MuiOutlinedInput-root {
+    text-align: left;
+    width: 500px;
+  }
+`;
 
 class Register extends React.Component {
   constructor(props) {
@@ -15,22 +44,100 @@ class Register extends React.Component {
       username: '',
       email: '',
       password: '',
+      passwordConfirmation: '',
+      fieldErrors: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.validateForm = this.validateForm.bind(this);
   }
 
+  /**
+   * Updates state when a value is entered in a field.
+   *
+   * @param      {Object}  e       The event object.
+   */
   handleChange = (e) => {
     const { name, value } = e.target;
 
     this.setState({ [name]: value });
   }
 
+  /**
+   * Validates the form.
+   *
+   * @return     {Boolean}  Indicates if the form is valid or invalid.
+   */
+  validateForm = () => {
+    const {
+      email,
+      username,
+      password,
+      passwordConfirmation,
+    } = this.state;
+    const errors = {};
+
+    if (!email.length) {
+      errors.email = 'Email is required.';
+    } else if (email.length) {
+      if (!validateEmail(email)) {
+        errors.email = 'Invalid email.';
+      }
+    } else {
+      delete errors.email;
+    }
+
+    if (!username.length) {
+      errors.username = 'Username is required.';
+    } else {
+      delete errors.username;
+    }
+
+    if (!password.length) {
+      errors.password = 'Password is required.';
+    } else if (password.length) {
+      if (password.length < 5) {
+        errors.password = 'Password needs to be greater then 5 characters long.';
+      } else if (password.length && password.length >= 5) {
+        if (password !== passwordConfirmation) {
+          errors.passwordConfirmation = 'Password and Password Confirmation must match.';
+        } else {
+          delete errors.password;
+          delete errors.passwordConfirmation;
+        }
+      }
+    }
+
+    if (!passwordConfirmation.length) {
+      errors.passwordConfirmation = 'Password confirmation is required.';
+    }
+
+    if (Object.keys(errors).length >= 1) {
+      this.setState({
+        fieldErrors: errors,
+      });
+
+      return false;
+    }
+
+    this.setState({
+      fieldErrors: errors,
+    });
+
+
+    return true;
+  }
+
+  /**
+   * Submits the registration.
+   *
+   * @param      {Object}  e       The event object.
+   */
   handleSubmit = async (e) => {
     const { username, email, password } = this.state;
 
-    if (username.length && email.length && password.length) {
+    if (this.validateForm()) {
       const { mutate } = this.props;
 
       const response = await mutate({ variables: { username, email, password } });
@@ -57,73 +164,107 @@ class Register extends React.Component {
       username,
       email,
       password,
+      passwordConfirmation,
+      fieldErrors,
     } = this.state;
 
     return (
-      <div className="container">
-        <header>
-          <div className="header">
-            <h1 className="text-center">
-              Register
-            </h1>
-          </div>
-        </header>
-        <main>
-          <Form onSubmit={(e) => { e.preventDefault(); }}>
-            <FormGroup row>
-              <Label for="username" md={2}>
-                Username:
-              </Label>
-              <Col md={10}>
-                <Input
-                  type="text"
-                  name="username"
-                  value={username}
-                  onChange={e => this.handleChange(e)}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Label for="email" md={2}>
-                Email:
-              </Label>
-              <Col md={10}>
-                <Input
-                  type="email"
-                  name="email"
-                  value={email}
-                  placeholder="you@host.com"
-                  onChange={e => this.handleChange(e)}
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Label for="password" md={2}>
-                Password:
-              </Label>
-              <Col md={10}>
-                <Input
-                  type="password"
-                  name="password"
-                  value={password}
-                  onChange={e => this.handleChange(e)}
-                />
-              </Col>
-            </FormGroup>
-            <div className="row">
-              <div className="col-md-12 text-center">
-                <Button
-                  type="submit"
-                  color="primary"
-                  onClick={this.handleSubmit}
-                >
-                  Register
-                </Button>
-              </div>
-            </div>
-          </Form>
-        </main>
-      </div>
+      <Wrapper>
+        <Content>
+          <header>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <h1>Register</h1>
+                <hr />
+              </Grid>
+            </Grid>
+          </header>
+          <main>
+            <form onSubmit={e => e.preventDefault()}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <StyledTextField
+                    label="Email *"
+                    type="text"
+                    name="email"
+                    autoComplete="email"
+                    margin="normal"
+                    variant="outlined"
+                    onChange={e => this.handleChange(e)}
+                    onBlur={this.validateForm}
+                    error={!fieldErrors.email === false}
+                    helperText={fieldErrors.email}
+                    value={email}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <StyledTextField
+                    label="Username *"
+                    type="text"
+                    name="username"
+                    autoComplete="username"
+                    margin="normal"
+                    variant="outlined"
+                    onChange={e => this.handleChange(e)}
+                    onBlur={this.validateForm}
+                    error={!fieldErrors.username === false}
+                    helperText={fieldErrors.username}
+                    value={username}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <StyledTextField
+                    label="Password *"
+                    type="password"
+                    name="password"
+                    autoComplete="password"
+                    margin="normal"
+                    variant="outlined"
+                    onChange={e => this.handleChange(e)}
+                    onBlur={this.validateForm}
+                    error={!fieldErrors.password === false}
+                    helperText={fieldErrors.password}
+                    value={password}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <StyledTextField
+                    label="Password Confirmation *"
+                    type="password"
+                    name="passwordConfirmation"
+                    autoComplete="passwordConfirmation"
+                    margin="normal"
+                    variant="outlined"
+                    onChange={e => this.handleChange(e)}
+                    onBlur={this.validateForm}
+                    error={!fieldErrors.passwordConfirmation === false}
+                    helperText={fieldErrors.passwordConfirmation}
+                    value={passwordConfirmation}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    onClick={this.handleSubmit}
+                  >
+                    Register
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </main>
+        </Content>
+      </Wrapper>
     );
   }
 }
