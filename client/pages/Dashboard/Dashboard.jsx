@@ -138,11 +138,6 @@ class Dashboard extends React.Component {
       uuid,
     };
 
-    const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
-    const team = teams[teamIdx];
-    const { teamMembers } = team;
-    const isOwner = team.admin;
-
     if (Array.isArray(teams)) {
       if (!teams.length) {
         return (
@@ -150,6 +145,11 @@ class Dashboard extends React.Component {
         );
       }
     }
+
+    const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
+    const team = teams[teamIdx];
+    const { teamMembers } = team;
+    const isOwner = team.admin;
 
     return (
       <div className="dashboard-container">
