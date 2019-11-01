@@ -49,29 +49,41 @@ export default {
     login: async (parent, { email, password }, { models, SECRET, SECRET2 }) => {
       const loginResult = await tryLogin(email, password, models, SECRET, SECRET2);
       let result = null;
+      let teams = null;
+      let team = null;
+      let channelUUID = null;
 
       if (loginResult.ok) {
-        const teams = await models.sequelize.query(
-          'select * from teams as team join members as member on team.id = member.team_id where member.user_id = ?',
-          {
-            replacements: [loginResult.userInfo.id],
-            model: models.Team,
-            raw: true,
-          },
-        );
+        try {
+          teams = await models.sequelize.query(
+            'select * from teams as team join members as member on team.id = member.team_id where member.user_id = ?',
+            {
+              replacements: [loginResult.userInfo.id],
+              model: models.Team,
+              raw: true,
+            },
+          );
 
-        const team = teams[0];
+          team = teams[0];
 
-        const channel = await models.sequelize.query(
-          "select uuid from channels where channels.name = 'general' and channels.team_id = ?",
-          {
-            replacements: [team.id],
-            model: models.Channels,
-            raw: true,
-          }
-        );
+          const channel = await models.sequelize.query(
+            "select uuid from channels where channels.name = 'general' and channels.team_id = ?",
+            {
+              replacements: [team.id],
+              model: models.Channels,
+              raw: true,
+            }
+          );
 
-        const channelUUID = channel[0][0].uuid;
+          channelUUID = channel[0][0].uuid;
+        } catch (err) {
+          console.log(`There was an error: ${err}`);
+
+          teams = [];
+          team = '';
+          channelUUID = '';
+        }
+
 
         if (Array.isArray(teams)) {
           if (teams.length >= 1) {
@@ -83,18 +95,24 @@ export default {
               'token': loginResult.token,
               'refreshToken': loginResult.refreshToken,
             }
-          } else {
-            result = {
-              'ok': loginResult.ok,
-              'user': loginResult.user,
-              'teamUUID': undefined,
-              'token': loginResult.token,
-              'refreshToken': loginResult.refreshToken,
-            }
           }
         }
-      } else {
-        result = loginResult;
+
+        result = {
+          'ok': loginResult.ok,
+          'user': loginResult.user,
+          'teamUUID': undefined,
+          'token': loginResult.token,
+          'refreshToken': loginResult.refreshToken,
+        }
+      }
+
+      result = {
+        'ok': loginResult.ok,
+        'user': loginResult.user,
+        'teamUUID': undefined,
+        'token': loginResult.token,
+        'refreshToken': loginResult.refreshToken,
       }
 
       return result;
