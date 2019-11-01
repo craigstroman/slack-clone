@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import styled from 'styled-components';
+import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -108,6 +109,10 @@ class Login extends React.Component {
       return false;
     }
 
+    this.setState({
+      fieldErrors: errors,
+    });
+
     return true;
   }
 
@@ -172,46 +177,48 @@ class Login extends React.Component {
                   message="Invalid email or password."
                 />
               )}
-              <div>
-                <StyledTextField
-                  label="Email *"
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  margin="normal"
-                  variant="outlined"
-                  onChange={e => this.handleChange(e)}
-                  onBlur={this.validateForm}
-                  error={!fieldErrors.email === false}
-                  helperText={fieldErrors.email}
-                  value={email}
-                />
-              </div>
-              <div>
-                <StyledTextField
-                  label="Password *"
-                  type="password"
-                  name="password"
-                  autoComplete="current-password"
-                  margin="normal"
-                  variant="outlined"
-                  onChange={e => this.handleChange(e)}
-                  onBlur={this.validateForm}
-                  error={!fieldErrors.password === false}
-                  helperText={fieldErrors.password}
-                  value={password}
-                />
-              </div>
-              <div>
-                <Button
-                  type="button"
-                  variant="contained"
-                  color="primary"
-                  onClick={e => this.handleSubmit(e)}
-                >
-                  Login
-                </Button>
-              </div>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <StyledTextField
+                    label="Email *"
+                    type="email"
+                    name="email"
+                    autoComplete="email"
+                    margin="normal"
+                    variant="outlined"
+                    onChange={e => this.handleChange(e)}
+                    onBlur={this.validateForm}
+                    error={!fieldErrors.email === false}
+                    helperText={fieldErrors.email}
+                    value={email}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <StyledTextField
+                    label="Password *"
+                    type="password"
+                    name="password"
+                    autoComplete="current-password"
+                    margin="normal"
+                    variant="outlined"
+                    onChange={e => this.handleChange(e)}
+                    onBlur={this.validateForm}
+                    error={!fieldErrors.password === false}
+                    helperText={fieldErrors.password}
+                    value={password}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    onClick={e => this.handleSubmit(e)}
+                  >
+                    Login
+                  </Button>
+                </Grid>
+              </Grid>
             </form>
           </main>
         </Content>
