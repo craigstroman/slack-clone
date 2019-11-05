@@ -1,19 +1,15 @@
 import Sequelize from 'sequelize';
-import env from 'node-env-file';
 
-if ( process.env.NODE_ENV === 'development' ) {
-  env(__dirname + '/../../.env');
-}
+require('dotenv').config();
 
 const db = process.env.DB;
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 
-
 const sequelize = new Sequelize(db, dbUser, dbPassword, {
   dialect: 'postgres',
   define: {
-  	underscored: true,
+    underscored: true,
   },
   logging: false,
 });
@@ -27,7 +23,7 @@ const models = {
   DirectMessage: sequelize.import('./directMessage'),
 };
 
-Object.keys(models).forEach((modelName) => {
+Object.keys(models).forEach(modelName => {
   if ('associate' in models[modelName]) {
     models[modelName].associate(models);
   }
