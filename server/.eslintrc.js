@@ -1,7 +1,11 @@
 module.exports = {
-    'extends': 'airbnb-base',
+    'extends': [
+      'airbnb-base',
+      'prettier'
+    ],
     'plugins': [
-        'import'
+        'import',
+        'prettier'
     ],
 	'env': {
 		'node': true,
