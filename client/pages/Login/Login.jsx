@@ -209,7 +209,10 @@ class Login extends React.Component {
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
-                          <IconButton onClick={this.togglePasswordMask}>
+                          <IconButton
+                            title={hidden ? 'Show Password' : 'Hide Password'}
+                            onClick={this.togglePasswordMask}
+                          >
                             <FontAwesomeIcon
                               icon={hidden ? faEyeSlash : faEye}
                               style={{ cursor: 'pointer' }}
