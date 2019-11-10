@@ -1,25 +1,36 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import styled from 'styled-components';
+import { CssBaseline, Container, Grid } from '@material-ui/core';
+import Login from '../Login/Login';
+
+const Header = styled.header`
+  margin-top: 10px;
+  h1 {
+    text-align: center;
+  }
+`;
 
 const Home = () => (
-  <div className="container">
-    <div className="row">
-      <div className="col-md-12">
-        <h1 className="text-center">Slack Clone</h1>
+  <Fragment>
+    <CssBaseline />
+    <Container maxWidth="lg">
+      <Header>
+        <h1>Slack Clone</h1>
         <hr />
-      </div>
-    </div>
-    <div className="row">
-      <div className="col-md-12 text-center">
-        <a href="/login">Login</a>
-      </div>
-    </div>
-    <div className="row">
-      <div className="col-md-12 text-center">
-        Not a registered user?&nbsp;
-        <a href="/register">Sign Up</a>
-      </div>
-    </div>
-  </div>
+      </Header>
+      <main>
+        <Grid container spacing={3} justify="center">
+          <Grid item lg={12}>
+            <Login />
+          </Grid>
+          <Grid item lg={12} style={{ textAlign: 'center' }}>
+            Not a registered user?&nbsp;
+            <a href="/register">Sign Up</a>
+          </Grid>
+        </Grid>
+      </main>
+    </Container>
+  </Fragment>
 );
 
 export default Home;
