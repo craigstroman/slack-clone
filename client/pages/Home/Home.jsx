@@ -10,7 +10,7 @@ const Header = styled.header`
   }
 `;
 
-const Home = () => (
+const Home = props => (
   <Fragment>
     <CssBaseline />
     <Container maxWidth="lg">
@@ -21,7 +21,7 @@ const Home = () => (
       <main>
         <Grid container spacing={3} justify="center">
           <Grid item lg={12}>
-            <Login />
+            <Login {...props} />
           </Grid>
           <Grid item lg={12} style={{ textAlign: 'center' }}>
             Not a registered user?&nbsp;
