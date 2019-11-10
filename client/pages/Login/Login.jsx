@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
 import styled from 'styled-components';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
 import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
+import { Button, Grid, IconButton, InputAdornment, Snackbar, TextField } from '@material-ui/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { updateSubScription } from '../../apollo';
 import validateEmail from '../../shared/util/utils';
 
@@ -39,7 +38,7 @@ const StyledTextField = styled(TextField)`
 
 const StyledSnackbar = styled(Snackbar)`
   .MuiTypography-root {
-   background-color: #D32F2F;
+    background-color: #d32f2f;
   }
 `;
 
@@ -52,19 +51,35 @@ class Login extends React.Component {
       password: '',
       fieldErrors: [],
       errors: false,
+      hidden: true,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.validateForm = this.validateForm.bind(this);
+    this.togglePasswordMask = this.togglePasswordMask.bind(this);
   }
+
+  togglePasswordMask = () => {
+    const { hidden } = this.state;
+
+    if (hidden) {
+      this.setState({
+        hidden: false,
+      });
+    } else {
+      this.setState({
+        hidden: true,
+      });
+    }
+  };
 
   /**
    * Updates the state when inputs change.
    *
    * @param      {Object}   e   The event object.
    */
-  handleChange = (e) => {
+  handleChange = e => {
     const { name, value } = e.target;
 
     if (name === 'email') {
@@ -78,7 +93,7 @@ class Login extends React.Component {
         password: value,
       });
     }
-  }
+  };
 
   /**
    * Validates the form.
@@ -114,14 +129,14 @@ class Login extends React.Component {
     });
 
     return true;
-  }
+  };
 
   /**
    * Handles the form submit
    *
    * @param      {Object}  e   The event object.
    */
-  handleSubmit = async (e) => {
+  handleSubmit = async e => {
     e.preventDefault();
     const { email, password } = this.state;
 
@@ -129,9 +144,7 @@ class Login extends React.Component {
       const { mutate, history } = this.props;
       const response = await mutate({ variables: { email, password } });
 
-      const {
-        ok, teamUUID, channelUUID, token, refreshToken,
-      } = response.data.login;
+      const { ok, teamUUID, channelUUID, token, refreshToken } = response.data.login;
 
       if (ok) {
         localStorage.setItem('token', token);
@@ -153,30 +166,17 @@ class Login extends React.Component {
         this.setState({ errors: true });
       }
     }
-  }
+  };
 
   render() {
-    const {
-      email, password, errors, fieldErrors,
-    } = this.state;
+    const { email, password, errors, fieldErrors, hidden } = this.state;
 
     return (
       <Wrapper>
         <Content>
-          <header>
-            <h1>
-              Login
-            </h1>
-            <hr />
-          </header>
           <main>
             <form>
-              {errors && (
-                <StyledSnackbar
-                  open={errors}
-                  message="Invalid email or password."
-                />
-              )}
+              {errors && <StyledSnackbar open={errors} message="Invalid email or password." />}
               <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <StyledTextField
@@ -196,7 +196,7 @@ class Login extends React.Component {
                 <Grid item xs={12}>
                   <StyledTextField
                     label="Password *"
-                    type="password"
+                    type={hidden ? 'password' : 'text'}
                     name="password"
                     autoComplete="current-password"
                     margin="normal"
@@ -206,6 +206,18 @@ class Login extends React.Component {
                     error={!fieldErrors.password === false}
                     helperText={fieldErrors.password}
                     value={password}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={this.togglePasswordMask}>
+                            <FontAwesomeIcon
+                              icon={hidden ? faEyeSlash : faEye}
+                              style={{ cursor: 'pointer' }}
+                            />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
