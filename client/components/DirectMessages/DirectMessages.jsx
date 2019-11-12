@@ -1,10 +1,57 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
+import styled, { ThemeProvider } from 'styled-components';
+import { Button, IconButton } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
 import MessageUser from '../MessageUser/MessageUser';
+import theme from '../../shared/themes';
+import clearFix from '../../shared/themes/mixins';
 import './DirectMessages.scss';
+
+const Wrapper = styled.div`
+  margin-top: 10px;
+`;
+
+const Heading = styled.div`
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+  h5,
+  button {
+    color: ${props => props.theme.colors.shadyLady};
+    float: left;
+  }
+  h5 {
+    margin-left: ${props => props.theme.sidebar.marginLeft};
+  }
+  button {
+    bottom: 13px;
+  }
+  ${clearFix()}
+`;
+
+const UsersList = styled.ul`
+  list-style-type: none;
+  padding-left: 0;
+  li {
+    &.selected {
+      background-color: ${props => props.theme.colors.toryBlue};
+      &:hover {
+        background-color: ${props => props.theme.colors.toryBlue};
+      }
+    }
+
+    button {
+      color: ${props => props.theme.colors.shadyLady};
+      svg {
+        color: ${props => props.theme.colors.jungleGreen};
+        margin-right: 5px;
+      }
+    }
+  }
+`;
 
 class DirectMessages extends React.Component {
   constructor(props) {
@@ -27,15 +74,15 @@ class DirectMessages extends React.Component {
    *
    * @param      {Object}  e  The event object.
    */
-  handleSelectUser = (e) => {
+  handleSelectUser = e => {
     const { selectItem, teamUUID, history } = this.props;
-    const { target } = e;
-    const uuid = target.getAttribute('uuid');
+    const { currentTarget } = e;
+    const uuid = currentTarget.getAttribute('uuid');
 
     history.push(`/dashboard/view/team/${teamUUID}/user/${uuid}`);
 
     selectItem(e);
-  }
+  };
 
   /**
    * Opens the direct message modal.
@@ -43,7 +90,7 @@ class DirectMessages extends React.Component {
    */
   handleOpenDirectMessageModal = () => {
     this.setState({ directMessageModal: true });
-  }
+  };
 
   /**
    * Closes the direct message modal.
@@ -51,7 +98,7 @@ class DirectMessages extends React.Component {
    */
   handleCloseDirectMessageModal = () => {
     this.setState({ directMessageModal: false });
-  }
+  };
 
   /**
    * Loads the screen for messaging a selected user.
@@ -71,16 +118,16 @@ class DirectMessages extends React.Component {
 
     // Selects the user in the sidebar.
     handleGetUser(val, teamId);
-  }
+  };
 
-  userAlreadyListed = (user) => {
+  userAlreadyListed = user => {
     const { directMessageUsers } = this.props;
 
     if (Array.isArray(directMessageUsers)) {
       if (user !== null) {
         if (typeof user === 'object') {
           if ({}.hasOwnProperty.call(user, 'id')) {
-            const res = directMessageUsers.some(el => (el.id === user.id));
+            const res = directMessageUsers.some(el => el.id === user.id);
 
             return res;
           }
@@ -89,36 +136,31 @@ class DirectMessages extends React.Component {
     }
 
     return 0;
-  }
+  };
 
   render() {
-    const {
-      directMessageUsers, user, activeEl, teamId, teamUUID,
-    } = this.props;
+    const { directMessageUsers, user, activeEl, teamId, teamUUID } = this.props;
     const { directMessageModal, messageUser } = this.state;
 
     const userExists = messageUser !== null ? this.userAlreadyListed(messageUser) : null;
-    const showMessageUser = (messageUser !== null && userExists !== null);
+    const showMessageUser = messageUser !== null && userExists !== null;
 
     return (
-      <Fragment>
+      <ThemeProvider theme={theme}>
         <Fragment>
-          <div className="users">
-            <div className="sidebar-heading">
+          <Wrapper>
+            <Heading>
               <h5>Direct Messages</h5>
-              <Button
-                type="button"
+              <IconButton
                 className="sidebar-heading__action"
                 onClick={() => this.handleOpenDirectMessageModal()}
               >
                 <FontAwesomeIcon icon={faPlusCircle} />
-              </Button>
-            </div>
-            <ul className="users-list">
+              </IconButton>
+            </Heading>
+            <UsersList>
               <li
-                className={
-                  activeEl === user.uuid ? 'user-list__item selected' : 'user-list__item'
-                }
+                className={activeEl === user.uuid ? 'user-list__item selected' : 'user-list__item'}
                 id={user.uuid}
                 key={user.uuid}
               >
@@ -138,9 +180,7 @@ class DirectMessages extends React.Component {
               </li>
               {showMessageUser && (
                 <li
-                  className={
-                    activeEl === messageUser.uuid ? 'user-list__item selected' : 'user-list__item'
-                  }
+                  className={activeEl === messageUser.uuid ? 'user-list__item selected' : 'user-list__item'}
                   id={messageUser.uuid}
                   key={messageUser.uuid}
                 >
@@ -158,13 +198,11 @@ class DirectMessages extends React.Component {
                   </Button>
                 </li>
               )}
-              {directMessageUsers.map((el) => {
+              {directMessageUsers.map(el => {
                 if (el.username !== user.username) {
                   return (
                     <li
-                      className={
-                        activeEl === el.uuid ? 'user-list__item selected' : 'user-list__item'
-                      }
+                      className={activeEl === el.uuid ? 'user-list__item selected' : 'user-list__item'}
                       id={el.uuid}
                       key={el.uuid}
                     >
@@ -185,8 +223,8 @@ class DirectMessages extends React.Component {
                 }
                 return null;
               })}
-            </ul>
-          </div>
+            </UsersList>
+          </Wrapper>
         </Fragment>
         <Fragment>
           <MessageUser
@@ -198,7 +236,7 @@ class DirectMessages extends React.Component {
             {...this.props}
           />
         </Fragment>
-      </Fragment>
+      </ThemeProvider>
     );
   }
 }
