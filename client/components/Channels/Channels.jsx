@@ -1,10 +1,63 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
+import styled, { ThemeProvider } from 'styled-components';
+import { Button, IconButton } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import AddChannel from '../AddChannel/AddChannel';
-import './Channels.scss';
+import theme from '../../shared/themes';
+import clearFix from '../../shared/themes/mixins';
+
+const Wrapper = styled.div`
+  margin-top: 10px;
+`;
+
+const Heading = styled.div`
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+  h5,
+  button {
+    color: ${props => props.theme.colors.shadyLady};
+    float: left;
+  }
+  h5 {
+    margin-left: ${props => props.theme.sidebar.marginLeft};
+  }
+  button {
+    bottom: 13px;
+  }
+  ${clearFix()}
+`;
+
+const ChannelsList = styled.ul`
+  list-style-type: none;
+  padding-left: 0;
+  li {
+    &.selected {
+      background-color: ${props => props.theme.colors.toryBlue};
+      &:hover,
+      &:active,
+      &:visited {
+        background-color: ${props => props.theme.colors.toryBlue};
+      }
+      button {
+        &:hover,
+        &:active,
+        &:visited {
+          background-color: ${props => props.theme.colors.toryBlue};
+        }
+      }
+    }
+    margin-left: 0;
+    padding-left: 0;
+    button {
+      color: ${props => props.theme.colors.shadyLady};
+      font-size: 1em;
+    }
+  }
+`;
 
 class Channels extends React.Component {
   constructor(props) {
@@ -18,47 +71,41 @@ class Channels extends React.Component {
     this.handleSelectChannel = this.handleSelectChannel.bind(this);
   }
 
-  handleSelectChannel = (e) => {
+  handleSelectChannel = e => {
     const { selectItem, teamUUID, history } = this.props;
-    const { target } = e;
-    const uuid = target.getAttribute('uuid');
+    const { currentTarget } = e;
+    const uuid = currentTarget.getAttribute('uuid');
 
     history.push(`/dashboard/view/team/${teamUUID}/channel/${uuid}`);
 
     selectItem(e);
-  }
+  };
 
   handleOpenAddChannel = () => {
     this.setState({ addChannelModal: true });
-  }
+  };
 
   handleCloseAddChannel = () => {
     this.setState({ addChannelModal: false });
-  }
+  };
 
   render() {
     const { addChannelModal } = this.state;
-    const {
-      isOwner, channels, activeEl, teamId,
-    } = this.props;
+    const { isOwner, channels, activeEl, teamId } = this.props;
 
     return (
-      <Fragment>
+      <ThemeProvider theme={theme}>
         <Fragment>
-          <div className="channels">
-            <div className="sidebar-heading">
+          <Wrapper>
+            <Heading>
               <h5>Channels</h5>
               {isOwner && (
-                <Button
-                  type="button"
-                  className="sidebar-heading__action"
-                  onClick={() => this.handleOpenAddChannel()}
-                >
+                <IconButton onClick={() => this.handleOpenAddChannel()}>
                   <FontAwesomeIcon icon={faPlusCircle} />
-                </Button>
+                </IconButton>
               )}
-            </div>
-            <ul className="channels-list">
+            </Heading>
+            <ChannelsList>
               {channels.map(el => (
                 <li
                   className={
@@ -68,7 +115,6 @@ class Channels extends React.Component {
                   key={el.uuid}
                 >
                   <Button
-                    type="button"
                     className="channel-item"
                     id={el.id}
                     uuid={el.uuid}
@@ -81,8 +127,8 @@ class Channels extends React.Component {
                   </Button>
                 </li>
               ))}
-            </ul>
-          </div>
+            </ChannelsList>
+          </Wrapper>
         </Fragment>
         <Fragment>
           <AddChannel
@@ -91,11 +137,10 @@ class Channels extends React.Component {
             handleCloseAddChannel={() => this.handleCloseAddChannel()}
           />
         </Fragment>
-      </Fragment>
+      </ThemeProvider>
     );
   }
 }
-
 
 Channels.defaultProps = {
   isOwner: false,
