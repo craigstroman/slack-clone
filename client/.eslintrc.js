@@ -30,6 +30,7 @@ module.exports = {
     'react/no-unused-prop-types': 'error',
     'react/prop-types': 'error',
     'react/react-in-jsx-scope': 'error',
+    'react/jsx-one-expression-per-line': 'off',
   },
   globals: {
     React: true,
