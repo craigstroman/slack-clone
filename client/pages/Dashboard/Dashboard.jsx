@@ -29,7 +29,7 @@ class Dashboard extends React.Component {
     this.handleChangeTeam = this.handleChangeTeam.bind(this);
   }
 
-  componentDidUpdate = (prevProps) => {
+  componentDidUpdate = prevProps => {
     const { match, data } = this.props;
     const { channelUUID, userUUID } = this.state;
 
@@ -52,7 +52,7 @@ class Dashboard extends React.Component {
         this.handleChangeItem(teamUUID, uuid, 'user', data);
       }
     }
-  }
+  };
 
   /**
    * Changes the team.
@@ -62,7 +62,7 @@ class Dashboard extends React.Component {
    */
   handleChangeTeam = (teamName, teamId) => {
     this.setState({ teamName, teamId });
-  }
+  };
 
   /**
    * Updates which item is selected.
@@ -111,27 +111,20 @@ class Dashboard extends React.Component {
         }
       }
     }
-  }
+  };
 
   render() {
     const {
-      data: { loading, me }, match,
+      data: { loading, me },
+      match,
     } = this.props;
-    const {
-      teamName, teamId, userId, userUUID, channelId, itemName,
-    } = this.state;
+    const { teamName, teamId, userId, userUUID, channelId, itemName } = this.state;
 
     if (loading) {
-      return (
-        <div>
-          Loading...
-        </div>
-      );
+      return <div>Loading...</div>;
     }
 
-    const {
-      id, username, teams, uuid,
-    } = me;
+    const { id, username, teams, uuid } = me;
     const user = {
       id,
       username,
@@ -140,13 +133,11 @@ class Dashboard extends React.Component {
 
     if (Array.isArray(teams)) {
       if (!teams.length) {
-        return (
-          <NoTeams />
-        );
+        return <NoTeams />;
       }
     }
 
-    const teamIdx = teamId ? teams.findIndex(el => (el.id === parseInt(teamId, 10))) : 0;
+    const teamIdx = teamId ? teams.findIndex(el => el.id === parseInt(teamId, 10)) : 0;
     const team = teams[teamIdx];
     const { teamMembers } = team;
     const isOwner = team.admin;
@@ -185,11 +176,7 @@ class Dashboard extends React.Component {
           <div className="main-content">
             <header>
               <div className="header-container">
-                <Header
-                  channels={team.channels}
-                  users={teamMembers}
-                  {...this.props}
-                />
+                <Header channels={team.channels} users={teamMembers} {...this.props} />
               </div>
             </header>
             <Fragment>
