@@ -7,7 +7,6 @@ import { faPlusCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
 import MessageUser from '../MessageUser/MessageUser';
 import theme from '../../shared/themes';
 import clearFix from '../../shared/themes/mixins';
-import './DirectMessages.scss';
 
 const Wrapper = styled.div`
   margin-top: 10px;
