@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
 import { Button } from '@material-ui/core';
-import './TeamSidebar.scss';
 import theme from '../../shared/themes';
 import clearFix from '../../shared/themes/mixins';
 
