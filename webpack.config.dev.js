@@ -13,6 +13,8 @@ const PATHS = {
 module.exports = {
   mode: 'development',
 
+  // devtool: 'source-map',
+
   entry: {
     app: [
       path.join(__dirname, 'client/App.jsx'),
@@ -36,6 +38,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
+
   module: {
     rules: [
       {
