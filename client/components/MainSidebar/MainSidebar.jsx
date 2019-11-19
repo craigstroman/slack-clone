@@ -74,12 +74,12 @@ class MainSidebar extends React.Component {
     this.handleGetUser = this.handleGetUser.bind(this);
   }
 
+  /**
+   * Sets which item is selected when component loads.
+   */
   componentDidMount = () => {
     const { match, channels, teamMembers } = this.props;
 
-    /**
-     * Sets which item is selected when component loads.
-     */
     if (match.params.channelId) {
       const channel = channels.filter(el => el.uuid === match.params.channelId);
 
@@ -88,6 +88,21 @@ class MainSidebar extends React.Component {
       const user = teamMembers.filter(el => el.uuid === match.params.userId);
 
       this.setState({ activeEl: user[0].uuid });
+    }
+  };
+
+  /**
+   * Sets the selected channel if a team is changed.  Will select general channel of team.
+   *
+   * @param      {Object}  prevProps  The previous properties.
+   */
+  componentDidUpdate = prevProps => {
+    const { match, channels } = this.props;
+
+    if (prevProps.match.params.channelId !== match.params.channelId) {
+      const channel = channels.filter(el => el.uuid === match.params.channelId);
+
+      this.setState({ activeEl: channel[0].uuid });
     }
   };
 
