@@ -31,6 +31,7 @@ module.exports = {
     'react/prop-types': 'error',
     'react/react-in-jsx-scope': 'error',
     'react/jsx-one-expression-per-line': 'off',
+    'react/jsx-boolean-value': 'off',
   },
   globals: {
     React: true,
