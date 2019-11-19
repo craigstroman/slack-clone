@@ -176,7 +176,13 @@ class Login extends React.Component {
         <Content>
           <main>
             <form>
-              {errors && <StyledSnackbar open={errors} message="Invalid email or password." />}
+              {errors && (
+                <StyledSnackbar
+                  open={errors}
+                  message="Invalid email or password."
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                />
+              )}
               <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <StyledTextField
