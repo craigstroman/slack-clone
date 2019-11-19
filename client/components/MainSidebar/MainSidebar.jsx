@@ -99,10 +99,12 @@ class MainSidebar extends React.Component {
   componentDidUpdate = prevProps => {
     const { match, channels } = this.props;
 
-    if (prevProps.match.params.channelId !== match.params.channelId) {
-      const channel = channels.filter(el => el.uuid === match.params.channelId);
+    if (match.params.channelId) {
+      if (prevProps.match.params.channelId !== match.params.channelId) {
+        const channel = channels.filter(el => el.uuid === match.params.channelId);
 
-      this.setState({ activeEl: channel[0].uuid });
+        this.setState({ activeEl: channel[0].uuid });
+      }
     }
   };
 
