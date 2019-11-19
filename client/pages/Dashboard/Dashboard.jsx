@@ -60,8 +60,26 @@ class Dashboard extends React.Component {
    * @param      {String}  teamName  The team name
    * @param      {Integer}  teamId    The team identifier
    */
-  handleChangeTeam = (teamName, teamId) => {
-    this.setState({ teamName, teamId });
+  handleChangeTeam = (teamName, teamId, teamUUID) => {
+    const {
+      data: { loading, me },
+      match,
+      history,
+    } = this.props;
+    const { teams } = me;
+    const teamIdx = teams.findIndex(el => el.id === parseInt(teamId, 0));
+    const team = teams[teamIdx];
+    const { channels } = team;
+    const { id, uuid } = channels[0];
+    const data = {
+      me,
+    };
+
+    history.push(`/dashboard/view/team/${teamUUID}/channel/${uuid}`);
+
+    this.setState({ teamName, teamId, channelId: id, channelUUID: uuid });
+
+    this.handleChangeItem(teamUUID, uuid, 'channel', data);
   };
 
   /**
