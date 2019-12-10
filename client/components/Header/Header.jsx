@@ -24,6 +24,7 @@ class Header extends React.Component {
     };
 
     this.logout = this.logout.bind(this);
+    this.teams = this.teams.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
@@ -39,6 +40,14 @@ class Header extends React.Component {
     localStorage.removeItem('token');
 
     history.push('/');
+  };
+
+  teams = () => {
+    const { history } = this.props;
+
+    history.push('/teams');
+
+    this.handleClose();
   };
 
   handleOpen = e => {
@@ -95,6 +104,7 @@ class Header extends React.Component {
               open={Boolean(anchorEl)}
               onClose={this.handleClose}
             >
+              <MenuItem onClick={this.teams}>Teams</MenuItem>
               <MenuItem onClick={this.logout}>Logout</MenuItem>
             </Menu>
           </Grid>
