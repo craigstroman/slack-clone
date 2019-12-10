@@ -63,7 +63,7 @@ class Teams extends React.Component {
                   const channel = channels[0];
 
                   return (
-                    <li ke={`${uuid}-${id}`}>
+                    <li key={`${uuid}-${id}`}>
                       <Link to={`/dashboard/view/team/${uuid}/channel/${channel.uuid}`}>{name}</Link>
                     </li>
                   );
