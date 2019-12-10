@@ -163,19 +163,6 @@ class Dashboard extends React.Component {
     return (
       <div className="dashboard-container">
         <aside>
-          <div className="team-sidebar">
-            <TeamSidebar
-              userTeams={teams.map(t => ({
-                id: t.id,
-                uuid: t.uuid,
-                letter: t.name.charAt(0).toUpperCase(),
-                name: t.name,
-                type: 'channel',
-              }))}
-              handleChangeTeam={this.handleChangeTeam}
-              {...this.props}
-            />
-          </div>
           <div className="main-sidebar">
             <MainSidebar
               channels={team.channels}
