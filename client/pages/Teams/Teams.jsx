@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import meQuery from '../../shared/queries/team';
+import PopUpMenu from '../../components/PopUpMenu/PopUpMenu';
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -56,6 +57,9 @@ class Teams extends React.Component {
         </header>
         <main>
           <Grid container spacing={3}>
+            <Grid item xs={12} style={{ textAlign: 'right' }}>
+              <PopUpMenu {...this.props} />
+            </Grid>
             <Grid item xs={12}>
               <ul>
                 {teams.map(el => {
