@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { graphql } from 'react-apollo';
 import Grid from '@material-ui/core/Grid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import meQuery from '../../shared/queries/team';
 import PopUpMenu from '../../components/PopUpMenu/PopUpMenu';
+import theme from '../../shared/themes';
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -21,6 +22,15 @@ const Wrapper = styled.div`
     ul {
       list-style-type: none;
     }
+  }
+`;
+
+const StyledTextLink = styled(Link)`
+  color: ${props => props.theme.colors.black};
+  &:hover,
+  &:focus,
+  &:active {
+    color: ${props => props.theme.colors.black};
   }
 `;
 
@@ -46,37 +56,41 @@ class Teams extends React.Component {
     }
 
     return (
-      <Wrapper>
-        <header>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <h1>Teams for {username}</h1>
-              <hr />
+      <ThemeProvider theme={theme}>
+        <Wrapper>
+          <header>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <h1>Teams for {username}</h1>
+                <hr />
+              </Grid>
             </Grid>
-          </Grid>
-        </header>
-        <main>
-          <Grid container spacing={3}>
-            <Grid item xs={12} style={{ textAlign: 'right' }}>
-              <PopUpMenu {...this.props} />
-            </Grid>
-            <Grid item xs={12}>
-              <ul>
-                {teams.map(el => {
-                  const { uuid, name, channels, id } = el;
-                  const channel = channels[0];
+          </header>
+          <main>
+            <Grid container spacing={3}>
+              <Grid item xs={12} style={{ textAlign: 'right' }}>
+                <PopUpMenu {...this.props} />
+              </Grid>
+              <Grid item xs={12}>
+                <ul>
+                  {teams.map(el => {
+                    const { uuid, name, channels, id } = el;
+                    const channel = channels[0];
 
-                  return (
-                    <li key={`${uuid}-${id}`}>
-                      <Link to={`/dashboard/view/team/${uuid}/channel/${channel.uuid}`}>{name}</Link>
-                    </li>
-                  );
-                })}
-              </ul>
+                    return (
+                      <li key={`${uuid}-${id}`}>
+                        <StyledTextLink to={`/dashboard/view/team/${uuid}/channel/${channel.uuid}`}>
+                          {name}
+                        </StyledTextLink>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </Grid>
             </Grid>
-          </Grid>
-        </main>
-      </Wrapper>
+          </main>
+        </Wrapper>
+      </ThemeProvider>
     );
   }
 }
