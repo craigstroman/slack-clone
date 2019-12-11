@@ -2,10 +2,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import {
-  Button, Col, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter,
-} from 'reactstrap';
+  Button,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Snackbar,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@material-ui/core';
+import styled from 'styled-components';
 import gql from 'graphql-tag';
 import meQuery from '../../shared/queries/team';
+
+const StyledDialog = styled(Dialog)`
+  .MuiDialogTitle-root {
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 1rem;
+  }
+  .MuiDialogActions-root {
+    border-top: 1px solid #dee2e6;
+    margin-top: 1rem;
+  }
+`;
 
 class AddChannel extends React.Component {
   constructor(props) {
@@ -13,14 +35,16 @@ class AddChannel extends React.Component {
 
     this.state = {
       channelName: '',
+      fieldErrors: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.validateForm = this.validateForm.bind(this);
   }
 
-  handleChange = (e) => {
+  handleChange = e => {
     const { name, value } = e.target;
 
     if (name === 'name') {
@@ -30,94 +54,105 @@ class AddChannel extends React.Component {
         });
       }
     }
-  }
+  };
+
+  validateForm = () => {
+    const { channelName } = this.state;
+    const errors = {};
+
+    if (!channelName.length) {
+      errors.channel = 'Channel name is required.';
+    }
+
+    if (Object.keys(errors).length >= 1) {
+      this.setState({
+        fieldErrors: errors,
+      });
+
+      return false;
+    }
+
+    this.setState({
+      fieldErrors: errors,
+    });
+
+    return true;
+  };
 
   handleSubmit = async () => {
     const { channelName } = this.state;
     const { mutate, teamId } = this.props;
 
-    await mutate({
-      variables: { teamId, name: channelName },
-      optimisticResponse: {
-        createChannel: {
-          __typename: 'Mutation',
-          ok: true,
-          channel: {
-            __typename: 'Channel',
-            id: -1,
-            uuid: -1,
-            name: channelName,
+    if (this.validateForm()) {
+      await mutate({
+        variables: { teamId, name: channelName },
+        optimisticResponse: {
+          createChannel: {
+            __typename: 'Mutation',
+            ok: true,
+            channel: {
+              __typename: 'Channel',
+              id: -1,
+              uuid: -1,
+              name: channelName,
+            },
           },
         },
-      },
-      update: (store, { data: { createChannel } }) => {
-        const { ok, channel } = createChannel;
+        update: (store, { data: { createChannel } }) => {
+          const { ok, channel } = createChannel;
 
-        if (!ok) {
-          return;
-        }
+          if (!ok) {
+            return;
+          }
 
-        const data = store.readQuery({ query: meQuery });
-        const teamIdx = data.me.teams.findIndex(el => (el.id === teamId));
+          const data = store.readQuery({ query: meQuery });
+          const teamIdx = data.me.teams.findIndex(el => el.id === teamId);
 
-        data.me.teams[teamIdx].channels.push(channel);
+          data.me.teams[teamIdx].channels.push(channel);
 
-        store.writeQuery({ query: meQuery, data });
-      },
-    });
+          store.writeQuery({ query: meQuery, data });
+        },
+      });
 
-    this.handleClose();
-  }
+      this.handleClose();
+    }
+  };
 
   handleClose = () => {
     const { handleCloseAddChannel } = this.props;
 
-    this.setState({ channelName: '' });
+    this.setState({ channelName: '', fieldErrors: '' });
 
     handleCloseAddChannel();
-  }
+  };
 
   render() {
     const { isOpen } = this.props;
-    const { channelName } = this.state;
+    const { channelName, fieldErrors } = this.state;
 
     return (
-      <Modal isOpen={isOpen}>
-        <ModalHeader>Create a channel</ModalHeader>
-        <ModalBody>
-          <Form onSubmit={(e) => { e.preventDefault(); }}>
-            <FormGroup row>
-              <Label for="name" md={4}>
-                Channel Name:
-              </Label>
-              <Col md={8}>
-                <Input
-                  type="text"
-                  name="name"
-                  placeholder="# e.g. Leads"
-                  value={channelName}
-                  onChange={e => this.handleChange(e)}
-                />
-              </Col>
-            </FormGroup>
-          </Form>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            color="secondary"
-            onClick={() => this.handleClose()}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            color="primary"
-            onClick={() => this.handleSubmit()}
-          >
+      <StyledDialog open={isOpen} maxWidth="md" fullWidth={true} onClose={this.handleClose}>
+        <DialogTitle id="form-dialog-title">Create a channel</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Enter a channel name.</DialogContentText>
+          <TextField
+            type="text"
+            name="name"
+            label="# e.g. Leads"
+            value={channelName}
+            error={!fieldErrors.channel === false}
+            helperText={fieldErrors.channel}
+            onChange={e => this.handleChange(e)}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => this.handleClose()}> Cancel</Button>
+          <Button variant="contained" color="primary" onClick={this.handleSubmit}>
             Create Channel
           </Button>
-        </ModalFooter>
-      </Modal>
+        </DialogActions>
+      </StyledDialog>
     );
   }
 }
