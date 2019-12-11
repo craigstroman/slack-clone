@@ -58,6 +58,7 @@ class Login extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.validateForm = this.validateForm.bind(this);
     this.togglePasswordMask = this.togglePasswordMask.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   togglePasswordMask = () => {
@@ -80,7 +81,7 @@ class Login extends React.Component {
    * @param      {Object}   e   The event object.
    */
   handleChange = e => {
-    const { name, value } = e.target;
+    const { name, value, keyCode, which } = e.target;
 
     if (name === 'email') {
       this.setState({
@@ -92,6 +93,19 @@ class Login extends React.Component {
       this.setState({
         password: value,
       });
+    }
+  };
+
+  /**
+   * Determines what key is pressed in the input field.
+   *
+   * @param      {Object}  e       The event object.
+   */
+  handleKeyPress = e => {
+    const keyCode = e.keyCode ? e.keyCode : e.which;
+
+    if (keyCode === 13) {
+      this.handleSubmit(e);
     }
   };
 
@@ -194,6 +208,7 @@ class Login extends React.Component {
                     variant="outlined"
                     onChange={e => this.handleChange(e)}
                     onBlur={this.validateForm}
+                    onKeyPress={e => this.handleKeyPress(e)}
                     error={!fieldErrors.email === false}
                     helperText={fieldErrors.email}
                     value={email}
@@ -209,6 +224,7 @@ class Login extends React.Component {
                     variant="outlined"
                     onChange={e => this.handleChange(e)}
                     onBlur={this.validateForm}
+                    onKeyPress={e => this.handleKeyPress(e)}
                     error={!fieldErrors.password === false}
                     helperText={fieldErrors.password}
                     value={password}
