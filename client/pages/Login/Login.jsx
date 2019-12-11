@@ -81,7 +81,7 @@ class Login extends React.Component {
    * @param      {Object}   e   The event object.
    */
   handleChange = e => {
-    const { name, value, keyCode, which } = e.target;
+    const { name, value } = e.target;
 
     if (name === 'email') {
       this.setState({
