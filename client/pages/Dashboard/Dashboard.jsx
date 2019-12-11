@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
+import styled, { ThemeProvider } from 'styled-components';
 import meQuery from '../../shared/queries/team';
 import MainSidebar from '../../components/MainSidebar/MainSidebar';
 import ChannelMessages from '../../components/Messages/ChannelMessages/ChannelMessages';
@@ -9,7 +10,49 @@ import UserMessages from '../../components/Messages/UserMessages/UserMessages';
 import UserInput from '../../components/MessageInput/UserInput/UserInput';
 import Header from '../../components/Header/Header';
 import NoTeams from '../../components/NoTeams/NoTeams';
-import './Dashboard.scss';
+import theme from '../../shared/themes';
+
+const Wrapper = styled.div`
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 250px 1fr;
+  aside {
+    display: grid;
+    grid-template-columns: 250px;
+  }
+  main {
+    display: grid;
+  }
+`;
+
+const Sidebar = styled.div`
+  background-color: ${props => props.theme.colors.valentino};
+  grid-column: 1;
+`;
+
+const Content = styled.div`
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+  header {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  section {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  footer {
+    grid-column: 1;
+    grid-row: 3;
+  }
+`;
+
+const Messages = styled.div`
+  border-bottom: 1px solid ${props => props.theme.colors.black};
+  border-top: 1px solid ${props => props.theme.colors.black};
+  height: 98%;
+`;
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -160,91 +203,91 @@ class Dashboard extends React.Component {
     const isOwner = team.admin;
 
     return (
-      <div className="dashboard-container">
-        <aside>
-          <div className="main-sidebar">
-            <MainSidebar
-              channels={team.channels}
-              directMessageUsers={team.directMessageMembers}
-              teamMembers={teamMembers}
-              currentUser={user}
-              teamName={teamName}
-              teamId={team.id}
-              teamUUID={team.uuid}
-              isOwner={isOwner}
-              {...this.props}
-            />
-          </div>
-        </aside>
-        <main>
-          <div className="main-content">
-            <header>
-              <div className="header-container">
+      <ThemeProvider theme={theme}>
+        <Wrapper>
+          <aside>
+            <Sidebar>
+              <MainSidebar
+                channels={team.channels}
+                directMessageUsers={team.directMessageMembers}
+                teamMembers={teamMembers}
+                currentUser={user}
+                teamName={teamName}
+                teamId={team.id}
+                teamUUID={team.uuid}
+                isOwner={isOwner}
+                {...this.props}
+              />
+            </Sidebar>
+          </aside>
+          <main>
+            <Content>
+              <header>
                 <Header channels={team.channels} users={teamMembers} {...this.props} />
-              </div>
-            </header>
-            <Fragment>
-              {match.params.channelId && channelId !== null && (
-                <Fragment>
-                  <section>
-                    <div className="messages-container">
-                      <ChannelMessages
-                        channelId={parseInt(channelId, 10)}
-                        channels={team.channels}
-                        {...this.props}
-                      />
-                    </div>
-                  </section>
-                </Fragment>
-              )}
-              {match.params.userId && userId !== null && (
-                <Fragment>
-                  <section>
-                    <div className="messages-container">
-                      <UserMessages
-                        teamId={parseInt(team.id, 10)}
-                        userId={parseInt(userId, 10)}
-                        {...this.props}
-                      />
-                    </div>
-                  </section>
-                </Fragment>
-              )}
-            </Fragment>
-            <Fragment>
-              {match.params.channelId && (
-                <Fragment>
-                  <footer>
-                    <div className="input-container">
-                      <ChannelInput
-                        channelId={parseInt(channelId, 10)}
-                        channels={team.channels}
-                        {...this.props}
-                      />
-                    </div>
-                  </footer>
-                </Fragment>
-              )}
-              {match.params.userId && (
-                <Fragment>
-                  <footer>
-                    <div className="input-container">
-                      <UserInput
-                        teamId={team.id}
-                        receiverId={parseInt(userId, 10)}
-                        receiverUUID={userUUID}
-                        username={itemName}
-                        users={teamMembers}
-                        {...this.props}
-                      />
-                    </div>
-                  </footer>
-                </Fragment>
-              )}
-            </Fragment>
-          </div>
-        </main>
-      </div>
+              </header>
+              <Fragment>
+                {match.params.channelId && channelId !== null && (
+                  <Fragment>
+                    <section>
+                      <Messages>
+                        <ChannelMessages
+                          channelId={parseInt(channelId, 10)}
+                          channels={team.channels}
+                          {...this.props}
+                        />
+                      </Messages>
+                    </section>
+                  </Fragment>
+                )}
+                {match.params.userId && userId !== null && (
+                  <Fragment>
+                    <section>
+                      <Messages>
+                        <UserMessages
+                          teamId={parseInt(team.id, 10)}
+                          userId={parseInt(userId, 10)}
+                          {...this.props}
+                        />
+                      </Messages>
+                    </section>
+                  </Fragment>
+                )}
+              </Fragment>
+              <Fragment>
+                {match.params.channelId && (
+                  <Fragment>
+                    <footer>
+                      <div className="input-container">
+                        <ChannelInput
+                          channelId={parseInt(channelId, 10)}
+                          channels={team.channels}
+                          {...this.props}
+                        />
+                      </div>
+                    </footer>
+                  </Fragment>
+                )}
+                {match.params.userId && (
+                  <Fragment>
+                    <footer>
+                      <div className="input-container">
+                        <UserInput
+                          teamId={team.id}
+                          receiverId={parseInt(userId, 10)}
+                          receiverUUID={userUUID}
+                          username={itemName}
+                          users={teamMembers}
+                          {...this.props}
+                        />
+                      </div>
+                    </footer>
+                  </Fragment>
+                )}
+              </Fragment>
+            </Content>
+          </main>
+        </Wrapper>
+      </ThemeProvider>
     );
   }
 }
