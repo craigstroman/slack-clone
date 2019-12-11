@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import meQuery from '../../shared/queries/team';
 import MainSidebar from '../../components/MainSidebar/MainSidebar';
-import TeamSidebar from '../../components/TeamSidebar/TeamSidebar';
 import ChannelMessages from '../../components/Messages/ChannelMessages/ChannelMessages';
 import ChannelInput from '../../components/MessageInput/ChannelInput/ChannelInput';
 import UserMessages from '../../components/Messages/UserMessages/UserMessages';
