@@ -147,7 +147,7 @@ class AddChannel extends React.Component {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => this.handleClose()}> Cancel</Button>
+          <Button onClick={() => this.handleClose()}>Cancel</Button>
           <Button variant="contained" color="primary" onClick={this.handleSubmit}>
             Create Channel
           </Button>
