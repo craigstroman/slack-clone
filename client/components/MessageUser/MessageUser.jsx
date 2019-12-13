@@ -76,7 +76,7 @@ class MessageUser extends React.Component {
               const el = childNodes[0];
 
               if (el.hasAttribute('value-object')) {
-                const valueObject = JSON.parse(el.getAttribute('value-object'));
+                const valueObject = JSON.parse(el.getAttribute('value-dobject'));
 
                 this.setState({ value: valueObject });
               }
