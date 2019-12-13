@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import {
-  Button, Col, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter,
-} from 'reactstrap';
-import Downshift from 'downshift';
-import './MessageUser.scss';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import styled from 'styled-components';
+
+const StyledDialog = styled(Dialog)`
+  .MuiDialogTitle-root {
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 1rem;
+  }
+  .MuiDialogActions-root {
+    border-top: 1px solid #dee2e6;
+    margin-top: 1rem;
+  }
+`;
 
 class MessageUser extends React.Component {
   constructor(props) {
@@ -19,7 +28,10 @@ class MessageUser extends React.Component {
 
   render() {
     const {
-      open, handleCloseDirectMessageModal, handleMessageUser, data: { loading, getTeamMembers },
+      open,
+      handleCloseDirectMessageModal,
+      handleMessageUser,
+      data: { loading, getTeamMembers },
     } = this.props;
     const { value } = this.state;
 
@@ -30,76 +42,60 @@ class MessageUser extends React.Component {
     const items = getTeamMembers;
 
     return (
-      <Modal className="direct-messages__container" isOpen={open}>
-        <ModalHeader>Direct Messages</ModalHeader>
-        <ModalBody>
-          <Form onSubmit={(e) => { e.preventDefault(); }}>
-            <Downshift
-              onChange={(selection) => {
-                this.setState({ value: selection });
-              }}
-              itemToString={item => (item ? item.username : '')}
-            >
-              {({
-                getInputProps,
-                getItemProps,
-                getLabelProps,
-                getMenuProps,
-                isOpen,
-                inputValue,
-                highlightedIndex,
-                selectedItem,
-              }) => (
-                <div>
-                  <FormGroup row>
-                    <Label for="name" md={4} {...getLabelProps()}>Find a user to message:</Label>
-                    <Col md={8}>
-                      <Input {...getInputProps()} autoComplete="off" placeholder="Enter username" />
-                    </Col>
-                    <ul {...getMenuProps()} className="user-dropdown">
-                      {isOpen
-                        ? items
-                          .filter(item => !inputValue || item.username.toLowerCase().includes(inputValue))
-                          .map((item, index) => (
-                            <li
-                              {...getItemProps({
-                                key: item.uuid,
-                                index,
-                                item,
-                                style: {
-                                  backgroundColor:
-                                    highlightedIndex === index ? 'lightgray' : 'white',
-                                  fontWeight: selectedItem === item ? 'bold' : 'normal',
-                                },
-                              })}
-                            >
-                              {item.username}
-                            </li>
-                          ))
-                        : null}
-                    </ul>
-                  </FormGroup>
-                </div>
-              )}
-            </Downshift>
-          </Form>
-        </ModalBody>
-        <ModalFooter>
+      <StyledDialog
+        open={open}
+        maxWidth="md"
+        fullWidth={true}
+        onClose={() => handleCloseDirectMessageModal()}
+      >
+        <DialogTitle id="form-dialog-title">Direct Messages</DialogTitle>
+        <DialogContent>
+          <Autocomplete
+            options={items}
+            getOptionLabel={option => option.username}
+            renderOption={option => (
+              <Fragment>
+                <span value-object={JSON.stringify(option)}>{option.username}</span>
+              </Fragment>
+            )}
+            renderInput={params => (
+              <TextField
+                {...params}
+                label="Find a user to message"
+                variant="outlined"
+                fullWidth
+                inputProps={{
+                  ...params.inputProps,
+                  autoComplete: 'disabled', // disable autocomplete and autofill
+                }}
+              />
+            )}
+            onChange={event => {
+              const { target } = event;
+              const { childNodes } = target;
+              const el = childNodes[0];
+
+              if (el.hasAttribute('value-object')) {
+                const valueObject = JSON.parse(el.getAttribute('value-object'));
+
+                this.setState({ value: valueObject });
+              }
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleCloseDirectMessageModal()}>Cancel</Button>
           <Button
-            color="secondary"
-            onClick={() => handleCloseDirectMessageModal()}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
+            variant="contained"
             color="primary"
-            onClick={() => { handleMessageUser(value); }}
+            onClick={() => {
+              handleMessageUser(value);
+            }}
           >
             Go
           </Button>
-        </ModalFooter>
-      </Modal>
+        </DialogActions>
+      </StyledDialog>
     );
   }
 }
@@ -119,8 +115,8 @@ MessageUser.defaultProps = {
   handleCloseDirectMessageModal: () => {},
   handleMessageUser: () => {},
   data: {},
-  teamUUID: null,
-  history: {},
+  // teamUUID: null,
+  // history: {},
 };
 
 MessageUser.propTypes = {
@@ -128,8 +124,8 @@ MessageUser.propTypes = {
   handleCloseDirectMessageModal: PropTypes.func,
   handleMessageUser: PropTypes.func,
   data: PropTypes.object,
-  teamUUID: PropTypes.string,
-  history: PropTypes.object,
+  // teamUUID: PropTypes.string,
+  // history: PropTypes.object,
 };
 
 export default graphql(getTeamMembersQuery)(MessageUser);
