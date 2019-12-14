@@ -4,6 +4,7 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import decode from 'jwt-decode';
 import styled from 'styled-components';
 
 const StyledDialog = styled(Dialog)`
@@ -34,12 +35,17 @@ class MessageUser extends React.Component {
       data: { loading, getTeamMembers },
     } = this.props;
     const { value } = this.state;
+    const token = localStorage.getItem('token');
+    const { user } = decode(token);
+    const { username } = user;
 
     if (loading) {
       return null;
     }
 
-    const items = getTeamMembers;
+    let items = getTeamMembers;
+
+    items = items.filter(el => el.username !== username);
 
     return (
       <StyledDialog
@@ -53,11 +59,7 @@ class MessageUser extends React.Component {
           <Autocomplete
             options={items}
             getOptionLabel={option => option.username}
-            renderOption={option => (
-              <Fragment>
-                <span value-object={JSON.stringify(option)}>{option.username}</span>
-              </Fragment>
-            )}
+            renderOption={option => <Fragment>{option.username}</Fragment>}
             renderInput={params => (
               <TextField
                 {...params}
@@ -72,14 +74,10 @@ class MessageUser extends React.Component {
             )}
             onChange={event => {
               const { target } = event;
-              const { childNodes } = target;
-              const el = childNodes[0];
+              const { textContent } = target;
+              const selectedUser = items.find(el => el.username === textContent);
 
-              if (el.hasAttribute('value-object')) {
-                const valueObject = JSON.parse(el.getAttribute('value-dobject'));
-
-                this.setState({ value: valueObject });
-              }
+              this.setState({ value: selectedUser });
             }}
           />
         </DialogContent>
@@ -91,6 +89,7 @@ class MessageUser extends React.Component {
             onClick={() => {
               handleMessageUser(value);
             }}
+            disabled={!value}
           >
             Go
           </Button>
