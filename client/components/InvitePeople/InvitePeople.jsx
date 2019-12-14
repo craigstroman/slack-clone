@@ -13,6 +13,7 @@ import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import styled from 'styled-components';
 import normalizeErrors from '../../shared/util/normalizeErrors';
+import validateEmail from '../../shared/util/utils';
 
 const StyledDialog = styled(Dialog)`
   .MuiDialogTitle-root {
@@ -67,6 +68,10 @@ class InvitePeople extends React.Component {
 
     if (!email.length) {
       errors.email = 'Email is required.';
+    } else if (email.length) {
+      if (!validateEmail(email)) {
+        errors.email = 'Invalid email.';
+      }
     }
 
     if (Object.keys(errors).length >= 1) {
@@ -141,6 +146,7 @@ class InvitePeople extends React.Component {
             error={!fieldErrors.email === false}
             helperText={fieldErrors.email}
             onChange={e => this.handleChange(e)}
+            onBlur={this.validateForm}
             fullWidth
           />
         </DialogContent>
