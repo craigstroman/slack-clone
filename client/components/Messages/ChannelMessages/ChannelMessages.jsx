@@ -132,6 +132,9 @@ class ChannelMessages extends React.Component {
         <Wrapper>
           <ul>
             {messages.map((message, i) => {
+              const { text, user } = message;
+              const { username } = user;
+
               const calendarStrings = {
                 lastDay: '[Yesterday at] LT',
                 sameDay: '[Today at] LT',
@@ -140,18 +143,17 @@ class ChannelMessages extends React.Component {
                 nextWeek: 'dddd [at] LT',
                 sameElse: 'L',
               };
-
               const createdAt = new Date(message.createdAt);
 
               return (
                 <li key={`${uniqid()}`}>
                   <MessageHeader>
-                    <h6>{message.user.username}</h6>
+                    <h6>{username}</h6>
                     <div>
                       <Moment calendar={calendarStrings}>{createdAt}</Moment>
                     </div>
                   </MessageHeader>
-                  <Message>{message.text}</Message>
+                  <Message>{text}</Message>
                 </li>
               );
             })}
