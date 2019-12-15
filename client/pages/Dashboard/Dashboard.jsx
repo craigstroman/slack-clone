@@ -39,6 +39,8 @@ const Content = styled.div`
     grid-row: 1;
   }
   section {
+    border-bottom: 1px solid ${props => props.theme.colors.black};
+    border-top: 1px solid ${props => props.theme.colors.black};
     grid-column: 1;
     grid-row: 2;
   }
@@ -49,8 +51,6 @@ const Content = styled.div`
 `;
 
 const Messages = styled.div`
-  border-bottom: 1px solid ${props => props.theme.colors.black};
-  border-top: 1px solid ${props => props.theme.colors.black};
   height: 98%;
 `;
 
@@ -257,29 +257,25 @@ class Dashboard extends React.Component {
                 {match.params.channelId && (
                   <Fragment>
                     <footer>
-                      <div className="input-container">
-                        <ChannelInput
-                          channelId={parseInt(channelId, 10)}
-                          channels={team.channels}
-                          {...this.props}
-                        />
-                      </div>
+                      <ChannelInput
+                        channelId={parseInt(channelId, 10)}
+                        channels={team.channels}
+                        {...this.props}
+                      />
                     </footer>
                   </Fragment>
                 )}
                 {match.params.userId && (
                   <Fragment>
                     <footer>
-                      <div className="input-container">
-                        <UserInput
-                          teamId={team.id}
-                          receiverId={parseInt(userId, 10)}
-                          receiverUUID={userUUID}
-                          username={itemName}
-                          users={teamMembers}
-                          {...this.props}
-                        />
-                      </div>
+                      <UserInput
+                        teamId={team.id}
+                        receiverId={parseInt(userId, 10)}
+                        receiverUUID={userUUID}
+                        username={itemName}
+                        users={teamMembers}
+                        {...this.props}
+                      />
                     </footer>
                   </Fragment>
                 )}
