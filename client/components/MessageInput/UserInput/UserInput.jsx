@@ -1,13 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
-import {
-  Col, Form, FormGroup, Input,
-} from 'reactstrap';
+import { Button, TextField } from '@material-ui/core';
+import styled, { ThemeProvider } from 'styled-components';
 import gql from 'graphql-tag';
 import jwt from 'jsonwebtoken';
 import meQuery from '../../../shared/queries/team';
-import './UserInput.scss';
+import theme from '../../../shared/themes';
+
+const Wrapper = styled.div`
+  display: flex;
+  width: 100%;
+  .MuiFormControl-root {
+    text-align: left;
+    width: 100%;
+    .MuiInputBase-root {
+      .MuiInputBase-input {
+        color: ${props => props.theme.colors.black};
+        padding-left: 5px;
+      }
+    }
+  }
+`;
 
 class UserInput extends React.Component {
   constructor(props) {
@@ -26,7 +40,7 @@ class UserInput extends React.Component {
    *
    * @param      {Object}  e   The event object.
    */
-  handleChange = (e) => {
+  handleChange = e => {
     const { name, value } = e.target;
 
     if (name === 'message') {
@@ -34,7 +48,7 @@ class UserInput extends React.Component {
         message: value,
       });
     }
-  }
+  };
 
   /**
    * Submits the form.
@@ -58,13 +72,13 @@ class UserInput extends React.Component {
     if (data.createDirectMessage) {
       this.setState({ message: '' });
     }
-  }
+  };
 
   render() {
     const { users, match } = this.props;
     const { message, isSubmiting } = this.state;
     const token = jwt.decode(localStorage.getItem('token'));
-    const user = users.filter(el => (el.uuid === match.params.userId));
+    const user = users.filter(el => el.uuid === match.params.userId);
 
     let placeHolderText = null;
 
@@ -75,24 +89,22 @@ class UserInput extends React.Component {
     }
 
     return (
-      <div className="input">
-        <Form onSubmit={(e) => { e.preventDefault(); }}>
-          <FormGroup row>
-            <Col md={12}>
-              <Input
-                type="text"
-                name="message"
-                className="form-control"
-                placeholder={placeHolderText}
-                value={message || ''}
-                autoComplete="off"
-                onChange={e => this.handleChange(e)}
-                onKeyUp={(e) => { if (e.keyCode === 13 && !isSubmiting) { this.handleSubmit(); } }}
-              />
-            </Col>
-          </FormGroup>
-        </Form>
-      </div>
+      <ThemeProvider theme={theme}>
+        <Wrapper>
+          <TextField
+            name="message"
+            placeholder={placeHolderText}
+            value={message}
+            autoComplete="off"
+            onChange={e => this.handleChange(e)}
+            onKeyUp={e => {
+              if (e.keyCode === 13 && !isSubmiting) {
+                this.handleSubmit();
+              }
+            }}
+          />
+        </Wrapper>
+      </ThemeProvider>
     );
   }
 }

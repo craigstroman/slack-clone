@@ -1,11 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import {
-  Col, Form, FormGroup, Input,
-} from 'reactstrap';
+import { Button, TextField } from '@material-ui/core';
+import styled, { ThemeProvider } from 'styled-components';
 import gql from 'graphql-tag';
-import './ChannelInput.scss';
+import theme from '../../../shared/themes';
+
+const Wrapper = styled.div`
+  display: flex;
+  width: 100%;
+  .MuiFormControl-root {
+    text-align: left;
+    width: 100%;
+    .MuiInputBase-root {
+      .MuiInputBase-input {
+        color: ${props => props.theme.colors.black};
+        padding-left: 5px;
+      }
+    }
+  }
+`;
 
 class ChannelInput extends React.Component {
   constructor(props) {
@@ -25,7 +39,7 @@ class ChannelInput extends React.Component {
    *
    * @param      {Object}  e       The event object.
    */
-  handleChange = (e) => {
+  handleChange = e => {
     const { name, value } = e.target;
 
     if (name === 'message') {
@@ -33,7 +47,7 @@ class ChannelInput extends React.Component {
         message: value,
       });
     }
-  }
+  };
 
   /**
    * Submits the form.
@@ -53,32 +67,31 @@ class ChannelInput extends React.Component {
     });
 
     this.setState({ message: '' });
-  }
+  };
 
   render() {
     const { channels, match } = this.props;
     const { message, isSubmiting } = this.state;
-    const channel = channels.filter(el => (el.uuid === match.params.channelId));
+    const channel = channels.filter(el => el.uuid === match.params.channelId);
+    const { name } = channel[0];
 
     return (
-      <div className="input">
-        <Form onSubmit={(e) => { e.preventDefault(); }}>
-          <FormGroup row>
-            <Col md={12}>
-              <Input
-                type="text"
-                name="message"
-                className="form-control"
-                placeholder={`Message #${channel[0].name}`}
-                value={message}
-                autoComplete="off"
-                onChange={e => this.handleChange(e)}
-                onKeyUp={(e) => { if (e.keyCode === 13 && !isSubmiting) { this.handleSubmit(); } }}
-              />
-            </Col>
-          </FormGroup>
-        </Form>
-      </div>
+      <ThemeProvider theme={theme}>
+        <Wrapper>
+          <TextField
+            name="message"
+            placeholder={`Message #${name}`}
+            value={message}
+            autoComplete="off"
+            onChange={e => this.handleChange(e)}
+            onKeyUp={e => {
+              if (e.keyCode === 13 && !isSubmiting) {
+                this.handleSubmit();
+              }
+            }}
+          />
+        </Wrapper>
+      </ThemeProvider>
     );
   }
 }
