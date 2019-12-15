@@ -12,6 +12,8 @@ const theme = {
     valentino: '#3F0E40',
     toryBlue: '#1164A3',
     jungleGreen: '#2BAC76',
+
+    // Message colors
     scorpion: '#616061',
   },
   sidebar: {
