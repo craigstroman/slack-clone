@@ -4,8 +4,50 @@ import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import Moment from 'react-moment';
 import uniqid from 'uniqid';
+import styled, { ThemeProvider } from 'styled-components';
 import meQuery from '../../../shared/queries/team';
-import './UserMessages.scss';
+import theme from '../../../shared/themes';
+
+const Wrapper = styled.div`
+  background-color: ${props => props.theme.colors.white};
+  color: ${props => props.theme.colors.black};
+  display: flex;
+  flex-direction: column-reverse;
+  height: 85vh;
+  overflow-y: scroll;
+  ul {
+    list-style-type: none;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding-inline-start: 0;
+    li {
+      margin-bottom: 10px;
+      padding-left: 10px;
+    }
+  }
+`;
+
+const MessageHeader = styled.header`
+  display: block;
+  width: 100%;
+  h6 {
+    display: inline-block;
+    font-weight: bold;
+    margin-right: 20px;
+    text-align: left;
+  }
+  div {
+    color: ${props => props.theme.colors.scorpion};
+    display: inline-block;
+    font-size: 0.875em;
+  }
+`;
+
+const Message = styled.div`
+  display: block;
+  text-align: left;
+  width: 100%;
+`;
 
 const newDirectMessageSubscription = gql`
   subscription($teamId: Int!, $userId: Int!) {
@@ -60,71 +102,67 @@ class UserMessages extends React.Component {
   subscribe = (teamId, userId) => {
     const { data } = this.props;
 
-    return data
-      .subscribeToMore({
-        document: newDirectMessageSubscription,
-        variables: {
-          teamId,
-          userId,
-        },
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData) {
-            return prev;
-          }
+    return data.subscribeToMore({
+      document: newDirectMessageSubscription,
+      variables: {
+        teamId,
+        userId,
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData) {
+          return prev;
+        }
 
-          return {
-            ...prev,
-            directMessages: [...prev.directMessages, subscriptionData.newDirectMessage],
-          };
-        },
-      });
-  }
+        return {
+          ...prev,
+          directMessages: [...prev.directMessages, subscriptionData.newDirectMessage],
+        };
+      },
+    });
+  };
 
   render() {
-    const { data: { loading, directMessages } } = this.props;
+    const {
+      data: { loading, directMessages },
+    } = this.props;
 
     if (loading || typeof directMessages === 'undefined') {
       return null;
     }
 
     return (
-      <div className="messages">
-        <ul className="messages-list">
-          {directMessages.map((message, i) => {
-            const calendarStrings = {
-              lastDay: '[Yesterday at] LT',
-              sameDay: '[Today at] LT',
-              nextDay: '[Tomorrow at] LT',
-              lastWeek: 'dddd [at] LT',
-              nextWeek: 'dddd [at] LT',
-              sameElse: 'L',
-            };
+      <ThemeProvider theme={theme}>
+        <Wrapper>
+          <ul>
+            {directMessages.map((message, i) => {
+              const { sender, text } = message;
+              const { username } = sender;
 
-            const createdAt = new Date(message.createdAt);
+              const calendarStrings = {
+                lastDay: '[Yesterday at] LT',
+                sameDay: '[Today at] LT',
+                nextDay: '[Tomorrow at] LT',
+                lastWeek: 'dddd [at] LT',
+                nextWeek: 'dddd [at] LT',
+                sameElse: 'L',
+              };
+              const createdAt = new Date(message.createdAt);
 
-            return (
-              <li
-                key={`${uniqid()}`}
-                className="messages-list__item"
-              >
-                <div className="message-header">
-                  <div className="message-user">
-                    {message.sender.username}
-                  </div>
-                  <div className="message-date">
-                    <Moment calendar={calendarStrings}>
-                      {createdAt}
-                    </Moment>
-                  </div>
-                </div>
-                <div className="message-text">
-                  {message.text}
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+              return (
+                <li key={`${uniqid()}`}>
+                  <MessageHeader>
+                    <h6>{username}</h6>
+                    <div>
+                      <Moment calendar={calendarStrings}>{createdAt}</Moment>
+                    </div>
+                  </MessageHeader>
+                  <Message>{text}</Message>
+                </li>
+              );
+            })}
+          </ul>
+        </Wrapper>
+      </ThemeProvider>
     );
   }
 }
