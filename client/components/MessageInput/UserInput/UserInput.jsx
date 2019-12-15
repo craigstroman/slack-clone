@@ -79,13 +79,14 @@ class UserInput extends React.Component {
     const { message, isSubmiting } = this.state;
     const token = jwt.decode(localStorage.getItem('token'));
     const user = users.filter(el => el.uuid === match.params.userId);
+    const { username } = user[0];
 
     let placeHolderText = null;
 
     if (token.user.id === user[0].id) {
       placeHolderText = 'Jot something down';
     } else {
-      placeHolderText = `Message ${user[0].username}`;
+      placeHolderText = `Message ${username}`;
     }
 
     return (
