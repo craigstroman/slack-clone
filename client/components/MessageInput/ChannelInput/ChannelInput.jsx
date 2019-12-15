@@ -15,7 +15,7 @@ const Wrapper = styled.div`
     .MuiInputBase-root {
       .MuiInputBase-input {
         color: ${props => props.theme.colors.black};
-        padding-left: 5px;
+        padding-left: 10px;
       }
     }
   }
