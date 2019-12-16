@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-// import { Button, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Button, Grid, TextField } from '@material-ui/core';
 import styled, { ThemeProvider } from 'styled-components';
 import gql from 'graphql-tag';
@@ -44,6 +43,11 @@ class CreateTeam extends React.Component {
     this.validateForm = this.validateForm.bind(this);
   }
 
+  /**
+   * Validates the form.
+   *
+   * @return     {boolean}  The result of the form validation.
+   */
   validateForm = () => {
     const { name } = this.state;
     const errors = {};
@@ -67,12 +71,20 @@ class CreateTeam extends React.Component {
     return true;
   };
 
+  /**
+   * Updates the form field.
+   *
+   * @param      {Object}  e       The event object.
+   */
   handleChange = e => {
     const { value } = e.target;
 
     this.setState({ name: value });
   };
 
+  /**
+   * Submits the team name.
+   */
   handleSubmit = async () => {
     const { name } = this.state;
     let response = null;
@@ -103,8 +115,6 @@ class CreateTeam extends React.Component {
 
   render() {
     const { name, errors, fieldErrors } = this.state;
-
-    console.log('fieldErrors: ', fieldErrors);
 
     return (
       <ThemeProvider theme={theme}>
