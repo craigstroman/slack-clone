@@ -12,7 +12,7 @@ const Wrapper = styled.div`
   color: ${props => props.theme.colors.black};
   display: flex;
   flex-direction: column-reverse;
-  height: 85vh;
+  height: 89vh;
   overflow-y: scroll;
   ul {
     list-style-type: none;
@@ -29,7 +29,7 @@ const Wrapper = styled.div`
 const MessageHeader = styled.header`
   display: block;
   width: 100%;
-  h6 {
+  h3 {
     display: inline-block;
     font-weight: bold;
     margin-right: 20px;
@@ -148,7 +148,7 @@ class ChannelMessages extends React.Component {
               return (
                 <li key={`${uniqid()}`}>
                   <MessageHeader>
-                    <h6>{username}</h6>
+                    <h3>{username}</h3>
                     <div>
                       <Moment calendar={calendarStrings}>{createdAt}</Moment>
                     </div>
