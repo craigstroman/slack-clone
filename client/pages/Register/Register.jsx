@@ -153,7 +153,7 @@ class Register extends React.Component {
           <header>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <h1>Register</h1>
+                <h1>Slack Clone - Register</h1>
                 <hr />
               </Grid>
             </Grid>
