@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import { Button, Grid, TextField } from '@material-ui/core';
 import validateEmail from '../../shared/util/utils';
 
 const Wrapper = styled.div`
@@ -58,11 +56,11 @@ class Register extends React.Component {
    *
    * @param      {Object}  e       The event object.
    */
-  handleChange = (e) => {
+  handleChange = e => {
     const { name, value } = e.target;
 
     this.setState({ [name]: value });
-  }
+  };
 
   /**
    * Validates the form.
@@ -70,12 +68,7 @@ class Register extends React.Component {
    * @return     {Boolean}  Indicates if the form is valid or invalid.
    */
   validateForm = () => {
-    const {
-      email,
-      username,
-      password,
-      passwordConfirmation,
-    } = this.state;
+    const { email, username, password, passwordConfirmation } = this.state;
     const errors = {};
 
     if (!email.length) {
@@ -118,16 +111,15 @@ class Register extends React.Component {
       fieldErrors: errors,
     });
 
-
     return true;
-  }
+  };
 
   /**
    * Submits the registration.
    *
    * @param      {Object}  e       The event object.
    */
-  handleSubmit = async (e) => {
+  handleSubmit = async e => {
     const { username, email, password } = this.state;
 
     if (this.validateForm()) {
@@ -150,16 +142,10 @@ class Register extends React.Component {
         this.setState(err);
       }
     }
-  }
+  };
 
   render() {
-    const {
-      username,
-      email,
-      password,
-      passwordConfirmation,
-      fieldErrors,
-    } = this.state;
+    const { username, email, password, passwordConfirmation, fieldErrors } = this.state;
 
     return (
       <Wrapper>
@@ -236,12 +222,7 @@ class Register extends React.Component {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Button
-                    type="button"
-                    variant="contained"
-                    color="primary"
-                    onClick={this.handleSubmit}
-                  >
+                  <Button type="button" variant="contained" color="primary" onClick={this.handleSubmit}>
                     Register
                   </Button>
                 </Grid>
