@@ -5,6 +5,7 @@ import { Button, Grid, TextField } from '@material-ui/core';
 import styled, { ThemeProvider } from 'styled-components';
 import gql from 'graphql-tag';
 import theme from '../../shared/themes';
+import PopUpMenu from '../PopUpMenu/PopUpMenu';
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -89,7 +90,7 @@ class CreateTeam extends React.Component {
     const { name } = this.state;
     let response = null;
 
-    if (name.length) {
+    if (this.validateForm()) {
       const { mutate, history } = this.props;
 
       try {
@@ -134,6 +135,9 @@ class CreateTeam extends React.Component {
               }}
             >
               <Grid container spacing={3}>
+                <Grid item xs={12} style={{ textAlign: 'right' }}>
+                  <PopUpMenu {...this.props} />
+                </Grid>
                 <Grid item xs={12}>
                   <StyledTextField
                     label="Team Name *"
