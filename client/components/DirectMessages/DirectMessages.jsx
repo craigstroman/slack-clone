@@ -17,12 +17,12 @@ const Heading = styled.div`
   margin: 0 auto;
   text-align: center;
   width: 100%;
-  h5,
+  h3,
   button {
     color: ${props => props.theme.colors.shadyLady};
     float: left;
   }
-  h5 {
+  h3 {
     padding-top: 20px;
     margin-left: ${props => props.theme.sidebar.marginLeft};
   }
@@ -147,7 +147,7 @@ class DirectMessages extends React.Component {
         <Fragment>
           <Wrapper>
             <Heading>
-              <h5>Direct Messages</h5>
+              <h3>Direct Messages</h3>
               <IconButton
                 className="sidebar-heading__action"
                 onClick={() => this.handleOpenDirectMessageModal()}

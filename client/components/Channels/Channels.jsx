@@ -17,12 +17,12 @@ const Heading = styled.div`
   margin: 0 auto;
   text-align: center;
   width: 100%;
-  h5,
+  h3,
   button {
     color: ${props => props.theme.colors.shadyLady};
     float: left;
   }
-  h5 {
+  h3 {
     padding-top: 20px;
     margin-left: ${props => props.theme.sidebar.marginLeft};
   }
@@ -97,7 +97,7 @@ class Channels extends React.Component {
         <Fragment>
           <Wrapper>
             <Heading>
-              <h5>Channels</h5>
+              <h3>Channels</h3>
               {isOwner && (
                 <IconButton onClick={() => this.handleOpenAddChannel()}>
                   <FontAwesomeIcon icon={faPlusCircle} />

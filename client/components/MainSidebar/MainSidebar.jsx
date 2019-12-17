@@ -43,12 +43,12 @@ const Invite = styled.section`
   display: block;
   height: 40px;
   width: 100%;
-  h5,
+  h3,
   button {
     float: left;
   }
 
-  h5 {
+  h3 {
     margin-left: ${props => props.theme.sidebar.marginLeft};
     padding-top: 8px;
   }
@@ -56,7 +56,7 @@ const Invite = styled.section`
   button {
     bottom: 13px;
     color: ${props => props.theme.colors.shadyLady};
-    margin-left: 10px;
+    margin-left: 5px;
   }
 `;
 
@@ -190,7 +190,7 @@ class MainSidebar extends React.Component {
             </Fragment>
             {isOwner && (
               <Invite>
-                <h5>Invite People To Join</h5>
+                <h3>Invite People To Join</h3>
                 <IconButton
                   type="button"
                   className="sidebar-heading__action"
