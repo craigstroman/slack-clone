@@ -9,6 +9,7 @@ import client from './apollo';
 const GlobalStyles = createGlobalStyle`
   html,
   body {
+    font-family: arial, helvetica, sans-serif;
     height: 100%;
     margin: 0;
     padding: 0;
@@ -17,6 +18,17 @@ const GlobalStyles = createGlobalStyle`
   #app {
     height: 100%;
     overflow: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-block-start: 0;
+    margin-block-end: 0;
+
   }
 `;
 
