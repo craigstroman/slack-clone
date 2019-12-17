@@ -15,6 +15,7 @@ const Wrapper = styled.div`
 `;
 
 const Header = styled.header`
+  margin-bottom: 20px;
   h2 {
     color: ${props => props.theme.colors.white};
     text-align: center;
@@ -24,7 +25,7 @@ const Header = styled.header`
 const User = styled.div`
   margin: 0 auto;
   text-align: center;
-  h6 {
+  h3 {
     color: ${props => props.theme.colors.white};
     display: inline-block;
     text-align: center;
@@ -49,6 +50,7 @@ const Invite = styled.section`
 
   h5 {
     margin-left: ${props => props.theme.sidebar.marginLeft};
+    padding-top: 8px;
   }
 
   button {
@@ -158,7 +160,7 @@ class MainSidebar extends React.Component {
             <h2>{teamName}</h2>
             <User>
               <FontAwesomeIcon icon={faCircle} className="user-status" />
-              <h6>{currentUser.username}</h6>
+              <h3>{currentUser.username}</h3>
             </User>
           </Header>
           <section>

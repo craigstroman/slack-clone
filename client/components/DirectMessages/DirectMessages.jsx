@@ -23,10 +23,8 @@ const Heading = styled.div`
     float: left;
   }
   h5 {
+    padding-top: 20px;
     margin-left: ${props => props.theme.sidebar.marginLeft};
-  }
-  button {
-    bottom: 13px;
   }
   ${clearFix()}
 `;
