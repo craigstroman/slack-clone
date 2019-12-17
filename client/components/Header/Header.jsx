@@ -36,7 +36,7 @@ const Header = props => {
     <Wrapper>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <h4>{title}</h4>
+          <h3>{title}</h3>
         </Grid>
         <Grid item xs={6} style={{ textAlign: 'left' }}>
           {match.params.channelId && <FontAwesomeIcon icon={faUserAlt} />}
