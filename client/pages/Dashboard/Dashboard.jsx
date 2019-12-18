@@ -9,7 +9,7 @@ import ChannelInput from '../../components/MessageInput/ChannelInput/ChannelInpu
 import UserMessages from '../../components/Messages/UserMessages/UserMessages';
 import UserInput from '../../components/MessageInput/UserInput/UserInput';
 import Header from '../../components/Header/Header';
-import NoTeams from '../../components/NoTeams/NoTeams';
+import NoTeams from '../Teams/NoTeams';
 import theme from '../../shared/themes';
 
 const Wrapper = styled.div`
