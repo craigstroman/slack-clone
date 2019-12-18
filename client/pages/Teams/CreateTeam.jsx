@@ -5,7 +5,7 @@ import { Button, Grid, TextField } from '@material-ui/core';
 import styled, { ThemeProvider } from 'styled-components';
 import gql from 'graphql-tag';
 import theme from '../../shared/themes';
-import PopUpMenu from '../PopUpMenu/PopUpMenu';
+import PopUpMenu from '../../components/PopUpMenu/PopUpMenu';
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -115,7 +115,7 @@ class CreateTeam extends React.Component {
   };
 
   render() {
-    const { name, errors, fieldErrors } = this.state;
+    const { name, fieldErrors } = this.state;
 
     return (
       <ThemeProvider theme={theme}>
