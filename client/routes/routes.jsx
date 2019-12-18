@@ -5,7 +5,7 @@ import PrivateRoute from '../shared/util/privateRoutes';
 import Home from '../pages/Home/Home';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import Register from '../pages/Register/Register';
-import CreateTeam from '../components/CreateTeam/CreateTeam';
+import CreateTeam from '../pages/Teams/CreateTeam';
 import Teams from '../pages/Teams/Teams';
 
 const Routes = () => (
