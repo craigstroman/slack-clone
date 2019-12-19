@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import {
   Button,
-  Grid,
-  IconButton,
-  InputAdornment,
-  Snackbar,
   TextField,
   Dialog,
   DialogActions,

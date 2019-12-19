@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
-import { Button, TextField } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import styled, { ThemeProvider } from 'styled-components';
 import gql from 'graphql-tag';
 import jwt from 'jsonwebtoken';

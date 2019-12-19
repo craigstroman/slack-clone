@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import { CssBaseline, Container, Grid } from '@material-ui/core';
+import { CssBaseline, Grid } from '@material-ui/core';
 import Login from '../Login/Login';
 
 const Header = styled.header`

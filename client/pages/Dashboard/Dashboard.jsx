@@ -104,8 +104,7 @@ class Dashboard extends React.Component {
    */
   handleChangeTeam = (teamName, teamId, teamUUID) => {
     const {
-      data: { loading, me },
-      match,
+      data: { me },
       history,
     } = this.props;
     const { teams } = me;
