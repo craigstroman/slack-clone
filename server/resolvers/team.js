@@ -19,7 +19,7 @@ export default {
           model: models.User,
           raw: true,
         },
-      )
+      );
     }),
   },
   Mutation: {
@@ -34,10 +34,7 @@ export default {
      */
     addTeamMember: requiresAuth.createResolver(async (parent, { email, teamId }, { models, user }) => {
       try {
-        const memberPromise = models.Member.findOne(
-          { where: { teamId, userId: user.id } },
-          { raw: true },
-        );
+        const memberPromise = models.Member.findOne({ where: { teamId, userId: user.id } }, { raw: true });
         const userToAddPromise = models.User.findOne({ where: { email } }, { raw: true });
         const [member, userToAdd] = await Promise.all([memberPromise, userToAddPromise]);
         if (!member.admin) {
@@ -76,10 +73,18 @@ export default {
       try {
         const response = await models.sequelize.transaction(async () => {
           args['uuid'] = shortid.generate();
+          args['channelUUID'] = '';
 
           const team = await models.Team.create({ ...args });
 
-          await models.Channel.create({ uuid: shortid.generate(), name: 'general', public: true, teamId: team.id });
+          const channel = await models.Channel.create({
+            uuid: shortid.generate(),
+            name: 'general',
+            public: true,
+            teamId: team.id,
+          });
+
+          team.channelUUID = channel.uuid;
 
           await models.Member.create({ teamId: team.id, userId: user.id, admin: true });
 
@@ -89,6 +94,7 @@ export default {
         return {
           ok: true,
           team: response,
+          channelUUID: response.channelUUID,
         };
       } catch (err) {
         console.log(err);
@@ -102,16 +108,13 @@ export default {
   Team: {
     channels: ({ id }, args, { models }) => models.Channel.findAll({ where: { teamId: id } }),
     directMessageMembers: ({ id }, args, { models, user }) => {
-      // console.log('directMessageMembers: ');
-      // console.log('user: ', user);
-      // console.log('id: ', id);
       return models.sequelize.query(
         'select distinct on (u.id) u.id, u.uuid, u.username from users as u join direct_messages as dm on (u.id = dm.sender_id) or (u.id = dm.receiver_id) where (:currentUserId = dm.sender_id or :currentUserId = dm.receiver_id) and dm.team_id = :teamId',
         {
           replacements: { currentUserId: user.id, teamId: id },
           model: models.User,
           raw: true,
-        }
+        },
       );
     },
     teamMembers: ({ id }, args, { models, user }) => {
@@ -121,8 +124,8 @@ export default {
           replacements: [id],
           model: models.User,
           raw: true,
-        }
+        },
       );
-    }
+    },
   },
 };

@@ -14,6 +14,7 @@ export default `
     team: Team
     uuid: String!
     errors: [Error!]
+    channelUUID: String!
   }
 
   type Query {
