@@ -20,6 +20,10 @@ const GlobalStyles = createGlobalStyle`
     overflow: hidden;
   }
 
+  hr {
+    width: 95%;
+  }
+
   h1,
   h2,
   h3,
