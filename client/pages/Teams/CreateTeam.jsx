@@ -99,10 +99,10 @@ class CreateTeam extends React.Component {
         history.push('/login');
       }
 
-      const { ok, errors, team } = response.data.createTeam;
+      const { ok, errors, team, channelUUID } = response.data.createTeam;
 
       if (ok) {
-        history.push(`/dashboard/view/team/${team.uuid}`);
+        history.push(`/dashboard/view/team/${team.uuid}/channel/${channelUUID}`);
       } else {
         const err = {};
         errors.forEach(({ path, message }) => {
@@ -178,6 +178,7 @@ const createTeamMutation = gql`
         path
         message
       }
+      channelUUID
     }
   }
 `;
