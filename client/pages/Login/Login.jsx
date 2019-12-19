@@ -16,7 +16,6 @@ const Wrapper = styled.div`
 const Content = styled.div`
   header {
     margin: 0 auto;
-    width: 95%;
     h1 {
       text-align: center;
     }

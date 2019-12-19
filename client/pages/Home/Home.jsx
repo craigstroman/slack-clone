@@ -13,23 +13,21 @@ const Header = styled.header`
 const Home = props => (
   <Fragment>
     <CssBaseline />
-    <Container maxWidth="lg">
-      <Header>
-        <h1>Slack Clone</h1>
-        <hr />
-      </Header>
-      <main>
-        <Grid container spacing={3} justify="center">
-          <Grid item lg={12}>
-            <Login {...props} />
-          </Grid>
-          <Grid item lg={12} style={{ textAlign: 'center' }}>
-            Not a registered user?&nbsp;
-            <a href="/register">Sign Up</a>
-          </Grid>
+    <Header>
+      <h1>Slack Clone</h1>
+      <hr />
+    </Header>
+    <main>
+      <Grid container spacing={3} justify="center">
+        <Grid item lg={12}>
+          <Login {...props} />
         </Grid>
-      </main>
-    </Container>
+        <Grid item lg={12} style={{ textAlign: 'center' }}>
+          Not a registered user?&nbsp;
+          <a href="/register">Sign Up</a>
+        </Grid>
+      </Grid>
+    </main>
   </Fragment>
 );
 

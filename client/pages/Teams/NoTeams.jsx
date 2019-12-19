@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
 import styled from 'styled-components';
+import PopUpMenu from '../../components/PopUpMenu/PopUpMenu';
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -16,7 +17,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const NoTeams = () => (
+const NoTeams = props => (
   <Wrapper>
     <header>
       <Grid container spacing={3}>
@@ -28,6 +29,9 @@ const NoTeams = () => (
     </header>
     <main>
       <Grid container spacing={3}>
+        <Grid item xs={12} style={{ textAlign: 'right' }}>
+          <PopUpMenu {...props} />
+        </Grid>
         <Grid item xs={12}>
           You need to&nbsp;
           <a href="/create-team">create a team</a>.
