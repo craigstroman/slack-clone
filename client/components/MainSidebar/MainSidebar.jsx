@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { graphql } from 'react-apollo';
 import styled, { ThemeProvider } from 'styled-components';
 import { IconButton } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
+import gql from 'graphql-tag';
 import InvitePeople from '../InvitePeople/InvitePeople';
 import Channels from '../Channels/Channels';
 import DirectMessages from '../DirectMessages/DirectMessages';
@@ -60,6 +62,19 @@ const Invite = styled.section`
   }
 `;
 
+const newDirectMessageSubscription = gql`
+  subscription($teamId: Int!, $userId: Int!) {
+    newDirectMessage(teamId: $teamId, userId: $userId) {
+      id
+      sender {
+        username
+      }
+      text
+      createdAt
+    }
+  }
+`;
+
 class MainSidebar extends React.Component {
   constructor(props) {
     super(props);
@@ -74,13 +89,14 @@ class MainSidebar extends React.Component {
     this.handleOpenInvitePeople = this.handleOpenInvitePeople.bind(this);
     this.handleCloseInvitePeople = this.handleCloseInvitePeople.bind(this);
     this.handleGetUser = this.handleGetUser.bind(this);
+    this.subscribeToDirectMessages = this.subscribeToDirectMessages.bind(this);
   }
 
   /**
    * Sets which item is selected when component loads.
    */
   componentDidMount = () => {
-    const { match, channels, teamMembers } = this.props;
+    const { match, channels, teamMembers, teamId, userId } = this.props;
 
     if (match.params.channelId) {
       const channel = channels.filter(el => el.uuid === match.params.channelId);
@@ -91,6 +107,8 @@ class MainSidebar extends React.Component {
 
       this.setState({ activeEl: user[0].uuid });
     }
+
+    this.unsubscribe = this.subscribeToDirectMessages(teamId, userId);
   };
 
   /**
@@ -99,7 +117,8 @@ class MainSidebar extends React.Component {
    * @param      {Object}  prevProps  The previous properties.
    */
   componentDidUpdate = prevProps => {
-    const { match, channels } = this.props;
+    const { match, channels, currentUser } = this.props;
+    const { uuid } = currentUser;
 
     if (match.params.channelId) {
       if (prevProps.match.params.channelId !== match.params.channelId) {
@@ -108,6 +127,40 @@ class MainSidebar extends React.Component {
         this.setState({ activeEl: channel[0].uuid });
       }
     }
+
+    if (match.params.userId === uuid) {
+      this.unsubscribe();
+    }
+  };
+
+  /**
+   * Subscription for new direct messages.
+   *
+   * @param      {String}  teamId  The team identifier.
+   * @param      {String}  userId  The user identifier.
+   *
+   * @return     {Object}  Direct messages for a user.
+   */
+  subscribeToDirectMessages = (teamId, userId) => {
+    const { data } = this.props;
+
+    return data.subscribeToMore({
+      document: newDirectMessageSubscription,
+      variables: {
+        teamId,
+        userId,
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          directMessages: [...prev.directMessages, subscriptionData.newDirectMessage],
+        };
+      },
+    });
   };
 
   /**
@@ -212,6 +265,19 @@ class MainSidebar extends React.Component {
   }
 }
 
+const directMessagesQuery = gql`
+  query directMessagesQuery($teamId: Int!, $userId: Int!) {
+    directMessages(teamId: $teamId, otherUserId: $userId) {
+      id
+      sender {
+        username
+      }
+      text
+      createdAt
+    }
+  }
+`;
+
 MainSidebar.defaultProps = {
   channels: [],
   directMessageUsers: [],
@@ -236,4 +302,12 @@ MainSidebar.propTypes = {
   match: PropTypes.object,
 };
 
-export default MainSidebar;
+export default graphql(directMessagesQuery, {
+  variables: props => ({
+    teamId: props.teamId,
+    userId: props.userId,
+  }),
+  options: {
+    fetchPolicy: 'network-only',
+  },
+})(MainSidebar);
