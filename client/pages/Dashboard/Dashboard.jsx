@@ -211,6 +211,7 @@ class Dashboard extends React.Component {
                 directMessageUsers={team.directMessageMembers}
                 teamMembers={teamMembers}
                 currentUser={user}
+                userId={id}
                 teamName={teamName}
                 teamId={team.id}
                 teamUUID={team.uuid}
