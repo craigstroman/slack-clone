@@ -56,7 +56,10 @@ class DirectMessages extends React.Component {
 
     this.state = {
       directMessageModal: false,
-      messageUser: null,
+      newMessageUser: null,
+      addMessageUser: null,
+      userExists: false,
+      userAdded: null,
     };
 
     this.handleOpenDirectMessageModal = this.handleOpenDirectMessageModal.bind(this);
@@ -65,6 +68,50 @@ class DirectMessages extends React.Component {
     this.handleSelectUser = this.handleSelectUser.bind(this);
     this.userAlreadyListed = this.userAlreadyListed.bind(this);
   }
+
+  componentDidUpdate = prevProps => {
+    const { teamMembers, newDirectMessages, user } = this.props;
+    const { userAdded } = this.state;
+    const { [newDirectMessages.length - 1]: newMessage } = newDirectMessages;
+
+    if (prevProps.newDirectMessages.length !== newDirectMessages.length) {
+      if (newMessage !== undefined) {
+        const { sender } = newMessage;
+        const { username } = sender;
+        const sendByUser = teamMembers.find(el => el.username === username);
+        const userExists = this.userAlreadyListed(sendByUser);
+
+        if (userAdded !== null) {
+          if (sendByUser.username !== userAdded.username) {
+            if (sendByUser.username !== user.username) {
+              this.setState({ userExists });
+
+              if (!userExists) {
+                if (typeof sendByUser === 'object') {
+                  this.setState({
+                    newMessageUser: sendByUser,
+                    userAdded: sendByUser,
+                  });
+                }
+              }
+            }
+          }
+        }
+        if (sendByUser.username !== user.username) {
+          this.setState({ userExists });
+
+          if (!userExists) {
+            if (typeof sendByUser === 'object') {
+              this.setState({
+                newMessageUser: sendByUser,
+                userAdded: sendByUser,
+              });
+            }
+          }
+        }
+      }
+    }
+  };
 
   /**
    * Selects a user to message.
@@ -104,29 +151,48 @@ class DirectMessages extends React.Component {
    */
   handleMessageUser = (val, teamId) => {
     const { history, teamUUID, handleGetUser } = this.props;
+    const userExists = this.userAlreadyListed(val);
 
-    history.push(`/dashboard/view/team/${teamUUID}/user/${val.uuid}`);
+    this.setState({ userExists });
 
-    this.handleCloseDirectMessageModal();
+    if (!userExists) {
+      history.push(`/dashboard/view/team/${teamUUID}/user/${val.uuid}`);
 
-    this.setState({
-      messageUser: val,
-    });
+      this.handleCloseDirectMessageModal();
 
-    // Selects the user in the sidebar.
-    handleGetUser(val, teamId);
+      this.setState({
+        addMessageUser: val,
+      });
+
+      // Selects the user in the sidebar.
+      handleGetUser(val, teamId);
+    } else {
+      this.handleCloseDirectMessageModal();
+
+      // Selects the user in the sidebar.
+      handleGetUser(val, teamId);
+    }
   };
 
+  /**
+   * Checks to see if user exists on the sidebar already.
+   *
+   * @param      {Object}  user    The user.
+   *
+   * @return     {Boolean}  Indicates true/false if a user exists.
+   */
   userAlreadyListed = user => {
     const { directMessageUsers } = this.props;
 
-    if (Array.isArray(directMessageUsers)) {
-      if (user !== null) {
-        if (typeof user === 'object') {
-          if ({}.hasOwnProperty.call(user, 'id')) {
-            const res = directMessageUsers.some(el => el.id === user.id);
+    if (user !== null) {
+      if (Array.isArray(directMessageUsers)) {
+        if (directMessageUsers.length >= 1) {
+          if (typeof user === 'object') {
+            if ({}.hasOwnProperty.call(user, 'id')) {
+              const res = directMessageUsers.some(el => el.id === user.id);
 
-            return res;
+              return res;
+            }
           }
         }
       }
@@ -136,11 +202,11 @@ class DirectMessages extends React.Component {
   };
 
   render() {
-    const { directMessageUsers, user, activeEl, teamId, teamUUID } = this.props;
-    const { directMessageModal, messageUser } = this.state;
+    const { newDirectMessages, directMessageUsers, user, activeEl, teamId, teamUUID } = this.props;
+    const { directMessageModal, addMessageUser, newMessageUser, userAdded, userExists } = this.state;
 
-    const userExists = messageUser !== null ? this.userAlreadyListed(messageUser) : null;
-    const showMessageUser = messageUser !== null && userExists !== null;
+    const showNewMessageUser = addMessageUser !== null && userExists !== null;
+    const showReceivedNewMessage = newMessageUser !== null && userExists !== null;
 
     return (
       <ThemeProvider theme={theme}>
@@ -175,27 +241,57 @@ class DirectMessages extends React.Component {
                   &nbsp;(you)
                 </Button>
               </li>
-              {showMessageUser && (
+              {showReceivedNewMessage && (
                 <li
-                  className={activeEl === messageUser.uuid ? 'user-list__item selected' : 'user-list__item'}
-                  id={messageUser.uuid}
-                  key={messageUser.uuid}
+                  className={
+                    activeEl === newMessageUser.uuid ? 'user-list__item selected' : 'user-list__item'
+                  }
+                  id={newMessageUser.uuid}
+                  key={newMessageUser.uuid}
                 >
                   <Button
                     type="button"
                     className="users-item"
-                    name={messageUser.username}
-                    uuid={messageUser.uuid}
-                    id={messageUser.id}
+                    name={newMessageUser.username}
+                    uuid={newMessageUser.uuid}
+                    id={newMessageUser.id}
                     teamid={teamId}
                     onClick={e => this.handleSelectUser(e)}
                   >
                     <FontAwesomeIcon icon={faCircle} className="user-status" />
-                    {messageUser.username}
+                    {newMessageUser.username}
+                  </Button>
+                </li>
+              )}
+              {showNewMessageUser && (
+                <li
+                  className={
+                    activeEl === addMessageUser.uuid ? 'user-list__item selected' : 'user-list__item'
+                  }
+                  id={addMessageUser.uuid}
+                  key={addMessageUser.uuid}
+                >
+                  <Button
+                    type="button"
+                    className="users-item"
+                    name={addMessageUser.username}
+                    uuid={addMessageUser.uuid}
+                    id={addMessageUser.id}
+                    teamid={teamId}
+                    onClick={e => this.handleSelectUser(e)}
+                  >
+                    <FontAwesomeIcon icon={faCircle} className="user-status" />
+                    {addMessageUser.username}
                   </Button>
                 </li>
               )}
               {directMessageUsers.map(el => {
+                if (newMessageUser !== null) {
+                  this.setState({
+                    newMessageUser: null,
+                  });
+                }
+
                 if (el.username !== user.username) {
                   return (
                     <li
@@ -218,6 +314,7 @@ class DirectMessages extends React.Component {
                     </li>
                   );
                 }
+
                 return null;
               })}
             </UsersList>
@@ -240,6 +337,8 @@ class DirectMessages extends React.Component {
 
 DirectMessages.defaultProps = {
   directMessageUsers: [],
+  newDirectMessages: [],
+  teamMembers: [],
   user: null,
   messageUser: null,
   activeEl: null,
@@ -252,6 +351,8 @@ DirectMessages.defaultProps = {
 
 DirectMessages.propTypes = {
   directMessageUsers: PropTypes.array,
+  newDirectMessages: PropTypes.array,
+  teamMembers: PropTypes.array,
   user: PropTypes.object,
   messageUser: PropTypes.object,
   activeEl: PropTypes.string,
