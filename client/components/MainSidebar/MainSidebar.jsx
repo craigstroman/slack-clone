@@ -203,8 +203,20 @@ class MainSidebar extends React.Component {
   };
 
   render() {
-    const { channels, directMessageUsers, teamName, teamId, teamUUID, currentUser, isOwner } = this.props;
+    const {
+      data: { directMessages, loading, error },
+      channels,
+      directMessageUsers,
+      teamMembers,
+      teamName,
+      teamId,
+      teamUUID,
+      currentUser,
+      isOwner,
+    } = this.props;
     const { activeEl, invitePeopleModal, user } = this.state;
+
+    console.log('this.props: ', this.props);
 
     return (
       <ThemeProvider theme={theme}>
@@ -231,6 +243,8 @@ class MainSidebar extends React.Component {
             <Fragment>
               <DirectMessages
                 directMessageUsers={directMessageUsers}
+                newDirectMessages={directMessages}
+                teamMembers={teamMembers}
                 user={currentUser}
                 messageUser={user}
                 activeEl={activeEl}
