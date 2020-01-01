@@ -45,7 +45,9 @@ class MessageUser extends React.Component {
 
     let items = getTeamMembers;
 
-    items = items.filter(el => el.username !== username);
+    if (Array.isArray(items)) {
+      items = items.filter(el => el.username !== username);
+    }
 
     return (
       <StyledDialog
