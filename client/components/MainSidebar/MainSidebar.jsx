@@ -216,8 +216,6 @@ class MainSidebar extends React.Component {
     } = this.props;
     const { activeEl, invitePeopleModal, user } = this.state;
 
-    console.log('this.props: ', this.props);
-
     return (
       <ThemeProvider theme={theme}>
         <Wrapper>
