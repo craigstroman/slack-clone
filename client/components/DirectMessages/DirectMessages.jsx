@@ -33,6 +33,8 @@ const UsersList = styled.ul`
   list-style-type: none;
   padding-left: 0;
   li {
+    position: relative;
+
     &.selected {
       background-color: ${props => props.theme.colors.toryBlue};
       &:hover {
@@ -45,6 +47,18 @@ const UsersList = styled.ul`
       svg {
         color: ${props => props.theme.colors.jungleGreen};
         margin-right: 5px;
+      }
+      mark {
+        background-color: ${props => props.theme.colors.red};
+        border: 2px solid ${props => props.theme.colors.white};
+        border-radius: 20px;
+        color: ${props => props.theme.colors.white};
+        font-size: 10px;
+        height: 20px;
+        position: absolute;
+        top: -5px;
+        right: -20px;
+        width: 20px;
       }
     }
   }
@@ -259,6 +273,7 @@ class DirectMessages extends React.Component {
                     onClick={e => this.handleSelectUser(e)}
                   >
                     <FontAwesomeIcon icon={faCircle} className="user-status" />
+                    <mark>1</mark>
                     {newMessageUser.username}
                   </Button>
                 </li>
