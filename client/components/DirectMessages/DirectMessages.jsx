@@ -286,9 +286,11 @@ class DirectMessages extends React.Component {
                 </li>
               )}
               {directMessageUsers.map(el => {
-                if (newMessageUser !== null) {
+                if (newMessageUser !== null || addMessageUser !== null || userExists !== null) {
                   this.setState({
                     newMessageUser: null,
+                    addMessageUser: null,
+                    userExists: null,
                   });
                 }
 
