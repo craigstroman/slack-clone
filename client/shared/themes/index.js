@@ -2,6 +2,8 @@ const theme = {
   colors: {
     white: '#fff',
     black: '#000',
+    red: '#f00',
+
     matterhorn: '#4D384B',
 
     // Team sidebar colors
