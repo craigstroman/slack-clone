@@ -50,13 +50,14 @@ const UsersList = styled.ul`
       }
       mark {
         background-color: ${props => props.theme.colors.red};
-        border: 2px solid ${props => props.theme.colors.white};
+        border: 2px solid ${props => props.theme.colors.red};
         border-radius: 20px;
         color: ${props => props.theme.colors.white};
-        font-size: 10px;
+        font-size: 14px;
         height: 20px;
+        line-height: 20px;
         position: absolute;
-        top: -5px;
+        top: -3px;
         right: -20px;
         width: 20px;
       }
