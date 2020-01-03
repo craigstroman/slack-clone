@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import AddChannel from '../AddChannel/AddChannel';
 import theme from '../../shared/themes';
-import clearFix from '../../shared/themes/mixins';
 
 const Wrapper = styled.div`
   margin-top: 10px;
@@ -27,7 +26,7 @@ const Heading = styled.div`
     margin-left: ${props => props.theme.sidebar.marginLeft};
   }
 
-  ${clearFix()}
+  ${props => props.theme.mixins.clearfix()}
 `;
 
 const ChannelsList = styled.ul`
@@ -55,6 +54,8 @@ const ChannelsList = styled.ul`
       color: ${props => props.theme.colors.shadyLady};
       font-size: 1em;
     }
+
+    ${props => props.theme.mixins.clearfix()}
   }
 `;
 

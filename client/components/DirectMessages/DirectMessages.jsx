@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
 import MessageUser from '../MessageUser/MessageUser';
 import theme from '../../shared/themes';
-import clearFix from '../../shared/themes/mixins';
 
 const Wrapper = styled.div`
   margin-top: 10px;
@@ -26,7 +25,8 @@ const Heading = styled.div`
     padding-top: 20px;
     margin-left: ${props => props.theme.sidebar.marginLeft};
   }
-  ${clearFix()}
+
+  ${props => props.theme.mixins.clearfix()}
 `;
 
 const UsersList = styled.ul`
@@ -62,6 +62,8 @@ const UsersList = styled.ul`
         width: 20px;
       }
     }
+
+    ${props => props.theme.mixins.clearfix()}
   }
 `;
 
@@ -88,6 +90,9 @@ class DirectMessages extends React.Component {
     const { teamMembers, newDirectMessages, user } = this.props;
     const { userAdded } = this.state;
     const { [newDirectMessages.length - 1]: newMessage } = newDirectMessages;
+
+    console.log('this.props: ', this.props);
+    console.log('prevProps: ', prevProps);
 
     if (prevProps.newDirectMessages.length !== newDirectMessages.length) {
       if (newMessage !== undefined) {

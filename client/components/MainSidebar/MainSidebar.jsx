@@ -9,7 +9,6 @@ import gql from 'graphql-tag';
 import InvitePeople from '../InvitePeople/InvitePeople';
 import Channels from '../Channels/Channels';
 import DirectMessages from '../DirectMessages/DirectMessages';
-import clearFix from '../../shared/themes/mixins';
 import theme from '../../shared/themes';
 
 const Wrapper = styled.div`
@@ -22,6 +21,8 @@ const Header = styled.header`
     color: ${props => props.theme.colors.white};
     text-align: center;
   }
+
+  ${props => props.theme.mixins.clearfix()}
 `;
 
 const User = styled.div`
@@ -37,7 +38,8 @@ const User = styled.div`
     font-size: 0.85em;
     margin-right: 5px;
   }
-  ${clearFix()}
+
+  ${props => props.theme.mixins.clearfix()}
 `;
 
 const Invite = styled.section`
@@ -60,6 +62,8 @@ const Invite = styled.section`
     color: ${props => props.theme.colors.shadyLady};
     margin-left: 5px;
   }
+
+  ${props => props.theme.mixins.clearfix()}
 `;
 
 const newDirectMessageSubscription = gql`
