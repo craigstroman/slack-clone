@@ -1,3 +1,5 @@
+import mixins from './mixins';
+
 const theme = {
   colors: {
     white: '#fff',
@@ -21,6 +23,8 @@ const theme = {
   sidebar: {
     marginLeft: '10px',
   },
+
+  mixins,
 };
 
 export default theme;
