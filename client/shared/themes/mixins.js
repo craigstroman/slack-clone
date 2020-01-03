@@ -1,8 +1,10 @@
-const clearFix = () =>
-  `&:after {
+const mixins = {
+  clearfix: () =>
+    `&:after {
     content: '';
     display: table;
     clear: both;
-  `;
+  `,
+};
 
-export default clearFix;
+export default mixins;
