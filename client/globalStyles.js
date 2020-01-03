@@ -26,7 +26,6 @@ const GlobalStyles = createGlobalStyle`
   h6 {
     margin-block-start: 0;
     margin-block-end: 0;
-
   }
 
   h1 {
