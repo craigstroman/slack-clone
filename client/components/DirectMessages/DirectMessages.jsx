@@ -91,9 +91,6 @@ class DirectMessages extends React.Component {
     const { userAdded } = this.state;
     const { [newDirectMessages.length - 1]: newMessage } = newDirectMessages;
 
-    console.log('this.props: ', this.props);
-    console.log('prevProps: ', prevProps);
-
     if (prevProps.newDirectMessages.length !== newDirectMessages.length) {
       if (newMessage !== undefined) {
         const { sender } = newMessage;
