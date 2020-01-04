@@ -53,7 +53,7 @@ const Invite = styled.section`
   }
 
   h3 {
-    margin-left: ${props => props.theme.sidebar.marginLeft};
+    margin-left: 10px;
     padding-top: 8px;
   }
 

@@ -23,7 +23,7 @@ const Heading = styled.div`
   }
   h3 {
     padding-top: 20px;
-    margin-left: ${props => props.theme.sidebar.marginLeft};
+    margin-left: 10px;
   }
 
   ${props => props.theme.mixins.clearfix()}
