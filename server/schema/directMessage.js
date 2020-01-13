@@ -4,6 +4,7 @@ export default `
     text: String!
     sender: User!
     receiverId: Int!
+    senderId: Int!
     createdAt: String!
   }
 
