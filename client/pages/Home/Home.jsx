@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { CssBaseline, Grid } from '@material-ui/core';
@@ -9,15 +9,12 @@ import CreateTeam from '../Teams/CreateTeam/CreateTeam';
 import ViewTeam from '../Teams/ViewTeam/ViewTeam';
 import Teams from '../Teams/Teams/Teams';
 
-const Header = styled.header`
+const Wrapper = styled.div`
   margin-top: 10px;
-  h1 {
-    text-align: center;
-  }
 `;
 
 const Home = props => (
-  <Fragment>
+  <Wrapper>
     <BrowserRouter>
       <CssBaseline />
       <main>
@@ -42,7 +39,7 @@ const Home = props => (
         </Grid>
       </main>
     </BrowserRouter>
-  </Fragment>
+  </Wrapper>
 );
 
 export default Home;
