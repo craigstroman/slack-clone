@@ -109,9 +109,15 @@ class Dashboard extends React.Component {
       data: { directMessages },
       match,
       me,
+      teamId,
+      userId,
     } = this.props;
     const { channelUUID, userUUID } = this.state;
     const { uuid } = me;
+
+    if (prevProps.userId !== userId) {
+      this.unsubscribe = this.subscribeToDirectMessages(teamId, userId);
+    }
 
     if (Array.isArray(directMessages) && Array.isArray(prevProps.data.directMessages)) {
       if (directMessages.length > prevProps.data.directMessages) {

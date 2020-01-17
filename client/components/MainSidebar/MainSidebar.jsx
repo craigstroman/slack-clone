@@ -66,34 +66,20 @@ const Invite = styled.section`
   ${props => props.theme.mixins.clearfix()}
 `;
 
-const newDirectMessageSubscription = gql`
-  subscription($teamId: Int!, $userId: Int!) {
-    newDirectMessage(teamId: $teamId, userId: $userId) {
-      id
-      sender {
-        username
-      }
-      text
-      createdAt
-    }
-  }
-`;
-
 class MainSidebar extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       activeEl: '',
-      user: null,
       invitePeopleModal: false,
+      user: null,
     };
 
     this.handleSelectItem = this.handleSelectItem.bind(this);
     this.handleOpenInvitePeople = this.handleOpenInvitePeople.bind(this);
     this.handleCloseInvitePeople = this.handleCloseInvitePeople.bind(this);
     this.handleGetUser = this.handleGetUser.bind(this);
-    this.subscribeToDirectMessages = this.subscribeToDirectMessages.bind(this);
   }
 
   /**
@@ -111,8 +97,6 @@ class MainSidebar extends React.Component {
 
       this.setState({ activeEl: user[0].uuid });
     }
-
-    this.unsubscribe = this.subscribeToDirectMessages(teamId, userId);
   };
 
   /**
@@ -121,7 +105,7 @@ class MainSidebar extends React.Component {
    * @param      {Object}  prevProps  The previous properties.
    */
   componentDidUpdate = prevProps => {
-    const { match, channels, currentUser } = this.props;
+    const { channels, currentUser, match } = this.props;
     const { uuid } = currentUser;
 
     if (match.params.channelId) {
@@ -131,40 +115,6 @@ class MainSidebar extends React.Component {
         this.setState({ activeEl: channel[0].uuid });
       }
     }
-
-    if (match.params.userId === uuid) {
-      this.unsubscribe();
-    }
-  };
-
-  /**
-   * Subscription for new direct messages.
-   *
-   * @param      {String}  teamId  The team identifier.
-   * @param      {String}  userId  The user identifier.
-   *
-   * @return     {Object}  Direct messages for a user.
-   */
-  subscribeToDirectMessages = (teamId, userId) => {
-    const { data } = this.props;
-
-    return data.subscribeToMore({
-      document: newDirectMessageSubscription,
-      variables: {
-        teamId,
-        userId,
-      },
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData) {
-          return prev;
-        }
-
-        return {
-          ...prev,
-          directMessages: [...prev.directMessages, subscriptionData.newDirectMessage],
-        };
-      },
-    });
   };
 
   /**
@@ -208,9 +158,9 @@ class MainSidebar extends React.Component {
 
   render() {
     const {
-      data: { directMessages, loading, error },
       channels,
-      directMessageUsers,
+      directMessageMembers,
+      directMessagesReceived,
       teamMembers,
       teamName,
       teamId,
@@ -244,8 +194,8 @@ class MainSidebar extends React.Component {
             </Fragment>
             <Fragment>
               <DirectMessages
-                directMessageUsers={directMessageUsers}
-                newDirectMessages={directMessages}
+                directMessagesReceived={directMessagesReceived}
+                directMessageMembers={directMessageMembers}
                 teamMembers={teamMembers}
                 user={currentUser}
                 messageUser={user}
@@ -281,22 +231,10 @@ class MainSidebar extends React.Component {
   }
 }
 
-const directMessagesQuery = gql`
-  query directMessagesQuery($teamId: Int!, $userId: Int!) {
-    directMessages(teamId: $teamId, otherUserId: $userId) {
-      id
-      sender {
-        username
-      }
-      text
-      createdAt
-    }
-  }
-`;
-
 MainSidebar.defaultProps = {
   channels: [],
-  directMessageUsers: [],
+  directMessageMembers: [],
+  directMessagesReceived: [],
   teamMembers: [],
   teamName: '',
   teamId: null,
@@ -308,7 +246,8 @@ MainSidebar.defaultProps = {
 
 MainSidebar.propTypes = {
   channels: PropTypes.array,
-  directMessageUsers: PropTypes.array,
+  directMessageMembers: PropTypes.array,
+  directMessagesReceived: PropTypes.array,
   teamMembers: PropTypes.array,
   teamName: PropTypes.string,
   teamId: PropTypes.number,
@@ -318,12 +257,4 @@ MainSidebar.propTypes = {
   match: PropTypes.object,
 };
 
-export default graphql(directMessagesQuery, {
-  variables: props => ({
-    teamId: props.teamId,
-    userId: props.userId,
-  }),
-  options: {
-    fetchPolicy: 'network-only',
-  },
-})(MainSidebar);
+export default MainSidebar;
