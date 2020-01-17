@@ -187,6 +187,10 @@ class Login extends React.Component {
     return (
       <Wrapper>
         <Content>
+          <header>
+            <h1 style={{ textAlign: 'center' }}>Slack Clone</h1>
+            <hr />
+          </header>
           <main>
             <form>
               {errors && (
@@ -253,6 +257,10 @@ class Login extends React.Component {
                   >
                     Login
                   </Button>
+                </Grid>
+                <Grid item lg={12} style={{ textAlign: 'center' }}>
+                  Not a registered user?&nbsp;
+                  <a href="/register">Sign Up</a>
                 </Grid>
               </Grid>
             </form>
