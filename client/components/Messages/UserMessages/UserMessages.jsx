@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 import Moment from 'react-moment';
 import uniqid from 'uniqid';
 import styled, { ThemeProvider } from 'styled-components';
+import decode from 'jwt-decode';
 import meQuery from '../../../shared/queries/team';
 import theme from '../../../shared/themes';
 
@@ -56,6 +57,8 @@ const newDirectMessageSubscription = gql`
       sender {
         username
       }
+      receiverId
+      senderId
       text
       createdAt
     }
@@ -69,12 +72,12 @@ class UserMessages extends React.Component {
     this.subscribe = this.subscribe.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     const { teamId, userId } = this.props;
     this.unsubscribe = this.subscribe(teamId, userId);
-  }
+  };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate = prevProps => {
     const { teamId, userId } = this.props;
 
     if (teamId !== prevProps.teamId || userId !== prevProps.userId) {
@@ -84,13 +87,13 @@ class UserMessages extends React.Component {
 
       this.unsubscribe = this.subscribe(teamId, userId);
     }
-  }
+  };
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
-  }
+  };
 
   /**
    * Subscribes a user to a direct message.
@@ -101,6 +104,9 @@ class UserMessages extends React.Component {
    */
   subscribe = (teamId, userId) => {
     const { data } = this.props;
+    const token = decode(localStorage.getItem('token'));
+    const { user } = token;
+    const { id } = user;
 
     return data.subscribeToMore({
       document: newDirectMessageSubscription,
@@ -111,6 +117,12 @@ class UserMessages extends React.Component {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData) {
           return prev;
+        }
+
+        const { newDirectMessage } = subscriptionData;
+
+        if (newDirectMessage.senderId !== id && newDirectMessage.receiverId !== id) {
+          return 0;
         }
 
         return {
@@ -124,6 +136,7 @@ class UserMessages extends React.Component {
   render() {
     const {
       data: { loading, directMessages },
+      userId,
     } = this.props;
 
     if (loading || typeof directMessages === 'undefined') {
@@ -174,6 +187,8 @@ const directMessagesQuery = gql`
       sender {
         username
       }
+      receiverId
+      senderId
       text
       createdAt
     }
