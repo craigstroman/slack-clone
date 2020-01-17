@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom';
 import React, { Fragment } from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { createGlobalStyle } from 'styled-components';
-import Routes from './routes/routes';
+import Home from './pages/Home/Home';
 import registerServiceWorker from './registerServiceWorker';
 import client from './apollo';
 import GlobalStyles from './globalStyles';
@@ -10,7 +10,7 @@ import GlobalStyles from './globalStyles';
 const App = (
   <Fragment>
     <ApolloProvider client={client}>
-      <Routes />
+      <Home />
     </ApolloProvider>
     <GlobalStyles />
   </Fragment>
