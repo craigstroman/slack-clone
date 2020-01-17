@@ -87,42 +87,45 @@ class DirectMessages extends React.Component {
   }
 
   componentDidUpdate = prevProps => {
-    const { teamMembers, newDirectMessages, user } = this.props;
-    const { userAdded } = this.state;
-    const { [newDirectMessages.length - 1]: newMessage } = newDirectMessages;
+    const { directMessagesReceived, match, teamMembers, user } = this.props;
+    const { newMessageUser, userAdded } = this.state;
 
-    if (prevProps.newDirectMessages.length !== newDirectMessages.length) {
-      if (newMessage !== undefined) {
-        const { sender } = newMessage;
-        const { username } = sender;
-        const sendByUser = teamMembers.find(el => el.username === username);
-        const userExists = this.userAlreadyListed(sendByUser);
+    if (directMessagesReceived !== prevProps.directMessagesReceived) {
+      if (Array.isArray(directMessagesReceived)) {
+        if (directMessagesReceived.length >= 1) {
+          const { [directMessagesReceived.length - 1]: newMessage } = directMessagesReceived;
 
-        if (userAdded !== null) {
-          if (sendByUser.username !== userAdded.username) {
-            if (sendByUser.username !== user.username) {
-              this.setState({ userExists });
+          const { sender } = newMessage;
+          const { username } = sender;
+          const sendByUser = teamMembers.find(el => el.username === username);
+          const userExists = this.userAlreadyListed(sendByUser);
 
-              if (!userExists) {
-                if (typeof sendByUser === 'object') {
-                  this.setState({
-                    newMessageUser: sendByUser,
-                    userAdded: sendByUser,
-                  });
+          if (userAdded !== null) {
+            if (sendByUser.username !== userAdded.username) {
+              if (sendByUser.username !== user.username) {
+                this.setState({ userExists });
+
+                if (!userExists) {
+                  if (typeof sendByUser === 'object') {
+                    this.setState({
+                      newMessageUser: sendByUser,
+                      userAdded: sendByUser,
+                    });
+                  }
                 }
               }
             }
           }
-        }
-        if (sendByUser.username !== user.username) {
-          this.setState({ userExists });
+          if (sendByUser.username !== user.username) {
+            this.setState({ userExists });
 
-          if (!userExists) {
-            if (typeof sendByUser === 'object') {
-              this.setState({
-                newMessageUser: sendByUser,
-                userAdded: sendByUser,
-              });
+            if (!userExists) {
+              if (typeof sendByUser === 'object') {
+                this.setState({
+                  newMessageUser: sendByUser,
+                  userAdded: sendByUser,
+                });
+              }
             }
           }
         }
@@ -219,7 +222,7 @@ class DirectMessages extends React.Component {
   };
 
   render() {
-    const { newDirectMessages, directMessageUsers, user, activeEl, teamId, teamUUID } = this.props;
+    const { activeEl, directMessageMembers, teamId, teamUUID, user } = this.props;
     const { directMessageModal, addMessageUser, newMessageUser, userAdded, userExists } = this.state;
 
     const showNewMessageUser = addMessageUser !== null && userExists !== null;
@@ -303,7 +306,7 @@ class DirectMessages extends React.Component {
                   </Button>
                 </li>
               )}
-              {directMessageUsers.map(el => {
+              {directMessageMembers.map(el => {
                 if (newMessageUser !== null || addMessageUser !== null || userExists !== null) {
                   this.setState({
                     newMessageUser: null,
@@ -356,7 +359,8 @@ class DirectMessages extends React.Component {
 }
 
 DirectMessages.defaultProps = {
-  directMessageUsers: [],
+  directMessagesReceived: [],
+  directMessageMembers: [],
   newDirectMessages: [],
   teamMembers: [],
   user: null,
@@ -367,10 +371,12 @@ DirectMessages.defaultProps = {
   teamId: null,
   teamUUID: null,
   history: {},
+  match: {},
 };
 
 DirectMessages.propTypes = {
-  directMessageUsers: PropTypes.array,
+  directMessagesReceived: PropTypes.array,
+  directMessageMembers: PropTypes.array,
   newDirectMessages: PropTypes.array,
   teamMembers: PropTypes.array,
   user: PropTypes.object,
@@ -381,6 +387,7 @@ DirectMessages.propTypes = {
   teamId: PropTypes.number,
   teamUUID: PropTypes.string,
   history: PropTypes.object,
+  match: PropTypes.object,
 };
 
 export default DirectMessages;
