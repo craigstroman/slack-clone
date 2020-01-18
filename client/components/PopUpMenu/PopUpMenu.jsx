@@ -2,9 +2,7 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import { Button, Menu, MenuItem } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import theme from '../../shared/themes';
@@ -15,6 +13,12 @@ const StyledTextLink = styled(Link)`
   &:focus,
   &:active {
     color: ${props => props.theme.colors.black};
+  }
+`;
+
+const StyledMenu = styled(Menu)`
+  .MuiMenu-paper {
+    top: 83px !important;
   }
 `;
 
@@ -63,7 +67,7 @@ class PopUpMenu extends React.Component {
           <Button aria-controls="settings-menu" aria-haspopup="true" onClick={e => this.handleOpen(e)}>
             <FontAwesomeIcon icon={faCog} className="settings-icon" />
           </Button>
-          <Menu
+          <StyledMenu
             id="settings-menu"
             anchorEl={anchorEl}
             keepMounted
@@ -76,7 +80,7 @@ class PopUpMenu extends React.Component {
             <MenuItem onClick={this.logout}>
               <StyledTextLink to="/">Logout</StyledTextLink>
             </MenuItem>
-          </Menu>
+          </StyledMenu>
         </ThemeProvider>
       </Fragment>
     );
