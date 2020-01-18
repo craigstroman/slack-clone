@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { CssBaseline, Grid } from '@material-ui/core';
 import PrivateRoute from '../../shared/util/privateRoutes';
@@ -9,12 +8,8 @@ import CreateTeam from '../Teams/CreateTeam/CreateTeam';
 import ViewTeam from '../Teams/ViewTeam/ViewTeam';
 import Teams from '../Teams/Teams/Teams';
 
-const Wrapper = styled.div`
-  margin-top: 10px;
-`;
-
 const Home = props => (
-  <Wrapper>
+  <div>
     <BrowserRouter>
       <CssBaseline />
       <main>
@@ -39,7 +34,7 @@ const Home = props => (
         </Grid>
       </main>
     </BrowserRouter>
-  </Wrapper>
+  </div>
 );
 
 export default Home;

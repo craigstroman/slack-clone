@@ -10,7 +10,9 @@ import { updateSubScription } from '../../apollo';
 import validateEmail from '../../shared/util/utils';
 
 const Wrapper = styled.div`
-  margin: 0 auto;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
   width: 100%;
 `;
 const Content = styled.div`

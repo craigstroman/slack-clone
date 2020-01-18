@@ -9,7 +9,9 @@ import PopUpMenu from '../../../components/PopUpMenu/PopUpMenu';
 import theme from '../../../shared/themes';
 
 const Wrapper = styled.div`
-  margin: 0 auto;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
   width: 100%;
   header {
     h1 {
