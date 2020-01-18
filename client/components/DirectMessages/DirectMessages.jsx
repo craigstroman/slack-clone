@@ -57,8 +57,8 @@ const UsersList = styled.ul`
         height: 20px;
         line-height: 20px;
         position: absolute;
-        top: -3px;
-        right: -20px;
+        top: -2px;
+        right: -8px;
         width: 20px;
       }
     }
