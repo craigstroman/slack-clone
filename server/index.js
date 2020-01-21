@@ -29,6 +29,7 @@ models.sequelize.sync().then(() => {
   ws.listen(PORT, () => {
     console.log(`\nThe server has started on port: ${PORT}`);
     console.log(`http://localhost:${PORT}`);
+    console.log(`http://localhost:${PORT}/graphiql`);
     new SubscriptionServer(
       {
         execute,
