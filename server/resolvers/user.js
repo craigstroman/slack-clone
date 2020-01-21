@@ -27,14 +27,48 @@ export default {
     /**
      * Get's all users.
      *
-     * @param      {<type>}  parent       The parent.
-     * @param      {<type>}  args         The arguments.
+     * @param      {Object}  parent       The parent.
+     * @param      {Object}  args         The arguments.
      * @param      {Object}  models       The models.
      */
     allUsers: (parent, args, { models }) => models.User.findAll(),
+    /**
+     * Get's the logged in user information.
+     *
+     * @param      {Object}  parent       The parent.
+     * @param      {Object}  args         The arguments.
+     * @param      {Object}  user         The user.
+     * @param      {Object}  models       The models.
+     */
     me: requiresAuth.createResolver((parent, args, { user, models }) =>
       models.User.findOne({ where: { id: user.id } }),
     ),
+    /**
+     * Verify's if a user exists or not.
+     *
+     * @param      {Object}   parent       The parent
+     * @param      {Object}   args         The arguments
+     * @param      {Object}   models       The models
+     * @return     {boolean}  { description_of_the_return_value }
+     */
+    verifyUser: async (parent, args, { models }) => {
+      try {
+        const { username } = args;
+        const result = await models.User.findOne({ where: { username: username } }, { raw: true });
+
+        if (result !== null) {
+          if (username === result.username) {
+            return true;
+          }
+        }
+
+        return false;
+      } catch (err) {
+        console.log(`There was an error: ${err}`);
+
+        return false;
+      }
+    },
   },
   Mutation: {
     /**
