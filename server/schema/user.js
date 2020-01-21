@@ -18,6 +18,7 @@ export default `
     me: User!
     allUsers: [User!]!
     getUser(userId: Int!): User
+    verifyUser(username: String): Boolean
   }
 
   type RegisterResponse {
