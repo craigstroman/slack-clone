@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
+import { withApollo } from 'react-apollo';
+import ReCAPTCHA from 'react-google-recaptcha';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 import { Button, Grid, TextField } from '@material-ui/core';
@@ -28,6 +29,10 @@ const Content = styled.div`
   }
 `;
 
+const StyledRecaptcha = styled(ReCAPTCHA)`
+  margin: 0 auto;
+`;
+
 const StyledTextField = styled(TextField)`
   .MuiOutlinedInput-root {
     text-align: left;
@@ -45,11 +50,15 @@ class Register extends React.Component {
       password: '',
       passwordConfirmation: '',
       fieldErrors: '',
+      recaptchaVerified: false,
+      usernameExists: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validateForm = this.validateForm.bind(this);
+    this.verifyCaptcha = this.verifyCaptcha.bind(this);
+    this.verifyUser = this.verifyUser.bind(this);
   }
 
   /**
@@ -63,13 +72,63 @@ class Register extends React.Component {
     this.setState({ [name]: value });
   };
 
+  verifyUser = async e => {
+    const { target } = e;
+    const { value } = target;
+    const { client } = this.props;
+
+    if (value.length) {
+      try {
+        const res = await client.query({
+          query: gql`
+            query($username: String) {
+              verifyUser(username: $username)
+            }
+          `,
+          variables: {
+            username: value,
+          },
+        });
+
+        const { data } = res;
+        const { verifyUser } = data;
+
+        if (verifyUser) {
+          this.setState({ usernameExists: true });
+
+          this.setState({
+            fieldErrors: {
+              username: 'Username already exists.',
+            },
+          });
+        } else {
+          this.setState({ usernameExists: false });
+
+          this.setState({
+            fieldErrors: {
+              username: '',
+            },
+          });
+        }
+      } catch (err) {
+        console.log(`There was an error: ${err}`);
+      }
+    }
+  };
+
+  verifyCaptcha = value => {
+    if (value) {
+      this.setState({ recaptchaVerified: true });
+    }
+  };
+
   /**
    * Validates the form.
    *
    * @return     {Boolean}  Indicates if the form is valid or invalid.
    */
   validateForm = () => {
-    const { email, username, password, passwordConfirmation } = this.state;
+    const { email, username, password, passwordConfirmation, recaptchaVerified, usernameExists } = this.state;
     const errors = {};
 
     if (!email.length) {
@@ -82,6 +141,8 @@ class Register extends React.Component {
 
     if (!username.length) {
       errors.username = 'Username is required.';
+    } else if (usernameExists) {
+      errors.username = 'Username already exists.';
     }
 
     if (!password.length) {
@@ -98,6 +159,10 @@ class Register extends React.Component {
 
     if (!passwordConfirmation.length) {
       errors.passwordConfirmation = 'Password confirmation is required.';
+    }
+
+    if (!recaptchaVerified) {
+      errors.recaptcha = 'Recaptcha is required.';
     }
 
     if (Object.keys(errors).length >= 1) {
@@ -124,9 +189,22 @@ class Register extends React.Component {
     const { username, email, password } = this.state;
 
     if (this.validateForm()) {
-      const { mutate } = this.props;
+      const { client } = this.props;
 
-      const response = await mutate({ variables: { username, email, password } });
+      const response = await client.mutate({
+        mutation: gql`
+          mutation($username: String!, $email: String!, $password: String!) {
+            register(username: $username, email: $email, password: $password) {
+              ok
+              errors {
+                path
+                message
+              }
+            }
+          }
+        `,
+        variables: { username, email, password },
+      });
 
       const { ok, errors } = response.data.register;
 
@@ -146,7 +224,15 @@ class Register extends React.Component {
   };
 
   render() {
-    const { username, email, password, passwordConfirmation, fieldErrors } = this.state;
+    const {
+      username,
+      email,
+      password,
+      passwordConfirmation,
+      fieldErrors,
+      recaptchaVerified,
+      usernameExists,
+    } = this.state;
 
     return (
       <Wrapper>
@@ -185,9 +271,12 @@ class Register extends React.Component {
                     autoComplete="username"
                     margin="normal"
                     variant="outlined"
-                    onChange={e => this.handleChange(e)}
+                    onChange={e => {
+                      this.handleChange(e);
+                      this.verifyUser(e);
+                    }}
                     onBlur={this.validateForm}
-                    error={!fieldErrors.username === false}
+                    error={!fieldErrors.username === false || usernameExists === true}
                     helperText={fieldErrors.username}
                     value={username}
                   />
@@ -222,6 +311,17 @@ class Register extends React.Component {
                     value={passwordConfirmation}
                   />
                 </Grid>
+                <Grid item xs={12} align="center">
+                  <StyledRecaptcha
+                    sitekey="6LfYLs4SAAAAAK6qaUvUXZFBqjseQrkOoCK2HiE2"
+                    onChange={this.verifyCaptcha}
+                  />
+                </Grid>
+                {!recaptchaVerified && (
+                  <Grid item xs={12} style={{ color: '#f00' }}>
+                    {fieldErrors.recaptcha}
+                  </Grid>
+                )}
                 <Grid item xs={12}>
                   <Button type="button" variant="contained" color="primary" onClick={this.handleSubmit}>
                     Register
@@ -236,24 +336,14 @@ class Register extends React.Component {
   }
 }
 
-const registerMutation = gql`
-  mutation($username: String!, $email: String!, $password: String!) {
-    register(username: $username, email: $email, password: $password) {
-      ok
-      errors {
-        path
-        message
-      }
-    }
-  }
-`;
-
 Register.defaultProps = {
+  client: {},
   history: {},
 };
 
 Register.propTypes = {
+  client: PropTypes.object,
   history: PropTypes.object,
 };
 
-export default graphql(registerMutation)(Register);
+export default withApollo(Register);
