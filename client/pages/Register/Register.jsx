@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
-import ReCAPTCHA from 'react-google-recaptcha';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 import { Button, Grid, TextField } from '@material-ui/core';
@@ -29,10 +28,6 @@ const Content = styled.div`
   }
 `;
 
-const StyledRecaptcha = styled(ReCAPTCHA)`
-  margin: 0 auto;
-`;
-
 const StyledTextField = styled(TextField)`
   .MuiOutlinedInput-root {
     text-align: left;
@@ -50,15 +45,15 @@ class Register extends React.Component {
       password: '',
       passwordConfirmation: '',
       fieldErrors: '',
-      recaptchaVerified: false,
-      usernameExists: false,
+      usernameVerified: false,
+      emailVerified: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.verifyEmail = this.verifyEmail.bind(this);
+    this.verifyUser = this.verifyUser.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validateForm = this.validateForm.bind(this);
-    this.verifyCaptcha = this.verifyCaptcha.bind(this);
-    this.verifyUser = this.verifyUser.bind(this);
   }
 
   /**
@@ -72,6 +67,53 @@ class Register extends React.Component {
     this.setState({ [name]: value });
   };
 
+  /**
+   * Checks wether or not a email is alredy registered.
+   *
+   * @param      {Object}  e      The event object.
+   */
+  verifyEmail = async e => {
+    const { target } = e;
+    const { value } = target;
+    const { client } = this.props;
+
+    if (value.length) {
+      try {
+        const res = await client.query({
+          query: gql`
+            query($email: String) {
+              verifyEmail(email: $email)
+            }
+          `,
+          variables: {
+            email: value,
+          },
+        });
+        const { data } = res;
+        const { verifyEmail } = data;
+
+        if (verifyEmail) {
+          this.setState({ emailVerified: true });
+
+          this.validateForm();
+        } else if (!verifyEmail) {
+          this.setState({
+            emailVerified: false,
+          });
+
+          this.validateForm();
+        }
+      } catch (err) {
+        console.log(`There was an error: ${err}`);
+      }
+    }
+  };
+
+  /**
+   * Checks wether or not a username is already registered.
+   *
+   * @param      {Object}  e     The event object.
+   */
   verifyUser = async e => {
     const { target } = e;
     const { value } = target;
@@ -94,31 +136,17 @@ class Register extends React.Component {
         const { verifyUser } = data;
 
         if (verifyUser) {
-          this.setState({ usernameExists: true });
+          this.setState({ usernameVerified: true });
 
-          this.setState({
-            fieldErrors: {
-              username: 'Username already exists.',
-            },
-          });
+          this.validateForm();
         } else {
-          this.setState({ usernameExists: false });
+          this.setState({ usernameVerified: false });
 
-          this.setState({
-            fieldErrors: {
-              username: '',
-            },
-          });
+          this.validateForm();
         }
       } catch (err) {
         console.log(`There was an error: ${err}`);
       }
-    }
-  };
-
-  verifyCaptcha = value => {
-    if (value) {
-      this.setState({ recaptchaVerified: true });
     }
   };
 
@@ -128,21 +156,34 @@ class Register extends React.Component {
    * @return     {Boolean}  Indicates if the form is valid or invalid.
    */
   validateForm = () => {
-    const { email, username, password, passwordConfirmation, recaptchaVerified, usernameExists } = this.state;
+    const {
+      email,
+      fieldErrors,
+      username,
+      password,
+      passwordConfirmation,
+      recaptchaVerified,
+      emailVerified,
+      usernameVerified,
+    } = this.state;
     const errors = {};
 
     if (!email.length) {
       errors.email = 'Email is required.';
     } else if (email.length) {
       if (!validateEmail(email)) {
-        errors.email = 'Invalid email.';
+        errors.email = 'Email invalid or or already taken.';
+      } else if (emailVerified) {
+        errors.email = 'Email invalid or or already taken.';
       }
     }
 
     if (!username.length) {
       errors.username = 'Username is required.';
-    } else if (usernameExists) {
-      errors.username = 'Username already exists.';
+    } else if (username.length < 3) {
+      errors.username = 'The username needs to be between 3 and 25 characters long.';
+    } else if (usernameVerified) {
+      errors.username = `Username ${username} is not available.`;
     }
 
     if (!password.length) {
@@ -159,10 +200,6 @@ class Register extends React.Component {
 
     if (!passwordConfirmation.length) {
       errors.passwordConfirmation = 'Password confirmation is required.';
-    }
-
-    if (!recaptchaVerified) {
-      errors.recaptcha = 'Recaptcha is required.';
     }
 
     if (Object.keys(errors).length >= 1) {
@@ -230,8 +267,8 @@ class Register extends React.Component {
       password,
       passwordConfirmation,
       fieldErrors,
-      recaptchaVerified,
-      usernameExists,
+      usernameVerified,
+      emailVerified,
     } = this.state;
 
     return (
@@ -256,9 +293,12 @@ class Register extends React.Component {
                     autoComplete="email"
                     margin="normal"
                     variant="outlined"
-                    onChange={e => this.handleChange(e)}
+                    onChange={e => {
+                      this.handleChange(e);
+                      this.verifyEmail(e);
+                    }}
                     onBlur={this.validateForm}
-                    error={!fieldErrors.email === false}
+                    error={!fieldErrors.email === false || emailVerified === true}
                     helperText={fieldErrors.email}
                     value={email}
                   />
@@ -276,7 +316,7 @@ class Register extends React.Component {
                       this.verifyUser(e);
                     }}
                     onBlur={this.validateForm}
-                    error={!fieldErrors.username === false || usernameExists === true}
+                    error={!fieldErrors.username === false || usernameVerified === true}
                     helperText={fieldErrors.username}
                     value={username}
                   />
@@ -311,17 +351,6 @@ class Register extends React.Component {
                     value={passwordConfirmation}
                   />
                 </Grid>
-                <Grid item xs={12} align="center">
-                  <StyledRecaptcha
-                    sitekey="6LfYLs4SAAAAAK6qaUvUXZFBqjseQrkOoCK2HiE2"
-                    onChange={this.verifyCaptcha}
-                  />
-                </Grid>
-                {!recaptchaVerified && (
-                  <Grid item xs={12} style={{ color: '#f00' }}>
-                    {fieldErrors.recaptcha}
-                  </Grid>
-                )}
                 <Grid item xs={12}>
                   <Button type="button" variant="contained" color="primary" onClick={this.handleSubmit}>
                     Register
