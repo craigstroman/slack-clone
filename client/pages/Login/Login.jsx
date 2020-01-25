@@ -241,7 +241,7 @@ class Login extends React.Component {
                             onClick={this.togglePasswordMask}
                           >
                             <FontAwesomeIcon
-                              icon={hidden ? faEyeSlash : faEye}
+                              icon={hidden ? faEye : faEyeSlash}
                               style={{ cursor: 'pointer' }}
                             />
                           </IconButton>
