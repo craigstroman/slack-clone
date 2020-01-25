@@ -29,14 +29,12 @@ const Content = styled.div`
     text-align: center;
   }
 `;
-
 const StyledTextField = styled(TextField)`
   .MuiOutlinedInput-root {
     text-align: left;
     width: 450px;
   }
 `;
-
 const StyledSnackbar = styled(Snackbar)`
   .MuiTypography-root {
     background-color: #d32f2f;
