@@ -1,9 +1,3 @@
-// CRUD
-// Create
-// Read
-// Update
-// Delete
-
 export default `
 
   type User {
@@ -19,6 +13,7 @@ export default `
     allUsers: [User!]!
     getUser(userId: Int!): User
     verifyUser(username: String): Boolean
+    verifyEmail(email: String): Boolean
   }
 
   type RegisterResponse {

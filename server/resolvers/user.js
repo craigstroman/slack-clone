@@ -43,6 +43,24 @@ export default {
     me: requiresAuth.createResolver((parent, args, { user, models }) =>
       models.User.findOne({ where: { id: user.id } }),
     ),
+    verifyEmail: async (parent, args, { models }) => {
+      try {
+        const { email } = args;
+        const result = await models.User.findOne({ where: { email: email } }, { raw: true });
+
+        if (result !== null) {
+          if (email === result.email) {
+            return true;
+          }
+        }
+
+        return false;
+      } catch (err) {
+        console.log(`There was an error: ${err}`);
+
+        return false;
+      }
+    },
     /**
      * Verify's if a user exists or not.
      *
