@@ -1,6 +1,6 @@
 {
   "name": "slack-clone",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A chat room built using Express, GraphQL and React.",
   "main": "./server/index.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "apollo-link-ws": "1.0.0",
     "apollo-server-express": "1.1.3",
     "apollo-utilities": "1.0.22",
-    "bcrypt": "3.0.2",
+    "bcryptjs": "^2.4.3",
     "body-parser": "1.18.3",
     "cors": "2.8.5",
     "express": "4.16.4",
