@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 /**
  * Creates the auth tokens.
@@ -22,7 +22,7 @@ export const createTokens = async (user, secret, secret2) => {
 
   const createRefreshToken = jwt.sign(
     {
-      user: _.pick(user,  ['id', 'username']),
+      user: _.pick(user, ['id', 'username']),
     },
     secret2,
     {
@@ -44,7 +44,9 @@ export const createTokens = async (user, secret, secret2) => {
 export const refreshTokens = async (token, refreshToken, models, SECRET) => {
   let userId = -1;
   try {
-    const { user: { id } } = jwt.decode(refreshToken);
+    const {
+      user: { id },
+    } = jwt.decode(refreshToken);
     userId = id;
   } catch (err) {
     return {};
@@ -84,7 +86,7 @@ export const refreshTokens = async (token, refreshToken, models, SECRET) => {
  * @param      {String}  SECRET2   The secret 2.
  */
 export const tryLogin = async (email, password, models, SECRET, SECRET2) => {
-  const user = await models.User.findOne({ where: { email }, raw: true })
+  const user = await models.User.findOne({ where: { email }, raw: true });
 
   if (!user) {
     // user with provided email not found
@@ -108,7 +110,7 @@ export const tryLogin = async (email, password, models, SECRET, SECRET2) => {
   const [token, refreshToken] = await createTokens(user, SECRET, refreshTokenSecret);
 
   return {
-    'userInfo': user,
+    userInfo: user,
     ok: true,
     token,
     refreshToken,

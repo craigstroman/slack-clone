@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 export default (sequelize, DataTypes) => {
   const User = sequelize.define(
@@ -41,7 +41,7 @@ export default (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterValidate: async (user) => {
+        afterValidate: async user => {
           const hashedPassword = await bcrypt.hash(user.password, 12);
           // eslint-disable-next-line no-param-reassign
           user.password = hashedPassword;
@@ -50,7 +50,7 @@ export default (sequelize, DataTypes) => {
     },
   );
 
-  User.associate = (models) => {
+  User.associate = models => {
     User.belongsToMany(models.Team, {
       through: models.Member,
       foreignKey: {
