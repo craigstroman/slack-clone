@@ -1,5 +1,7 @@
 /node_modules/
 /public/
 package-lock.json
+slack.sql
+todo.todo
 .env
 .DS_Store

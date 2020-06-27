@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { CssBaseline, Grid } from '@material-ui/core';
+import styled from 'styled-components';
 import PrivateRoute from '../../shared/util/privateRoutes';
 import Login from '../Login/Login';
 import Register from '../Register/Register';
@@ -9,12 +10,12 @@ import ViewTeam from '../Teams/ViewTeam/ViewTeam';
 import Teams from '../Teams/Teams/Teams';
 
 const Home = props => (
-  <div>
+  <Fragment>
     <BrowserRouter>
       <CssBaseline />
       <main>
         <Grid container spacing={3} justify="center">
-          <Grid item lg={12}>
+          <Grid item lg={12} style={{ padding: '12 !important' }}>
             <Switch>
               <Route path="/" exact component={Login} />
               <Route path="/login" exact component={Login} />
@@ -34,7 +35,7 @@ const Home = props => (
         </Grid>
       </main>
     </BrowserRouter>
-  </div>
+  </Fragment>
 );
 
 export default Home;

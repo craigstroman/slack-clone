@@ -6,6 +6,7 @@ import Moment from 'react-moment';
 import uniqid from 'uniqid';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from '../../../shared/themes';
+import FileUpload from '../../FileUpload/FileUpload';
 
 const Wrapper = styled.div`
   background-color: ${props => props.theme.colors.white};
@@ -130,34 +131,36 @@ class ChannelMessages extends React.Component {
     return (
       <ThemeProvider theme={theme}>
         <Wrapper>
-          <ul>
-            {messages.map((message, i) => {
-              const { text, user } = message;
-              const { username } = user;
+          <FileUpload disableClick>
+            <ul>
+              {messages.map((message, i) => {
+                const { text, user } = message;
+                const { username } = user;
 
-              const calendarStrings = {
-                lastDay: '[Yesterday at] LT',
-                sameDay: '[Today at] LT',
-                nextDay: '[Tomorrow at] LT',
-                lastWeek: 'dddd [at] LT',
-                nextWeek: 'dddd [at] LT',
-                sameElse: 'L',
-              };
-              const createdAt = new Date(message.createdAt);
+                const calendarStrings = {
+                  lastDay: '[Yesterday at] LT',
+                  sameDay: '[Today at] LT',
+                  nextDay: '[Tomorrow at] LT',
+                  lastWeek: 'dddd [at] LT',
+                  nextWeek: 'dddd [at] LT',
+                  sameElse: 'L',
+                };
+                const createdAt = new Date(message.createdAt);
 
-              return (
-                <li key={`${uniqid()}`}>
-                  <MessageHeader>
-                    <h3>{username}</h3>
-                    <div>
-                      <Moment calendar={calendarStrings}>{createdAt}</Moment>
-                    </div>
-                  </MessageHeader>
-                  <Message>{text}</Message>
-                </li>
-              );
-            })}
-          </ul>
+                return (
+                  <li key={`${uniqid()}`}>
+                    <MessageHeader>
+                      <h3>{username}</h3>
+                      <div>
+                        <Moment calendar={calendarStrings}>{createdAt}</Moment>
+                      </div>
+                    </MessageHeader>
+                    <Message>{text}</Message>
+                  </li>
+                );
+              })}
+            </ul>
+          </FileUpload>
         </Wrapper>
       </ThemeProvider>
     );

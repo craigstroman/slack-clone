@@ -1,25 +1,30 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import { TextField } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
+import { withStyles } from '@material-ui/core/styles';
 import styled, { ThemeProvider } from 'styled-components';
 import gql from 'graphql-tag';
-import theme from '../../../shared/themes';
+import FileUpload from '../../FileUpload/FileUpload';
 
 const Wrapper = styled.div`
-  display: flex;
-  width: 100%;
-  .MuiFormControl-root {
-    text-align: left;
-    width: 100%;
-    .MuiInputBase-root {
-      .MuiInputBase-input {
-        color: ${props => props.theme.colors.black};
-        padding-left: 10px;
-      }
-    }
-  }
+  display: grid;
+  grid-column: 2;
+  grid-template-columns: 4% auto;
+  ${props => props.theme.mixins.clearfix()}
 `;
+
+const useStyles = theme => ({
+  buttton: {
+    cursor: 'pointer',
+  },
+  input: {
+    flex: 1,
+    paddingLeft: '5px',
+    paddingBottom: '10px',
+  },
+});
 
 class ChannelInput extends React.Component {
   constructor(props) {
@@ -28,6 +33,7 @@ class ChannelInput extends React.Component {
     this.state = {
       message: '',
       isSubmiting: false,
+      attachFileModal: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -70,28 +76,32 @@ class ChannelInput extends React.Component {
   };
 
   render() {
-    const { channels, match } = this.props;
-    const { message, isSubmiting } = this.state;
+    const { channels, classes, match } = this.props;
+    const { message, isSubmiting, attachFileModal } = this.state;
     const channel = channels.filter(el => el.uuid === match.params.channelId);
     const { name } = channel[0];
 
     return (
-      <ThemeProvider theme={theme}>
-        <Wrapper>
-          <TextField
-            name="message"
-            placeholder={`Message #${name}`}
-            value={message}
-            autoComplete="off"
-            onChange={e => this.handleChange(e)}
-            onKeyUp={e => {
-              if (e.keyCode === 13 && !isSubmiting) {
-                this.handleSubmit();
-              }
-            }}
-          />
-        </Wrapper>
-      </ThemeProvider>
+      <Wrapper>
+        <Button variant="contained" className={classes.button} title="Attach a file">
+          <FileUpload>
+            <AttachFileIcon />
+          </FileUpload>
+        </Button>
+        <TextField
+          name="message"
+          placeholder={`Message #${name}`}
+          className={classes.input}
+          value={message}
+          autoComplete="off"
+          onChange={e => this.handleChange(e)}
+          onKeyUp={e => {
+            if (e.keyCode === 13 && !isSubmiting) {
+              this.handleSubmit();
+            }
+          }}
+        />
+      </Wrapper>
     );
   }
 }
@@ -105,13 +115,15 @@ const createMessageMutation = gql`
 ChannelInput.defaultProps = {
   channelId: 0,
   channels: [],
+  classes: {},
   match: {},
 };
 
 ChannelInput.propTypes = {
   channelId: PropTypes.number,
   channels: PropTypes.array,
+  classes: PropTypes.object,
   match: PropTypes.object,
 };
 
-export default graphql(createMessageMutation)(ChannelInput);
+export default graphql(createMessageMutation)(withStyles(useStyles)(ChannelInput));
