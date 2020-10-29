@@ -1,12 +1,12 @@
 # Slack Clone
 
-## Moved Notice
-
-- This repo has now been moved to the [Slack Clone Server](https://github.com/craigstroman/slack-clone-server) and [Slack Clone Client](https://github.com/craigstroman/slack-clone-client) repos.
-
 A Slack clone built using Express, GraphQL and React.
 
 Based on the tutorial from https://awesomereact.com/playlists/slack-clone-using-graphql/0MKJ7JbVnFc.
+
+## Moved Notice
+
+- This repo has now been moved to the [Slack Clone Server](https://github.com/craigstroman/slack-clone-server) and [Slack Clone Client](https://github.com/craigstroman/slack-clone-client) repos.
 
 ## Running locally
 
